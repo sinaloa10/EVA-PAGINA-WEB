@@ -1,0 +1,72 @@
+/* Estilos globales */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  width: 100%;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7f6;
+
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  overflow-y: auto; /* Permite el scroll vertical dentro del contenedor */
+}
+
+/* Estilos generales del calendario */
+.react-calendar {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  width: 100%;
+  padding: 10px;
+}
+
+/* Estilos para los botones de navegación */
+.react-calendar__navigation button {
+  background: #f8f9fa;
+  color: #333;
+  border: none;
+  padding: 8px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.react-calendar__navigation button:hover {
+  background: #e9ecef;
+}
+
+/* Estilos para los días de la semana */
+.react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Estilos para los días */
+.react-calendar__tile {
+  background: white;
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+  font-size: 1rem;
+  color: #333;
+  transition: background 0.3s ease;
+}
+
+.react-calendar__tile:hover {
+  background: #e2f0fb;
+}
+
+/* Día seleccionado */
+.react-calendar__tile--active {
+  background: #007bff !important;
+  color: white !important;
+}
+
+/* Días deshabilitados */
+.react-calendar__tile--disabled {
+  color: #ccc;
+}

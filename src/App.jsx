@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import './App.css';
-import Dashboard from './components/Dashboard';
+import Principal from './components/Principal/web';
 
 function App() {
 
   return (
-    <div className="App">
-      <Dashboard />
+    <div className="App" class="bg-">
+      <Principal />
     </div>
   );
 }

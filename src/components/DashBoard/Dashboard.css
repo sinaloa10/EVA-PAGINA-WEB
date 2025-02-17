@@ -1,0 +1,148 @@
+@import "tailwindcss";
+/* Estilos normales */
+@font-face {
+    font-family: "Ubuntu";
+    src: url("/font/Ubuntu-Light.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Ubuntu";
+    src: url("/font/Ubuntu-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Ubuntu";
+    src: url("/font/Ubuntu-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Ubuntu";
+    src: url("/font/Ubuntu-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  /* Estilos en cursiva */
+  @font-face {
+    font-family: "Ubuntu";
+    src: url("/font/Ubuntu-LightItalic.woff2") format("woff2");
+    font-weight: 300;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: "Ubuntu";
+    src: url("/font/Ubuntu-RegularItalic.woff2") format("woff2");
+    font-weight: 400;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: "Ubuntu";
+    src: url("/font/Ubuntu-MediumItalic.woff2") format("woff2");
+    font-weight: 500;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: "Ubuntu";
+    src: url("/font/Ubuntu-BoldItalic.woff2") format("woff2");
+    font-weight: 700;
+    font-style: italic;
+  }
+  
+  body {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 400; /* Regular */
+  }
+  
+  h1 {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 700; /* Bold */
+  }
+  h2 {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 700; /* Bold */
+  }
+  
+  p {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 300; /* Light */
+    font-style: italic; /* Cursiva */
+  }
+  li{
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 300; /* Medium */
+  }
+
+  
+/* Estilos generales del calendario */
+.react-calendar {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    width: 100%;
+    padding: 10px;
+  }
+  
+  /* Estilos para los botones de navegación */
+  .react-calendar__navigation button {
+    background: #f8f9fa;
+    color: #333;
+    border: none;
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .react-calendar__navigation button:hover {
+    background: #e9ecef;
+  }
+  
+  /* Estilos para los días de la semana */
+  .react-calendar__month-view__weekdays {
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  /* Estilos para los días */
+  .react-calendar__tile {
+    background: white;
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+    font-size: 1rem;
+    color: #333;
+    transition: background 0.3s ease;
+  }
+  
+  .react-calendar__tile:hover {
+    background: #e2f0fb;
+  }
+  
+  /* Día seleccionado */
+  .react-calendar__tile--active {
+    background: #007bff !important;
+    color: white !important;
+  }
+  
+  /* Días deshabilitados */
+  .react-calendar__tile--disabled {
+    color: #ccc;
+  }
+  .svg-hover-task:hover path {
+    fill: #eae2ed; /* Color al pasar el mouse */
+  }
+  .svg-hover-alert:hover path {
+    fill: #ffffff; /* Color al pasar el mouse */
+  }

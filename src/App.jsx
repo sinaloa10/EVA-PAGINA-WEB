@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div className="App" >
-   
+
 
       <Routes> {/* Define las rutas dentro de Routes */}
         <Route path="/" element={<Login />} /> {/* Ruta para Login */}

@@ -18,7 +18,7 @@ function App() {
       <Routes> 
         <Route path="/login" element={<Login />} /> {/* Ruta para Login */}
         <Route path="/" element={<Principal />} /> {/* Ruta para Principal */}
-        <Route path="/perfil" element={<Dashboard />} /> {/* Ruta para Dashboard */}
+        <Route path="/perfil" element={<Dashboard />}  className= "p-20"/> {/* Ruta para Dashboard */}
         <Route path="/register" element={<Register />} /> {/* Ruta para Registro */}
       </Routes>
       </div>

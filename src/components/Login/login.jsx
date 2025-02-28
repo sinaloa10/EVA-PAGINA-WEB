@@ -4,8 +4,9 @@ import { useNavigate, Link } from 'react-router-dom'; // Importa Link
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [hoveredOlvido, setHoveredOlvido] = useState(false); // Estado para el hover del email
+  const [hoveredRegistrar, setHoveredRegistrar] = useState(false); // Estado para el hover de la contraseña
   const navigate = useNavigate();
-
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -29,7 +30,7 @@ const Login = () => {
             <input 
               type="email" 
               id="email"
-              className="w-full p-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#8ac8fb] text-black" 
+              className="w-full p-3 mt-1 rounded-lg border border-[#E8B9B6]  focus:ring-2 focus:ring-[#8ac8fb] text-black" 
               placeholder="Correo electrónico" 
               value={email}
               onChange={(e) => setEmail(e.target.value)} 
@@ -42,7 +43,7 @@ const Login = () => {
             <input 
               type="password" 
               id="password" 
-              className="text-black w-full p-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#8d6e63]" 
+              className="text-black w-full p-3 mt-1 rounded-lg border border-[#E8B9B6] focus:ring-2 focus:ring-[#8d6e63]" 
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)} 
@@ -52,15 +53,40 @@ const Login = () => {
           
           <button 
             type="submit" 
-            className="w-full bg-amber-100 text-white py-3 rounded-lg font-semibold "
+            style={{
+              backgroundColor: '#8ac8fb', // Color similar a amber-100
+              color: 'white',
+              padding: '12px 0',
+              borderRadius: '8px',
+              fontWeight: '600',
+              width: '100%',
+              transition: 'background-color 0.3s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#E8B9B6'} // Hover
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#8ac8fb'} // Vuelve al color original
+          
           >
             Iniciar Sesión
           </button>
+
           <div className="text-center m-2">
-            <Link className="text-blue-500">¿No recuerdas la contraseña?</Link>
+            <Link  
+              style={{ color: hoveredOlvido ? '#8ac8fb' : '#E8B9B6' }}
+              onMouseEnter={() => setHoveredOlvido(true)}  // Al pasar el mouse
+              onMouseLeave={() => setHoveredOlvido(false)}  // Al salir del mouse
+            >
+              ¿No recuerdas la contraseña?
+            </Link>
           </div>
           <div className="text-center m-2">
-            <Link to="/register"  className="text-blue-500">¿No tienes una cuenta bb? Crea una</Link>
+            <Link 
+              to="/register"  
+              style={{ color: hoveredRegistrar ? '#8ac8fb' : '#E8B9B6' }}
+              onMouseEnter={() => setHoveredRegistrar(true)}  // Al pasar el mouse
+              onMouseLeave={() => setHoveredRegistrar(false)}  // Al salir del mouse
+            >
+              ¿No tienes una cuenta bb? Crea una
+            </Link>
           </div>
         </form>
       </div>

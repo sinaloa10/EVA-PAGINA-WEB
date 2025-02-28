@@ -46,19 +46,22 @@ const Dashboard = () => {
     <div className="container mx-auto p-4 flex-wrap">
 
     <div className="flex flex-row gap-6 mb-6 items-center p-8 border rounded-3xl  bg-[#ffffff]">
+      {/*
       <div className="flex flex-col items-center w-60">
         <div className="text-center mb-6">
+          
           <img className="rounded-full w-60 h-60" 
             src="https://i.pinimg.com/736x/41/89/ab/4189ab29d7006402ae882ab4eee91022.jpg" 
             alt="image description"
           />
         </div>
-        <div className="text-center text-4xl">
-          <h2 className="text-[#ffccc8]">Bienvenida Psic. Ramírez</h2>
-        </div>
-      </div>
+        
+      </div> */}
 
       <div className="flex-1 p-10">
+      <div className="text-center text-4xl">
+          <h2 className="text-[#ffccc8]">Reporte General</h2>
+        </div>
         <p className="text-black text-justify">
           Soy la Psicóloga Ramírez, con más de 10 años de experiencia en el ámbito clínico. 
           Me especializo en el tratamiento de la ansiedad, depresión y el manejo del estrés. 

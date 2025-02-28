@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom'; // Importa Link
 
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Login = () => {
   return (
     <div className="flex justify-center items-center min-h-screen ">
       <div className="bg-white p-8 rounded-xl shadow-lg w-96">
-        <h2 className="text-3xl text-center font-semibold text-[#8ac8fb] mb-6">Iniciar Sesión</h2>
+        <h2 className="text-3xl text-center font-semibold text-[#8ac8fb] mb-6">Crear Cuenta</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-[#8ac8fb] text-sm font-medium" htmlFor="email">Correo Electrónico</label>
@@ -60,7 +60,7 @@ const Login = () => {
             <Link className="text-blue-500">¿No recuerdas la contraseña?</Link>
           </div>
           <div className="text-center m-2">
-            <Link to="/register"  className="text-blue-500">¿No tienes una cuenta bb? Crea una</Link>
+            <Link className="text-blue-500">¿No tienes una cuenta bb? Crea una</Link>
           </div>
         </form>
       </div>
@@ -68,4 +68,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

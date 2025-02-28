@@ -1,20 +1,28 @@
-import { useState } from 'react';
+
 import { Route,Routes } from 'react-router-dom';
 import './App.css';
 import Principal from './components/Principal/web';
 import Dashboard from './components/DashBoard/Dashboard';
 import Login from './components/Login/login';
+import Register from './components/Login/register';
+import Navbar from './components/Navbar';
 function App() {
 
   return (
-    <div className="App" >
+    <div className="bg-[#EAE5EE] w-screen min-h-screen flex justify-center items-center" >
 
+        <Navbar /> {/* Navbar */}
 
-      <Routes> {/* Define las rutas dentro de Routes */}
-        <Route path="/" element={<Login />} /> {/* Ruta para Login */}
-        <Route path="/inicio" element={<Principal />} /> {/* Ruta para Principal */}
+    <div className='p-16'>
+     {/* Agregar rutas aquí */}
+      <Routes> 
+        <Route path="/login" element={<Login />} /> {/* Ruta para Login */}
+        <Route path="/" element={<Principal />} /> {/* Ruta para Principal */}
         <Route path="/perfil" element={<Dashboard />} /> {/* Ruta para Dashboard */}
+        <Route path="/register" element={<Register />} /> {/* Ruta para Registro */}
       </Routes>
+      </div>
+
     </div>
   );
 }

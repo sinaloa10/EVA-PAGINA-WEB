@@ -11,10 +11,7 @@ export default function HOME() {
     return (
         <div className="font-sans">
             {/* Encabezado */}
-            <div className="relative w-full h-[500px] bg-cover bg-center text-white flex items-center justify-center" style={{ backgroundImage: 'url(./psi.jpg)' }}>
-                <div className="text-center max-w-2xl">
-                    <h1 className="text-4xl font-bold text-gray-800">¡EVA, el futuro en ayuda psicológica!</h1>
-                </div>
+            <div className="relative w-screen h-[500px] bg-cover bg-center bg-fixed bg-no-repeat bg-[url('/img/Eva.png')] text-white flex items-center justify-center">
             </div>
 
             {/* Beneficios */}

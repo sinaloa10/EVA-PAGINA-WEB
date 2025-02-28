@@ -54,7 +54,7 @@ const Dashboard = () => {
           />
         </div>
         <div className="text-center text-4xl">
-          <h2 className="text-[#8d6e63]">Bienvenida Psic. Ramírez</h2>
+          <h2 className="text-[#ffccc8]">Bienvenida Psic. Ramírez</h2>
         </div>
       </div>
 
@@ -75,7 +75,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
         <div className="bg-white p-4 rounded-lg shadow ">
-          <h2 className="text-xl font-semibold mb-2 text-[#8d6e63]">Pacientes Recientes</h2>
+          <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Pacientes Recientes</h2>
           <ul>
             {patientsData.map((patient, index) => (
               <li key={index} className="p-2 border-b last:border-none">
@@ -89,7 +89,7 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-[#ffffff] p-4 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2 text-[#8d6e63]">Alertas Urgentes</h2>
+          <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Alertas Urgentes</h2>
           <ul>
             {alertas.map((alert, index) => (
               <li key={index} className="p-2  text-black flex items-center hover:rounded-2xl  hover:bg-[#a45656] hover:text-amber-50 hover:font-bold svg-hover-task">
@@ -110,14 +110,14 @@ const Dashboard = () => {
 
 
         <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2 text-[#8d6e63]">Próximas Citas</h2>
+          <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Próximas Citas</h2>
           <div className="flex justify-center">
             <Calendar />
           </div>
         </div>
 
         <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2 text-[#8d6e63]">Tareas Pendientes</h2>
+          <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Tareas Pendientes</h2>
           <ul>
             {tasks.map((task, index) => (
               <li key={index} className="p-2  text-black flex items-center hover:rounded-2xl  hover:bg-[#7c638d] hover:text-amber-50 hover:font-bold svg-hover-task">
@@ -137,7 +137,7 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-white p-4 rounded-lg shadow col-span-1 md:col-span-2">
-          <h2 className="text-xl font-semibold mb-2 text-[#8d6e63]">Gráficos de Evolución de Pacientes</h2>
+          <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Gráficos de Evolución de Pacientes</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={patientProgressData}>
               <CartesianGrid strokeDasharray="3 3" />

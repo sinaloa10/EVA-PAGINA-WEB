@@ -1,19 +1,6 @@
-/* Estilos globales */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: auto;
-  width: 100%;
- 
-
-  justify-content: center; /* Centra el contenido horizontalmente */
-  align-items: center; /* Centra el contenido verticalmente */
-  overflow-y: auto; /* Permite el scroll vertical dentro del contenedor */
-
-  background-color: #e0e0e0;
-
+body {
+  overflow-x: hidden; /* Oculta la barra de desplazamiento horizontal */
 }
-
 
 
 

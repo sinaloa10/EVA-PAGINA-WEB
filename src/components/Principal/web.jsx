@@ -1,5 +1,6 @@
 import React from "react";
 import '../Principal/web.css'
+import Footer from '../Footer/footer';
 
 const beneficios = [
     { titulo: "Precio", descripcion: "TA BIEN VARA." },

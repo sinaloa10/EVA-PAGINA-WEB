@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault();
     
     if (email === 'ejmeplo@gmail.com' && password === 'pas123') {
-         navigate ('/perfil');
+         navigate ('/dashboard');
     }else{
         alert('Correo electrónico o contraseña incorrectos');
         setEmail('');

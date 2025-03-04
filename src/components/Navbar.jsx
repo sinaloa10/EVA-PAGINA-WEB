@@ -42,36 +42,7 @@ const Navbar = () => {
             Iniciar Sesión
           </Link>
         </li>
-        <li
-          className="hover:text-[#8ac8fb] transition-all duration-300"
-          onMouseEnter={() => setHoveredLink('about')}
-          onMouseLeave={() => setHoveredLink(null)}
-        >
-          <Link
-            to="/about"
-            style={{
-              color: hoveredLink === 'about' ? '#8ac8fb' : '#E8B9B6',
-              textDecoration: 'none',
-            }}
-          >
-            Acerca de
-          </Link>
-        </li>
-        <li
-          className="transition-all duration-300"
-          onMouseEnter={() => setHoveredLink('contact')}
-          onMouseLeave={() => setHoveredLink(null)}
-        >
-          <Link
-            to="/contact"
-            style={{
-              color: hoveredLink === 'contact' ? '#8ac8fb' : '#E8B9B6',
-              textDecoration: 'none',
-            }}
-          >
-            Contacto
-          </Link>
-        </li>
+        
       </ul>
     </nav>
   );

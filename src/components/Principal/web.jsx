@@ -12,7 +12,7 @@ export default function HOME() {
     return (
         <div >
             {/* Encabezado */}
-            <div className="relative w-screen h-[500px] bg-cover bg-center bg-fixed bg-no-repeat bg-[url('/img/Eva.png')] text-white flex items-center justify-center">
+            <div className="relative w-screen h-[500px] bg-cover bg-center bg-no-repeat bg-[url('/img/EvanSinLetra.png')] text-white flex items-center justify-center">
                 <div style={{ fontFamily: "Thinkers, sans-serif" }}>
                     <h1 className="text-6xl font-bold text-[#8ac8fb]">Eva</h1>
                     <p className="text-lg text-[#8ac8fb]">El futuro en ayuda psicológica</p>

@@ -146,3 +146,28 @@
   .svg-hover-alert:hover path {
     fill: #ffffff; /* Color al pasar el mouse */
   }
+  .svg-hover-taskEva:hover path {
+    fill: #edf2f4; /* Color al pasar el mouse */
+  }
+  /* Estilos generales del scroll */
+.scroll-container {
+  overflow-y: auto;
+  scrollbar-width: thin; /* Para Firefox */
+  scrollbar-color: #ffccc8 transparent; /* Color del scroll y fondo */
+}
+
+/* Estilos para el botón */
+.button-custom {
+  background-color: #ffffff !important;
+  padding: 0.5rem !important;
+ 
+  box-shadow: 0 4px 6px rgba(163, 52, 52, 0.1) !important;
+  transition: background-color 0.3s ease-in-out !important;
+  transform: scale(1) !important;
+}
+
+/* Estilo para el hover del botón */
+.button-custom:hover {
+  background-color: #a2d3f6 !important;
+  transform: scale(1.1) !important;
+}

@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white bg-opacity-90 w-screen backdrop-blur-md shadow-md py-4 px-6 fixed top-0 w-full flex justify-between items-center z-50">
       {/* Logo */}
-      <div className="text-2xl font-bold text-[#E8B9B6]">Eva</div>
+      <div className="text-2xl font-bold text-[#E8B9B6]">EVA</div>
 
       {/* Menú de Navegación */}
       <ul className="flex space-x-6 font-medium">
@@ -42,36 +42,7 @@ const Navbar = () => {
             Iniciar Sesión
           </Link>
         </li>
-        <li
-          className="hover:text-[#8ac8fb] transition-all duration-300"
-          onMouseEnter={() => setHoveredLink('about')}
-          onMouseLeave={() => setHoveredLink(null)}
-        >
-          <Link
-            to="/about"
-            style={{
-              color: hoveredLink === 'about' ? '#8ac8fb' : '#E8B9B6',
-              textDecoration: 'none',
-            }}
-          >
-            Acerca de
-          </Link>
-        </li>
-        <li
-          className="transition-all duration-300"
-          onMouseEnter={() => setHoveredLink('contact')}
-          onMouseLeave={() => setHoveredLink(null)}
-        >
-          <Link
-            to="/contact"
-            style={{
-              color: hoveredLink === 'contact' ? '#8ac8fb' : '#E8B9B6',
-              textDecoration: 'none',
-            }}
-          >
-            Contacto
-          </Link>
-        </li>
+        
       </ul>
     </nav>
   );

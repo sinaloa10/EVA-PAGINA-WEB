@@ -1,14 +1,17 @@
-import React from "react";
+
 import Calendar from "react-calendar";
 import './Dashboard.css';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { useState } from "react";
 
 const patientsData = [
   { name: 'Carmen Alvira', emotionalState: 'Ansioso' },
   { name: 'Maria Chavez', emotionalState: 'Triste' },
   { name: 'Santiago Suarez', emotionalState: 'Estable' },
-  { name: 'Homero Padilla', emotionalState: 'En crisis' }
+  { name: 'Homero Padilla', emotionalState: 'En crisis' },
+  { name: 'Esteban Martínez', emotionalState: 'En crisis' },
+
 ];
 
 const emotionColors = {
@@ -23,13 +26,29 @@ const alertas = [
   { message: 'Maria reportó aumento de tristeza.' },
   { message: 'Carmen reportó ansiedad.' },
   { message: 'Santiago reportó aumento de ansiedad.' },
+  { message: 'Esteban reportó crisis emocional.' },
+  { message: 'Karen reportó crisis emocional.' },
+
+
   
 ];
 
 const tasks = [
   { task: 'Responder mensaje de Paciente 3' },
-  { task: 'Revisar informe de Paciente 1' }
+  { task: 'Revisar informe de Paciente 1' },
+  { task: 'Revisar informe de Paciente 2' },
+  { task: 'Responder mensaje de Paciente 1' },
+  { task: 'Revisar informe de Paciente 3' },
+  { task: 'Responder mensaje de Paciente 2' },
+  { task: 'Revisar informe de Paciente 1' },
+  { task: 'Revisar informe de Paciente 3' },
+  { task: 'Responder mensaje de Paciente 1' },
+  { task: 'Revisar informe de Paciente 2' },
+  { task: 'Revisar informe de Paciente 1' },
+  { task: 'Revisar informe de Paciente 3' },
 ];
+
+
 
 const patientProgressData = [
   { name: 'Semana 1', score: 60 },
@@ -39,6 +58,20 @@ const patientProgressData = [
 ];
 
 const Dashboard = () => {
+  const [tasksEva, setTaskEva] = useState([
+    { taskEva: 'Al paciente 4 mandarle mensajes de apoyo' },
+    { taskEva: 'Al paciente 2 recordarle hacer caminatas de media hora' }
+   
+  ]);
+  const [newTaskEva, setNewTaskEva] = useState("");
+  
+  const handleAddTask = (e) => {
+    e.preventDefault();
+    if (newTaskEva.trim()) {
+      setTaskEva([...tasksEva, { taskEva: newTaskEva }]);
+      setNewTaskEva(""); // Clear the input field after submission
+    }
+  };
   return (
 <>
     
@@ -58,27 +91,57 @@ const Dashboard = () => {
         
       </div> */}
 
-      <div className="flex-1 p-10">
-      <div className="text-center text-4xl">
-          <h2 className="text-[#ffccc8]">Reporte General</h2>
+        {/*REporte General SEMANAL*/}
+        <div className="flex-1 p-10">
+          <div className="flex items-center">
+            {/* Imagen a la izquierda */}
+            <div className="mr-6">
+              <img className="rounded-full w-80 h-30" 
+            src="https://i.pinimg.com/736x/e9/eb/9e/e9eb9ec1b0da71003807507b2368cd21.jpg" 
+            alt="image paciente"
+               />
+               <h3 className="text-[#000000] text-center font-bold">Paciente:</h3>
+               <h3 className="text-[#000000] text-center">Guillermo Lora</h3>
+            </div>
+
+            {/* Texto a la derecha de la imagen */}
+            <div>
+              <div className="text-center text-4xl">
+                <h2 className="text-[#b3908e]">Reporte General</h2>
+                <h3 className="text-[#f6938c]">Semana 1</h3>
+              </div>
+              <p className="text-black text-center">
+                Se ha identificado un patrón de ansiedad generalizada, acompañado de dificultades para 
+                manejar el estrés y relaciones interpersonales. Se observa una tendencia a la autoexigencia
+                y una baja autoestima que influyen en su estado de ánimo y bienestar general.
+              </p>
+              <div className="flex place-self-center space-x-8">
+                  {/** BOTON IZQ  */}
+              <button className="button-custom">
+                <svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512">
+                  <path fill="#f6938c" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+                </svg>
+              </button>
+                   {/** BOTON DERECHO  */}
+              <button className="button-custom">
+                <svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512">
+                  <path fill="#f6938d" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+                </svg>
+              </button>
+
+              </div>
+            </div>
+          </div>
         </div>
-        <p className="text-black text-justify">
-          Soy la Psicóloga Ramírez, con más de 10 años de experiencia en el ámbito clínico. 
-          Me especializo en el tratamiento de la ansiedad, depresión y el manejo del estrés. 
-          Mi enfoque terapéutico está basado en la Terapia Cognitivo-Conductual (TCC), buscando 
-          siempre un acompañamiento integral y personalizado. A lo largo de mi carrera, he ayudado 
-          a numerosas personas a superar sus retos emocionales y mejorar su calidad de vida. Si necesitas 
-          apoyo o guía para enfrentar cualquier desafío, no dudes en contactarme. Estoy aquí para ayudarte 
-          a alcanzar tu bienestar emocional.
-        </p>
-      </div>
     </div>
 
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
+      <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+        
+        {/*Pacientes Recientes*/}
         <div className="bg-white p-4 rounded-lg shadow ">
           <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Pacientes Recientes</h2>
+          <div className="max-h-80 overflow-y-auto scroll-container">
           <ul>
             {patientsData.map((patient, index) => (
               <li key={index} className="p-2 border-b last:border-none">
@@ -89,10 +152,13 @@ const Dashboard = () => {
               </li>
             ))}
           </ul>
+          </div>
         </div>
 
+            {/*Alertas Urgentes*/}
         <div className="bg-[#ffffff] p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Alertas Urgentes</h2>
+          <div className="max-h-80 overflow-y-auto scroll-container">
           <ul>
             {alertas.map((alert, index) => (
               <li key={index} className="p-2  text-black flex items-center hover:rounded-2xl  hover:bg-[#a45656] hover:text-amber-50 hover:font-bold svg-hover-task">
@@ -108,10 +174,11 @@ const Dashboard = () => {
               </li>
             ))}
           </ul>
+          </div>
         </div>
 
 
-
+            {/*Proximas citas*/}
         <div className="bg-white p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Próximas Citas</h2>
           <div className="flex justify-center">
@@ -119,8 +186,10 @@ const Dashboard = () => {
           </div>
         </div>
 
+            {/*Tareas Penientes*/}
         <div className="bg-white p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Tareas Pendientes</h2>
+          <div className="max-h-96 overflow-y-auto  scroll-container">
           <ul>
             {tasks.map((task, index) => (
               <li key={index} className="p-2  text-black flex items-center hover:rounded-2xl  hover:bg-[#7c638d] hover:text-amber-50 hover:font-bold svg-hover-task">
@@ -137,9 +206,63 @@ const Dashboard = () => {
                 </li>
             ))}
           </ul>
+          </div>
         </div>
 
-        <div className="bg-white p-4 rounded-lg shadow col-span-1 md:col-span-2">
+        
+         {/*TAREAS PARA EVA*/}
+
+         <div className="bg-white p-4 rounded-lg shadow md:col-span-2">
+              <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Establece una actividad</h2>
+              <div className="flex flex-col h-[400px]"> {/* Ajuste del contenedor */}
+                <div className="max-h-[288px] overflow-y-auto scroll-container flex-grow">
+                  <ul>
+                    {tasksEva.map((taskEva, index) => (
+                      <li
+                        key={index}
+                        className="p-2 text-black flex items-center hover:rounded-2xl hover:bg-[#e77c7c] hover:text-amber-50 hover:font-bold svg-hover-taskEva"
+                      >
+                        <div
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            marginRight: "8px",
+                            flexShrink: 0,
+                          }}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" height="32" width="36" viewBox="0 0 576 512">
+                          <path fill="#f6938c" d="M96 80c0-26.5 21.5-48 48-48l288 0c26.5 0 48 21.5 48 48l0 304L96 384 96 80zm313 47c-9.4-9.4-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L409 161c9.4-9.4 9.4-24.6 0-33.9zM0 336c0-26.5 21.5-48 48-48l16 0 0 128 448 0 0-128 16 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48L48 480c-26.5 0-48-21.5-48-48l0-96z"/></svg>
+
+                        </div>
+                        <span>{taskEva.taskEva}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <form onSubmit={handleAddTask} className="mt-4 flex">
+                  <input
+                    type="text"
+                    value={newTaskEva}
+                    onChange={(e) => setNewTaskEva(e.target.value)}
+                    placeholder="Escribe un mensaje..."
+                    className="p-2 border border-gray-300 rounded-l-lg flex-grow text-black"
+                  />
+                  <button
+                    type="submit"
+                    className="button-custom text-white"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512">
+                      <path fill="#f6938c" d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+
+
+            {/*Gráficos de Evolución de Pacientes*/}
+        <div className="bg-white p-4 rounded-lg shadow col-span-1 md:col-span-full">
           <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Gráficos de Evolución de Pacientes</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={patientProgressData}>
@@ -152,6 +275,9 @@ const Dashboard = () => {
             </LineChart>
           </ResponsiveContainer>
         </div>
+
+           
+
       </div>
     </div>
     </>

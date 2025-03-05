@@ -73,7 +73,7 @@ const Dashboard = () => {
     }
   };
   return (
-<>
+<div className = "pt-20">
     
 
     <div className="container mx-auto p-4 flex-wrap">
@@ -226,7 +226,7 @@ const Dashboard = () => {
                           style={{
                             width: "30px",
                             height: "30px",
-                            marginRight: "8px",
+                            marginRight: "8px", 
                             flexShrink: 0,
                           }}
                         >
@@ -280,7 +280,7 @@ const Dashboard = () => {
 
       </div>
     </div>
-    </>
+    </div >
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom'; // Importa Link
+import './general.css';
 
 const Register = () => {
   const [firstName, setFirstName] = useState('');
@@ -28,7 +29,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen ">
+    <div className="flex justify-center items-center min-h-screen pt-20 sinBarraDesplazamiento">
 
       <div className="bg-white p-8 rounded-xl shadow-lg max-w-full">
         <h2 className="text-3xl text-center font-semibold text-[#8ac8fb] mb-6">Crear Cuenta</h2>

@@ -1,0 +1,6 @@
+.sinBarraDesplazamiento {
+    overflow: hidden; /* Deshabilita el scroll en este contenedor específico */
+    height: 100vh; /* Ajusta al tamaño de la pantalla */
+    width: 100vw; /* Ajusta al tamaño de la pantalla */
+    position: relative; /* Asegura que esté en el contexto adecuado */
+  }

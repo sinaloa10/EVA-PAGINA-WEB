@@ -1,5 +1,6 @@
 import '../Principal/web.css'
 
+
 const beneficios = [
     { titulo: "Precio", descripcion: "TA BIEN VARA." },
     { titulo: "Funcionalidad", descripcion: "JALA CHIDO." },
@@ -10,7 +11,8 @@ const beneficios = [
 export default function HOME() {
 
     return (
-        <div >
+        <>
+        <div  >
             {/* Encabezado */}
             <div className="relative w-screen h-[600px] bg-cover bg-center bg-no-repeat bg-[url('/img/EvanSinLetra.png')] text-white flex items-center justify-center">
                 <div style={{ fontFamily: "Thinkers, sans-serif" }}>
@@ -55,8 +57,16 @@ export default function HOME() {
                         Crear cuenta.
                     </button>
                 </div>
+                
             </section>
 
+            
+               
+            
+
+                    
         </div>
+       
+        </>
     );
 }

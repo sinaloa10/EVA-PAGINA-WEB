@@ -97,7 +97,7 @@ const Dashboard = () => {
             {/* Imagen a la izquierda */}
             <div className="mr-6">
               <img className="rounded-full w-80 h-30" 
-            src="https://i.pinimg.com/736x/e9/eb/9e/e9eb9ec1b0da71003807507b2368cd21.jpg" 
+            src="https://i.pinimg.com/736x/3c/13/98/3c139858ade16fe6bf2b3c8f7f2cd0fd.jpg" 
             alt="image paciente"
                />
                <h3 className="text-[#000000] text-center font-bold">Paciente:</h3>

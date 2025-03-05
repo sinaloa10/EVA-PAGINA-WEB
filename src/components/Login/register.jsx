@@ -32,12 +32,12 @@ const Register = () => {
     <div className="flex justify-center items-center min-h-screen pt-20 sinBarraDesplazamiento">
 
       <div className="bg-white p-8 rounded-xl shadow-lg max-w-full">
-        <h2 className="text-3xl text-center font-semibold text-[#8ac8fb] mb-6">Crear Cuenta</h2>
+        <h2 className="text-3xl text-center font-semibold text-[#023d6d] mb-6">Crear Cuenta</h2>
         <form onSubmit={handleRegister} className="grid grid-cols-1 ">
           {/* Nombre y Apellido (En columnas) */}
           <div className="grid grid-cols-2 gap-4">
             <div className="mb-4">
-              <label className="block text-[#8ac8fb] text-sm font-medium" htmlFor="firstName">Nombre</label>
+              <label className="block text-[#023d6d] text-sm font-medium" htmlFor="firstName">Nombre</label>
               <input 
                 type="text" 
                 id="firstName"
@@ -50,7 +50,7 @@ const Register = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-[#8ac8fb] text-sm font-medium" htmlFor="lastName">Apellido</label>
+              <label className="block text-[#023d6d] text-sm font-medium" htmlFor="lastName">Apellido</label>
               <input 
                 type="text" 
                 id="lastName"
@@ -65,7 +65,7 @@ const Register = () => {
 
           {/* Correo Electrónico */}
           <div className="mb-4">
-            <label className="block text-[#8ac8fb] text-sm font-medium" htmlFor="email">Correo Electrónico</label>
+            <label className="block text-[#023d6d] text-sm font-medium" htmlFor="email">Correo Electrónico</label>
             <input 
               type="email" 
               id="email"
@@ -79,7 +79,7 @@ const Register = () => {
 
           {/* Número de Teléfono */}
           <div className="mb-4">
-            <label className="block text-[#8ac8fb] text-sm font-medium" htmlFor="phoneNumber">Número de Teléfono</label>
+            <label className="block text-[#023d6d] text-sm font-medium" htmlFor="phoneNumber">Número de Teléfono</label>
             <input 
               type="tel" 
               id="phoneNumber"
@@ -94,7 +94,7 @@ const Register = () => {
           {/* Contraseña y Confirmar Contraseña (En columnas) */}
           <div className="grid grid-cols-2 gap-4">
             <div className="mb-4">
-              <label className="block text-[#8ac8fb] text-sm font-medium" htmlFor="password">Contraseña</label>
+              <label className="block text-[#023d6d] text-sm font-medium" htmlFor="password">Contraseña</label>
               <input 
                 type="password" 
                 id="password" 
@@ -107,7 +107,7 @@ const Register = () => {
             </div>
 
             <div className="mb-6">
-              <label className="block text-[#8ac8fb] text-sm font-medium" htmlFor="confirmPassword">Confirmar Contraseña</label>
+              <label className="block text-[#023d6d] text-sm font-medium" htmlFor="confirmPassword">Confirmar Contraseña</label>
               <input 
                 type="password" 
                 id="confirmPassword"
@@ -143,7 +143,7 @@ const Register = () => {
           {/* Enlace para iniciar sesión */}
           <div className="text-center ">
             <Link to="/login" 
-            style={{ color: hoveredLogin ? '#8ac8fb' : '#E8B9B6' }}
+            style={{ color: hoveredLogin ? '#E8B9B6' : '#023d6d' }}
             onMouseEnter={() => setHoveredLogin(true)}  // Al pasar el mouse
             onMouseLeave={() => setHoveredLogin(false)}  // Al salir del mouse
             >¿Ya tienes una cuenta? Inicia sesión</Link>

@@ -23,10 +23,10 @@ const Login = () => {
   return (
     <div className="flex justify-center items-center min-h-screen sinBarraDesplazamiento">
       <div className="bg-white p-8 rounded-xl shadow-lg w-96">
-        <h2 className="text-3xl text-center font-semibold text-[#8ac8fb] mb-6">Iniciar Sesión</h2>
+        <h2 className="text-3xl text-center font-semibold text-[#023d6d] mb-6">Iniciar Sesión</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
-            <label className="block text-[#8ac8fb] text-sm font-medium" htmlFor="email">Correo Electrónico</label>
+            <label className="block text-[#023d6d] text-sm font-medium" htmlFor="email">Correo Electrónico</label>
             <input 
               type="email" 
               id="email"
@@ -39,7 +39,7 @@ const Login = () => {
           </div>
           
           <div className="mb-6">
-            <label className="block text-[#8ac8fb] text-sm font-medium " htmlFor="password">Contraseña</label>
+            <label className="block text-[#023d6d] text-sm font-medium " htmlFor="password">Contraseña</label>
             <input 
               type="password" 
               id="password" 
@@ -71,7 +71,7 @@ const Login = () => {
 
           <div className="text-center m-2">
             <Link  
-              style={{ color: hoveredOlvido ? '#8ac8fb' : '#E8B9B6' }}
+              style={{ color: hoveredOlvido ? '#E8B9B6' : '#023d6d'  }}
               onMouseEnter={() => setHoveredOlvido(true)}  // Al pasar el mouse
               onMouseLeave={() => setHoveredOlvido(false)}  // Al salir del mouse
             >
@@ -81,11 +81,11 @@ const Login = () => {
           <div className="text-center m-2">
             <Link 
               to="/register"  
-              style={{ color: hoveredRegistrar ? '#8ac8fb' : '#E8B9B6' }}
+              style={{ color: hoveredRegistrar ? '#E8B9B6' : '#023d6d'  }}
               onMouseEnter={() => setHoveredRegistrar(true)}  // Al pasar el mouse
               onMouseLeave={() => setHoveredRegistrar(false)}  // Al salir del mouse
             >
-              ¿No tienes una cuenta bb? Crea una
+              ¿No tienes una cuenta? Crea una
             </Link>
           </div>
         </form>

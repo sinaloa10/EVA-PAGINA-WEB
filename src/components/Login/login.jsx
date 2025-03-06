@@ -14,7 +14,7 @@ const Login = () => {
 
     try {
       // Enviar solicitud de inicio de sesión al backend
-      const response = await axios.post('http://localhost:3000/api/auth/login/psychologist', {
+      const response = await axios.post('http://evasalud.com.mx:3000/api/auth/login/psychologist', {
         email,  
         password,
       });

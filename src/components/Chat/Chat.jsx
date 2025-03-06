@@ -1,10 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './Chat.css';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const usuarioId = "0f961737-f9e7-484d-b65c-f60b78610aaa"; // ID estático
+
+  // Función para cargar el historial de mensajes
+  useEffect(() => {
+    const fetchMessageHistory = async () => {
+      try {
+        const response = await fetch("http://evasalud.com.mx:3000/api/eva/message-history", {
+          method: "POST", // o GET si prefieres, dependiendo de tu backend
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ usuarioId }), // Pasa el ID del usuario
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const messages = data.messages.flatMap(msg => [
+            msg.user_message ? { text: msg.user_message, sender: "Yo" } : null,
+            msg.bot_message ? { text: msg.bot_message, sender: "EVA" } : null
+          ]).filter(Boolean);  // Eliminar los nulls
+
+          setMessages(messages);
+        } else {
+          console.error("Error en la respuesta del servidor");
+        }
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
+    };
+
+    fetchMessageHistory(); // Llama a la función cuando el componente se monta
+  }, [usuarioId]);
 
   const sendMessage = async () => {
     if (input.trim() !== "") {
@@ -13,7 +44,7 @@ export default function Chat() {
       setInput("");
 
       try {
-        const response = await fetch("http://localhost:3000/api/eva/respuesta-eva", {
+        const response = await fetch("http://evasalud.com.mx:3000/api/eva/respuesta-eva", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -1,18 +1,9 @@
-
 import Calendar from "react-calendar";
 import './Dashboard.css';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { useState } from "react";
-
-const patientsData = [
-  { name: 'Carmen Alvira', emotionalState: 'Ansioso' },
-  { name: 'Maria Chavez', emotionalState: 'Triste' },
-  { name: 'Santiago Suarez', emotionalState: 'Estable' },
-  { name: 'Homero Padilla', emotionalState: 'En crisis' },
-  { name: 'Esteban Martínez', emotionalState: 'En crisis' },
-
-];
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const emotionColors = {
   ansioso: "bg-yellow-300 text-yellow-900",
@@ -22,12 +13,12 @@ const emotionColors = {
 };
 
 const alertas = [
-  { message: 'Homero mostró señales de crisis. Revisar urgentemente.' },
-  { message: 'Maria reportó aumento de tristeza.' },
-  { message: 'Carmen reportó ansiedad.' },
-  { message: 'Santiago reportó aumento de ansiedad.' },
-  { message: 'Esteban reportó crisis emocional.' },
-  { message: 'Karen reportó crisis emocional.' },
+  { message: 'Mostró señales de crisis. Revisar urgentemente.' },
+  { message: 'Reportó aumento de tristeza.' },
+  { message: 'Reportó ansiedad.' },
+  { message: 'Reportó aumento de ansiedad.' },
+  { message: 'Reportó crisis emocional.' },
+  { message: 'Reportó crisis emocional.' },
 
 
   
@@ -38,13 +29,6 @@ const tasks = [
   { task: 'Revisar informe de Paciente 1' },
   { task: 'Revisar informe de Paciente 2' },
   { task: 'Responder mensaje de Paciente 1' },
-  { task: 'Revisar informe de Paciente 3' },
-  { task: 'Responder mensaje de Paciente 2' },
-  { task: 'Revisar informe de Paciente 1' },
-  { task: 'Revisar informe de Paciente 3' },
-  { task: 'Responder mensaje de Paciente 1' },
-  { task: 'Revisar informe de Paciente 2' },
-  { task: 'Revisar informe de Paciente 1' },
   { task: 'Revisar informe de Paciente 3' },
 ];
 
@@ -58,20 +42,87 @@ const patientProgressData = [
 ];
 
 const Dashboard = () => {
-  const [tasksEva, setTaskEva] = useState([
-    { taskEva: 'Al paciente 4 mandarle mensajes de apoyo' },
-    { taskEva: 'Al paciente 2 recordarle hacer caminatas de media hora' }
-   
-  ]);
+  const [patientsData, setPatientsData] = useState([]);
+  const [tasksEva, setTaskEva] = useState([]);
   const [newTaskEva, setNewTaskEva] = useState("");
-  
-  const handleAddTask = (e) => {
-    e.preventDefault();
-    if (newTaskEva.trim()) {
-      setTaskEva([...tasksEva, { taskEva: newTaskEva }]);
-      setNewTaskEva(""); // Clear the input field after submission
+  const [aiReport, setAiReport] = useState(null);
+  const [chartData, setChartData] = useState([]);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  const psychologistId = localStorage.getItem('psychologist_id'); // Recuperar psychologist_id desde localStorage
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/dash/patients/${psychologistId}`);
+        setPatientsData(response.data.patients || []);
+        if (response.data.patients.length > 0) {
+          setSelectedPatient(response.data.patients[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching patients:', error);
+      }
+    };
+
+    const fetchActivities = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/dash/activities/${selectedPatient.patient_id}`);
+        setTaskEva(response.data.activities || []);
+      } catch (error) {
+        console.error('Error fetching activities:', error);
+      }
+    };
+
+    const fetchChartData = async (psychologistId, patientId) => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/dash/charts/${psychologistId}/${patientId}`);
+        setChartData(response.data.charts || []);
+      } catch (error) {
+        console.error('Error fetching charts:', error);
+      }
+    };
+
+    fetchPatients();
+    if (selectedPatient) {
+      fetchActivities();
+      fetchChartData(psychologistId, selectedPatient.patient_id);
+    }
+  }, [psychologistId]);
+
+  const fetchAiReport = async (psychologistId, patientId) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/dash/ai-reports/${psychologistId}/${patientId}`);
+      setAiReport(response.data.ai_reports[0] || null);
+    } catch (error) {
+      console.error('Error fetching AI report:', error);
     }
   };
+
+  useEffect(() => {
+    if (selectedPatient) {
+      fetchAiReport(psychologistId, selectedPatient.patient_id);
+      console.log(selectedPatient.patient_id);
+    }
+  }, [selectedPatient]);
+
+  const handleAddTask = async (e) => {
+    e.preventDefault();
+    if (newTaskEva.trim()) {
+      try {
+        await axios.post('http://localhost:3000/api/dash/activities', {
+          psychologist_id: psychologistId,
+          description: newTaskEva,
+          recommendation_date: new Date().toISOString(),
+          patient_id: selectedPatient.patient_id // Use the selected patient's ID
+        });
+        setTaskEva([...tasksEva, { taskEva: newTaskEva }]);
+        setNewTaskEva(""); // Clear the input field after submission
+      } catch (error) {
+        console.error('Error adding activity:', error);
+      }
+    }
+  };
+
   return (
 <div className = "pt-20">
     
@@ -96,12 +147,12 @@ const Dashboard = () => {
           <div className="flex items-center">
             {/* Imagen a la izquierda */}
             <div className="mr-6">
-              <img className="rounded-full w-80 h-30" 
+              <img className=" rounded-full w-80 h-30" 
             src="https://i.pinimg.com/736x/3c/13/98/3c139858ade16fe6bf2b3c8f7f2cd0fd.jpg" 
             alt="image paciente"
                />
                <h3 className="text-[#000000] text-center font-bold">Paciente:</h3>
-               <h3 className="text-[#000000] text-center">Guillermo Lora</h3>
+               <h3 className="text-[#000000] text-center">{selectedPatient ? selectedPatient.name : "Cargando..."}</h3>
             </div>
 
             {/* Texto a la derecha de la imagen */}
@@ -111,9 +162,7 @@ const Dashboard = () => {
                 <h3 className="text-[#f6938c]">Semana 1</h3>
               </div>
               <p className="text-black text-center">
-                Se ha identificado un patrón de ansiedad generalizada, acompañado de dificultades para 
-                manejar el estrés y relaciones interpersonales. Se observa una tendencia a la autoexigencia
-                y una baja autoestima que influyen en su estado de ánimo y bienestar general.
+                {aiReport ? aiReport.details : "Cargando reporte..."}
               </p>
               <div className="flex place-self-center space-x-8">
                   {/** BOTON IZQ  */}
@@ -138,15 +187,15 @@ const Dashboard = () => {
         
       <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
         
-        {/*Pacientes Recientes*/}
+        {/*Pacientes*/}
         <div className="bg-white p-4 rounded-lg shadow ">
-          <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Pacientes Recientes</h2>
+          <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Pacientes</h2>
           <div className="max-h-80 overflow-y-auto scroll-container">
           <ul>
             {patientsData.map((patient, index) => (
-              <li key={index} className="p-2 border-b last:border-none">
+              <li key={index} className="p-2 border-b last:border-none cursor-pointer" onClick={() => setSelectedPatient(patient)}>
                 <div className="text-[#0f0e0e]">{patient.name}</div>
-                <div className={`text-sm font-medium px-2 py-1 rounded ${emotionColors[patient.emotionalState.toLowerCase().replace(' ', '-')] || "bg-gray-200"}`}>
+                <div className={`text-sm font-medium px-2 py-1 rounded ${emotionColors[patient.emotionalState?.toLowerCase().replace(' ', '-')] || "bg-gray-200"}`}>
                     {patient.emotionalState}
                       </div>
               </li>
@@ -202,7 +251,7 @@ const Dashboard = () => {
                       />
                     </svg>
                 </div>
-                  <spam>{task.task}</spam>
+                  <span>{task.task}</span>
                 </li>
             ))}
           </ul>
@@ -213,7 +262,7 @@ const Dashboard = () => {
          {/*TAREAS PARA EVA*/}
 
          <div className="bg-white p-4 rounded-lg shadow md:col-span-2">
-              <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Establece una actividad</h2>
+              <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Establece una actividad para el paciente</h2>
               <div className="flex flex-col h-[400px]"> {/* Ajuste del contenedor */}
                 <div className="max-h-[288px] overflow-y-auto scroll-container flex-grow">
                   <ul>
@@ -234,7 +283,7 @@ const Dashboard = () => {
                           <path fill="#f6938c" d="M96 80c0-26.5 21.5-48 48-48l288 0c26.5 0 48 21.5 48 48l0 304L96 384 96 80zm313 47c-9.4-9.4-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L409 161c9.4-9.4 9.4-24.6 0-33.9zM0 336c0-26.5 21.5-48 48-48l16 0 0 128 448 0 0-128 16 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48L48 480c-26.5 0-48-21.5-48-48l0-96z"/></svg>
 
                         </div>
-                        <span>{taskEva.taskEva}</span>
+                        <span>{taskEva.description}</span>
                       </li>
                     ))}
                   </ul>
@@ -263,15 +312,15 @@ const Dashboard = () => {
 
             {/*Gráficos de Evolución de Pacientes*/}
         <div className="bg-white p-4 rounded-lg shadow col-span-1 md:col-span-full">
-          <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Gráficos de Evolución de Pacientes</h2>
+          <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Gráficos de evolución del paciente</h2>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={patientProgressData}>
+            <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="type" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="score" stroke="#8884d8" />
+              <Line type="monotone" dataKey="percentage" stroke="#8884d8" />
             </LineChart>
           </ResponsiveContainer>
         </div>

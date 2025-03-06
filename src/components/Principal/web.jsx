@@ -42,7 +42,7 @@ export default function HOME() {
                             Más detalles
                         </button>
                     </div>
-                    <img src="/img/psicologo.jpg" alt="Psicólogo usando EVA" className="rounded-3xl shadow-xl transform hover:scale-105 transition-all duration-300" />
+                    <img src="./img1.png" alt="Psicólogo usando EVA" className="rounded-3xl shadow-xl transform hover:scale-105 transition-all duration-300" />
                 </div>
             </section>
 

@@ -1,22 +1,34 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from 'react-router-dom'; // Importa Link
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios'; // Importar Axios
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [hoveredOlvido, setHoveredOlvido] = useState(false); // Estado para el hover del email
-  const [hoveredRegistrar, setHoveredRegistrar] = useState(false); // Estado para el hover de la contraseña
+  const [hoveredOlvido, setHoveredOlvido] = useState(false);
+  const [hoveredRegistrar, setHoveredRegistrar] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    
-    if (email === 'ejmeplo@gmail.com' && password === 'pas123') {
-         navigate ('/dashboard');
-    }else{
-        alert('Correo electrónico o contraseña incorrectos');
-        setEmail('');
-        setPassword('');
+
+    try {
+      // Enviar solicitud de inicio de sesión al backend
+      const response = await axios.post('http://localhost:3000/api/auth/login/psychologist', {
+        email,
+        password,
+      });
+
+      // Si la respuesta es exitosa, navegar al dashboard
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token); // Guardar token en localStorage
+        localStorage.setItem('psychologist_id', response.data.psychologist_id); // Guardar psychologist_id en localStorage
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      alert('Correo electrónico o contraseña incorrectos');
+      setEmail('');
+      setPassword('');
     }
   };
 
@@ -54,7 +66,7 @@ const Login = () => {
           <button 
             type="submit" 
             style={{
-              backgroundColor: '#8ac8fb', // Color similar a amber-100
+              backgroundColor: '#8ac8fb',
               color: 'white',
               padding: '12px 0',
               borderRadius: '8px',
@@ -62,9 +74,8 @@ const Login = () => {
               width: '100%',
               transition: 'background-color 0.3s ease'
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#E8B9B6'} // Hover
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#8ac8fb'} // Vuelve al color original
-          
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#E8B9B6'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#8ac8fb'}
           >
             Iniciar Sesión
           </button>
@@ -72,8 +83,8 @@ const Login = () => {
           <div className="text-center m-2">
             <Link  
               style={{ color: hoveredOlvido ? '#E8B9B6' : '#023d6d'  }}
-              onMouseEnter={() => setHoveredOlvido(true)}  // Al pasar el mouse
-              onMouseLeave={() => setHoveredOlvido(false)}  // Al salir del mouse
+              onMouseEnter={() => setHoveredOlvido(true)}  
+              onMouseLeave={() => setHoveredOlvido(false)}  
             >
               ¿No recuerdas la contraseña?
             </Link>
@@ -82,8 +93,8 @@ const Login = () => {
             <Link 
               to="/register"  
               style={{ color: hoveredRegistrar ? '#E8B9B6' : '#023d6d'  }}
-              onMouseEnter={() => setHoveredRegistrar(true)}  // Al pasar el mouse
-              onMouseLeave={() => setHoveredRegistrar(false)}  // Al salir del mouse
+              onMouseEnter={() => setHoveredRegistrar(true)}  
+              onMouseLeave={() => setHoveredRegistrar(false)}  
             >
               ¿No tienes una cuenta? Crea una
             </Link>

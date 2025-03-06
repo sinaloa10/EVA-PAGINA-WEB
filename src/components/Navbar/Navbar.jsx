@@ -42,6 +42,22 @@ const Navbar = () => {
             Iniciar Sesión
           </Link>
         </li>
+
+        <li
+          className="hover:text-[#8ac8fb] transition-all duration-300"
+          onMouseEnter={() => setHoveredLink('chat')}
+          onMouseLeave={() => setHoveredLink(null)}
+        >
+          <Link
+            to="/chat"
+            style={{
+              color: hoveredLink === 'chat' ? '#8ac8fb' : '#E8B9B6',
+              textDecoration: 'none',
+            }}
+          >
+            Chat
+          </Link>
+        </li>
         
       </ul>
     </nav>

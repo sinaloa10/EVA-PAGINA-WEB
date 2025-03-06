@@ -6,6 +6,7 @@ import Login from './components/Login/login';
 import Register from './components/Login/register';
 import Navbar from '../src/components/Navbar/Navbar';
 import Footer from './components/Footer/footer';
+import Chat from './components/Chat/Chat';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
               </>} /> {/* Ruta para Principal con Footer */}
           <Route path="/dashboard" element={<Dashboard className="p-96"/>}  /> {/* Ruta para Dashboard */}
           <Route path="/register" element={<Register />} /> {/* Ruta para Registro */}
+          <Route path="/chat" element={<Chat />} /> {/* Ruta para Chat */}
         </Routes>
       </div>
 

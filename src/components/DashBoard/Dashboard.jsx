@@ -147,7 +147,7 @@ const Dashboard = () => {
           <div className="flex items-center">
             {/* Imagen a la izquierda */}
             <div className="mr-6">
-              <img className=" rounded-full w-80 h-30" 
+              <img className=" rounded-full object-cover" 
             src="https://i.pinimg.com/736x/3c/13/98/3c139858ade16fe6bf2b3c8f7f2cd0fd.jpg" 
             alt="image paciente"
                />
@@ -156,7 +156,7 @@ const Dashboard = () => {
             </div>
 
             {/* Texto a la derecha de la imagen */}
-            <div>
+            <div className=" w-full">
               <div className="text-center text-4xl">
                 <h2 className="text-[#b3908e]">Reporte General</h2>
                 <h3 className="text-[#f6938c]">Semana 1</h3>

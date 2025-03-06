@@ -19,10 +19,8 @@ const alertas = [
   { message: 'Reportó aumento de ansiedad.' },
   { message: 'Reportó crisis emocional.' },
   { message: 'Reportó crisis emocional.' },
-
-
-  
 ];
+
 
 const tasks = [
   { task: 'Responder mensaje de Paciente 3' },
@@ -34,19 +32,20 @@ const tasks = [
 
 
 
-const patientProgressData = [
-  { name: 'Semana 1', score: 60 },
-  { name: 'Semana 2', score: 65 },
-  { name: 'Semana 3', score: 70 },
-  { name: 'Semana 4', score: 85 }
+const anxietyData = [
+  { day: 'Día 1', anxiety: 80 },
+  { day: 'Día 2', anxiety: 70 },
+  { day: 'Día 3', anxiety: 60 },
+  { day: 'Día 4', anxiety: 50 },
+  { day: 'Día 5', anxiety: 40 }
 ];
+
 
 const Dashboard = () => {
   const [patientsData, setPatientsData] = useState([]);
   const [tasksEva, setTaskEva] = useState([]);
   const [newTaskEva, setNewTaskEva] = useState("");
   const [aiReport, setAiReport] = useState(null);
-  const [chartData, setChartData] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
 
   const psychologistId = localStorage.getItem('psychologist_id'); // Recuperar psychologist_id desde localStorage
@@ -54,7 +53,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/patients/${psychologistId}`);
+        const response = await axios.get(`http://localhost:3000/api/dash/patients/${psychologistId}`);
         setPatientsData(response.data.patients || []);
         if (response.data.patients.length > 0) {
           setSelectedPatient(response.data.patients[0]);
@@ -64,34 +63,27 @@ const Dashboard = () => {
       }
     };
 
+    fetchPatients();
+  }, [psychologistId]);
+
+  useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/activities/${selectedPatient.patient_id}`);
+        const response = await axios.get(`http://localhost:3000/api/dash/activities/${selectedPatient.patient_id}`);
         setTaskEva(response.data.activities || []);
       } catch (error) {
         console.error('Error fetching activities:', error);
       }
     };
 
-    const fetchChartData = async (psychologistId, patientId) => {
-      try {
-        const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/charts/${psychologistId}/${patientId}`);
-        setChartData(response.data.charts || []);
-      } catch (error) {
-        console.error('Error fetching charts:', error);
-      }
-    };
-
-    fetchPatients();
     if (selectedPatient) {
       fetchActivities();
-      fetchChartData(psychologistId, selectedPatient.patient_id);
     }
-  }, [psychologistId]);
+  }, [selectedPatient]);
 
   const fetchAiReport = async (psychologistId, patientId) => {
     try {
-      const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/ai-reports/${psychologistId}/${patientId}`);
+      const response = await axios.get(`http://localhost:3000/api/dash/ai-reports/${psychologistId}/${patientId}`);
       setAiReport(response.data.ai_reports[0] || null);
     } catch (error) {
       console.error('Error fetching AI report:', error);
@@ -109,7 +101,7 @@ const Dashboard = () => {
     e.preventDefault();
     if (newTaskEva.trim()) {
       try {
-        await axios.post('http://evasalud.com.mx:3000/api/dash/activities', {
+        await axios.post('http://localhost:3000/api/dash/activities', {
           psychologist_id: psychologistId,
           description: newTaskEva,
           recommendation_date: new Date().toISOString(),
@@ -314,13 +306,13 @@ const Dashboard = () => {
         <div className="bg-white p-4 rounded-lg shadow col-span-1 md:col-span-full">
           <h2 className="text-xl font-semibold mb-2 text-[#8ac8fb]">Gráficos de evolución del paciente</h2>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData}>
+            <LineChart data={anxietyData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="type" />
-              <YAxis />
+              <XAxis dataKey="day" />
+              <YAxis domain={[0, 100]} />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="percentage" stroke="#8884d8" />
+              <Line type="monotone" dataKey="anxiety" stroke="#8884d8" />
             </LineChart>
           </ResponsiveContainer>
         </div>

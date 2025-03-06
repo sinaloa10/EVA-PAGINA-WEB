@@ -54,7 +54,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/dash/patients/${psychologistId}`);
+        const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/patients/${psychologistId}`);
         setPatientsData(response.data.patients || []);
         if (response.data.patients.length > 0) {
           setSelectedPatient(response.data.patients[0]);
@@ -66,7 +66,7 @@ const Dashboard = () => {
 
     const fetchActivities = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/dash/activities/${selectedPatient.patient_id}`);
+        const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/activities/${selectedPatient.patient_id}`);
         setTaskEva(response.data.activities || []);
       } catch (error) {
         console.error('Error fetching activities:', error);
@@ -75,7 +75,7 @@ const Dashboard = () => {
 
     const fetchChartData = async (psychologistId, patientId) => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/dash/charts/${psychologistId}/${patientId}`);
+        const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/charts/${psychologistId}/${patientId}`);
         setChartData(response.data.charts || []);
       } catch (error) {
         console.error('Error fetching charts:', error);
@@ -91,7 +91,7 @@ const Dashboard = () => {
 
   const fetchAiReport = async (psychologistId, patientId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/dash/ai-reports/${psychologistId}/${patientId}`);
+      const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/ai-reports/${psychologistId}/${patientId}`);
       setAiReport(response.data.ai_reports[0] || null);
     } catch (error) {
       console.error('Error fetching AI report:', error);
@@ -109,7 +109,7 @@ const Dashboard = () => {
     e.preventDefault();
     if (newTaskEva.trim()) {
       try {
-        await axios.post('http://localhost:3000/api/dash/activities', {
+        await axios.post('http://evasalud.com.mx:3000/api/dash/activities', {
           psychologist_id: psychologistId,
           description: newTaskEva,
           recommendation_date: new Date().toISOString(),

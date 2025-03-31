@@ -27,21 +27,7 @@ const Navbar = () => {
             Inicio
           </Link>
         </li>
-        <li
-          className="hover:text-[#8ac8fb] transition-all duration-300"
-          onMouseEnter={() => setHoveredLink('login')}
-          onMouseLeave={() => setHoveredLink(null)}
-        >
-          <Link
-            to="/login"
-            style={{
-              color: hoveredLink === 'login' ? '#8ac8fb' : '#E8B9B6',
-              textDecoration: 'none',
-            }}
-          >
-            Iniciar Sesión
-          </Link>
-        </li>
+        
 
         <li
           className="hover:text-[#8ac8fb] transition-all duration-300"
@@ -58,7 +44,21 @@ const Navbar = () => {
             Chat
           </Link>
         </li>
-        
+        <li
+          className="hover:text-[#8ac8fb] transition-all duration-300"
+          onMouseEnter={() => setHoveredLink('login')}
+          onMouseLeave={() => setHoveredLink(null)}
+        >
+          <Link
+            to="/login"
+            style={{
+              color: hoveredLink === 'login' ? '#8ac8fb' : '#E8B9B6',
+              textDecoration: 'none',
+            }}
+          >
+            Iniciar Sesión
+          </Link>
+        </li>
       </ul>
     </nav>
   );

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-8 w-full">
+    <footer style={{ backgroundColor: "#023d6d" }} className="text-white py-8 w-full">
       <div className="max-w-5xl mx-auto text-center">
         {/* Logo o Nombre */}
         <h2 className="text-xl font-bold">EVA T.I</h2>
@@ -34,4 +34,3 @@ export default function Footer() {
     </footer>
   );
 }
-

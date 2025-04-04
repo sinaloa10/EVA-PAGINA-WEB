@@ -104,7 +104,7 @@ export default function HOME() {
             {/* Encabezado */}
             <div className="relative w-screen h-[600px] bg-cover bg-center bg-no-repeat bg-[url('/img/EvanSinLetra.png')] text-white flex items-center justify-center">
                 <div className="text-center">
-                    <h1 className="text-6xl font-bold text-[#023d6d] animate__animated animate__fadeIn">Eva: Salud Mental</h1>
+                    <h1 className="text-6xl font-bold text-[#023d6d] animate__animated animate__fadeIn">EVA: Salud Mental</h1>
                     <p className="text-xl mt-4 text-[#023d6d] opacity-80 animate__animated animate__fadeIn animate__delay-1s">
                         Automatiza informes, mejora el seguimiento de pacientes y optimiza tus consultas
                     </p>
@@ -117,14 +117,14 @@ export default function HOME() {
             <section className="bg-white py-24 sm:py-32">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-2xl lg:text-center">
-                        <h2 className="mt-2 text-4xl text-[#023d6d] sm:text-5xl lg:text-balance">
-                        Los psciólos son los héroes de la salud mental, pero a veces necesitan un poco de ayuda
+                        <h2 className="mt-2 text-4xl text-[#023d6d] sm:text-5xl">
+                        Los psciólogos son héroes, pero a veces necesitan un poco de ayuda
                         </h2>
                         <p className="mt-6 text-lg/8 text-gray-600">
                             Con Eva, los profesionales de la salud mental pueden centrarse en lo que realmente importa: el bienestar de sus pacientes.
                         </p>
                     </div>
-                    <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
+                    <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl ">
                         <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
                             {problems.map((problem) => (
                                 <div key={problem.name} className="relative pl-16">

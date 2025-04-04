@@ -8,11 +8,10 @@ import Navbar from '../src/components/Navbar/Navbar';
 import Footer from './components/Footer/footer';
 import Chat from './components/Chat/Chat';
 
-
 function App() {
   return (
     <div className="bg-[#EAE5EE] w-screen min-h-screen flex flex-col justify-between items-center"> {/* Asegurar estructura flexible */}
-      <Navbar /> {/* Navbar */}
+    <Navbar /> {/* Navbar en la parte superior */}
       <div className=' flex-grow'>
         {/* Agregar rutas aquí */}
         <Routes>

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import './Chat.css';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);

@@ -1,11 +1,12 @@
-import { 
-    UserGroupIcon, 
-    LightBulbIcon, 
-    HeartIcon, 
-    UsersIcon 
+import {
+    UserGroupIcon,
+    LightBulbIcon,
+    HeartIcon,
+    UsersIcon
 } from '@heroicons/react/24/outline';
 import { useState } from "react";
-import '../Principal/web.css';
+import { Dialog, DialogPanel } from '@headlessui/react'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const benefits = [
     { titulo: "Accesibilidad", descripcion: "Plataforma fácil de usar para gestionar pacientes y seguimiento." },
@@ -39,6 +40,8 @@ const problems = [
         icon: UsersIcon,  // Icono relacionado con la comunidad y la inclusión
     },
 ]
+
+
 
 // Componente de chatbot
 function ChatBot() {
@@ -99,8 +102,10 @@ function ChatBot() {
 
 
 export default function HOME() {
+    
     return (
         <div className="font-sans">
+
             {/* Encabezado */}
             <div className="relative w-screen h-[600px] bg-cover bg-center bg-no-repeat bg-[url('/img/EvanSinLetra.png')] text-white flex items-center justify-center">
                 <div className="text-center">
@@ -118,7 +123,7 @@ export default function HOME() {
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-2xl lg:text-center">
                         <h2 className="mt-2 text-4xl text-[#023d6d] sm:text-5xl">
-                        Los psciólogos son héroes, pero a veces necesitan un poco de ayuda
+                            Los psciólogos son héroes, pero a veces necesitan un poco de ayuda
                         </h2>
                         <p className="mt-6 text-lg/8 text-gray-600">
                             Con Eva, los profesionales de la salud mental pueden centrarse en lo que realmente importa: el bienestar de sus pacientes.

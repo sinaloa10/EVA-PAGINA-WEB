@@ -16,30 +16,32 @@ const benefits = [
 
 const problems = [
     {
-        name: 'Falta de seguimiento continuo',
+        name: 'Sin seguimiento entre sesiones',
         description:
-            'Los psicólogos a menudo enfrentan la dificultad de dar un seguimiento constante a sus pacientes entre sesiones. Esto puede afectar el progreso del tratamiento y la eficacia de las intervenciones.',
-        icon: UserGroupIcon,  // Icono de apoyo grupal o emocional
+            'Los psicólogos pueden perder de vista el estado emocional del paciente entre consultas, dejando pasar crisis o retrocesos clave.',
+        icon: UserGroupIcon,
     },
     {
-        name: 'Dificultad para evaluar el progreso emocional',
+        name: 'Progreso difícil de medir',
         description:
-            'Los profesionales de la salud mental luchan por obtener una evaluación precisa y continua del bienestar emocional de los pacientes. Las herramientas actuales a menudo no son lo suficientemente detalladas para medir el progreso de manera efectiva.',
-        icon: LightBulbIcon,  // Icono relacionado con ideas o soluciones
+            'Sin datos precisos y constantes, evaluar el bienestar emocional real se vuelve casi imposible.',
+        icon: LightBulbIcon,
     },
     {
-        name: 'Desafíos en la gestión del autocuidado del paciente',
+        name: 'Autocuidado fuera de control',
         description:
-            'Los psicólogos encuentran complicado fomentar y hacer un seguimiento efectivo del autocuidado de los pacientes entre sesiones, lo que puede afectar su bienestar mental a largo plazo.',
-        icon: HeartIcon,  // Icono relacionado con el cuidado personal y la salud mental
+            'Muchos pacientes descuidan su bienestar fuera del consultorio, afectando seriamente su avance.',
+        icon: HeartIcon,
     },
     {
-        name: 'Resistencia a la apertura emocional',
+        name: 'Miedo a hablar',
         description:
-            'A menudo, los pacientes sienten temor o vergüenza de hablar abiertamente sobre sus problemas emocionales debido al estigma asociado a la salud mental. Los psicólogos deben enfrentar este desafío para construir un entorno de confianza.',
-        icon: UsersIcon,  // Icono relacionado con la comunidad y la inclusión
+            'El estigma emocional impide a muchos pacientes abrirse, bloqueando el proceso terapéutico desde la raíz.',
+        icon: UsersIcon,
     },
-]
+];
+
+
 
 
 

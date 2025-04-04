@@ -1,11 +1,44 @@
+import { 
+    UserGroupIcon, 
+    LightBulbIcon, 
+    HeartIcon, 
+    UsersIcon 
+} from '@heroicons/react/24/outline';
 import { useState } from "react";
 import '../Principal/web.css';
 
-const beneficios = [
+const benefits = [
     { titulo: "Accesibilidad", descripcion: "Plataforma fácil de usar para gestionar pacientes y seguimiento." },
     { titulo: "Automatización", descripcion: "Nuestro chatbot genera informes personalizados para facilitar el tratamiento." },
     { titulo: "Soporte Profesional", descripcion: "Asesoramiento continuo sobre cómo usar la plataforma de manera efectiva." }
 ];
+
+const problems = [
+    {
+        name: 'Falta de seguimiento continuo',
+        description:
+            'Los psicólogos a menudo enfrentan la dificultad de dar un seguimiento constante a sus pacientes entre sesiones. Esto puede afectar el progreso del tratamiento y la eficacia de las intervenciones.',
+        icon: UserGroupIcon,  // Icono de apoyo grupal o emocional
+    },
+    {
+        name: 'Dificultad para evaluar el progreso emocional',
+        description:
+            'Los profesionales de la salud mental luchan por obtener una evaluación precisa y continua del bienestar emocional de los pacientes. Las herramientas actuales a menudo no son lo suficientemente detalladas para medir el progreso de manera efectiva.',
+        icon: LightBulbIcon,  // Icono relacionado con ideas o soluciones
+    },
+    {
+        name: 'Desafíos en la gestión del autocuidado del paciente',
+        description:
+            'Los psicólogos encuentran complicado fomentar y hacer un seguimiento efectivo del autocuidado de los pacientes entre sesiones, lo que puede afectar su bienestar mental a largo plazo.',
+        icon: HeartIcon,  // Icono relacionado con el cuidado personal y la salud mental
+    },
+    {
+        name: 'Resistencia a la apertura emocional',
+        description:
+            'A menudo, los pacientes sienten temor o vergüenza de hablar abiertamente sobre sus problemas emocionales debido al estigma asociado a la salud mental. Los psicólogos deben enfrentar este desafío para construir un entorno de confianza.',
+        icon: UsersIcon,  // Icono relacionado con la comunidad y la inclusión
+    },
+]
 
 // Componente de chatbot
 function ChatBot() {
@@ -34,8 +67,8 @@ function ChatBot() {
             {/* Chat */}
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
                 {messages.map((msg, index) => (
-                    <div 
-                        key={index} 
+                    <div
+                        key={index}
                         className={`p-2 rounded-lg text-black text-sm max-w-[80%] 
                             ${msg.sender === "user" ? "bg-[#8cc8fa] self-end" : "bg-[#ffffff]"}`}
                     >
@@ -46,14 +79,14 @@ function ChatBot() {
 
             {/* Input */}
             <div className="p-3 bg-[#ffffff] border-t flex">
-                <input 
-                    type="text" 
-                    value={input} 
+                <input
+                    type="text"
+                    value={input}
                     onChange={(e) => setInput(e.target.value)}
                     className="flex-1 px-3 py-2 text-black border rounded-full text-sm outline-none"
                     placeholder="Escribe un mensaje..."
                 />
-                <button 
+                <button
                     onClick={handleSendMessage}
                     className="ml-2 bg-[#38b000] text-white px-4 py-2 rounded-full"
                 >
@@ -73,21 +106,54 @@ export default function HOME() {
                 <div className="text-center">
                     <h1 className="text-6xl font-bold text-[#023d6d] animate__animated animate__fadeIn">Eva: Salud Mental</h1>
                     <p className="text-xl mt-4 text-[#023d6d] opacity-80 animate__animated animate__fadeIn animate__delay-1s">
-                        Transforma tu consulta con la ayuda de nuestra tecnología.
+                        Automatiza informes, mejora el seguimiento de pacientes y optimiza tus consultas
                     </p>
+                    <button className="mt-6 bg-gradient-to-r from-blue-400 to-green-400 text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300">
+                        Prueba gratis
+                    </button>
                 </div>
             </div>
+
+            <section className="bg-white py-24 sm:py-32">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-2xl lg:text-center">
+                        <h2 className="mt-2 text-4xl text-[#023d6d] sm:text-5xl lg:text-balance">
+                        Los psciólos son los héroes de la salud mental, pero a veces necesitan un poco de ayuda
+                        </h2>
+                        <p className="mt-6 text-lg/8 text-gray-600">
+                            Con Eva, los profesionales de la salud mental pueden centrarse en lo que realmente importa: el bienestar de sus pacientes.
+                        </p>
+                    </div>
+                    <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
+                        <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
+                            {problems.map((problem) => (
+                                <div key={problem.name} className="relative pl-16">
+                                    <dt className="text-base/7 font-bold text-gray-700">
+                                        <div className="absolute top-0 left-0 flex size-10 items-center justify-center rounded-lg bg-[#ffccc8]">
+                                            <problem.icon aria-hidden="true" className="size-6 text-white" />
+                                        </div>
+                                        {problem.name}
+                                    </dt>
+                                    <dd className="mt-2 text-base/7 text-gray-600">{problem.description}</dd>
+                                </div>
+                            ))}
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+
 
             {/* Beneficios */}
             <section className="py-16 text-center bg-gradient-to-b from-white via-blue-50 to-white">
                 <h2 className="text-3xl font-semibold text-[#023d6d] mb-6 animate__animated animate__fadeIn">
-                    ¿Por qué elegir Eva para tu consulta?
+                    Nuestra solución
                 </h2>
                 <div className="mt-6 grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                    {beneficios.map((beneficio, index) => (
+                    {benefits.map((benefit, index) => (
                         <div key={index} className="bg-white shadow-xl p-8 rounded-lg transform hover:scale-105 transition-all ease-in-out duration-300">
-                            <h3 className="font-semibold text-lg text-[#023d6d]">{beneficio.titulo}</h3>
-                            <p className="text-gray-600 mt-4 text-md">{beneficio.descripcion}</p>
+                            <h3 className="font-semibold text-lg text-[#023d6d]">{benefit.titulo}</h3>
+                            <p className="text-gray-600 mt-4 text-md">{benefit.descripcion}</p>
                         </div>
                     ))}
                 </div>
@@ -148,6 +214,6 @@ export default function HOME() {
                     </button>
                 </div>
             </section>
-        </div>
+        </div >
     );
 }

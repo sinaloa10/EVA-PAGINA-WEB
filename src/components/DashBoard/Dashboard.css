@@ -1,85 +1,68 @@
 @import "tailwindcss";
 /* Estilos normales */
 @font-face {
-    font-family: "Ubuntu";
-    src: url("/font/Ubuntu-Light.woff2") format("woff2");
+    font-family: "Lato";
+    src: url("/font/Lato-Light.woff2") format("woff2");
     font-weight: 300;
     font-style: normal;
-  }
-  
-  @font-face {
-    font-family: "Ubuntu";
-    src: url("/font/Ubuntu-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Lato";
+    src: url("/font/Lato-Regular.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
-  }
-  
-  @font-face {
-    font-family: "Ubuntu";
-    src: url("/font/Ubuntu-Medium.woff2") format("woff2");
-    font-weight: 500;
-    font-style: normal;
-  }
-  
-  @font-face {
-    font-family: "Ubuntu";
-    src: url("/font/Ubuntu-Bold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Lato";
+    src: url("/font/Lato-Bold.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
-  }
-  
-  /* Estilos en cursiva */
-  @font-face {
-    font-family: "Ubuntu";
-    src: url("/font/Ubuntu-LightItalic.woff2") format("woff2");
+}
+
+/* Estilos en cursiva */
+@font-face {
+    font-family: "Lato";
+    src: url("/font/Lato-LightItalic.woff2") format("woff2");
     font-weight: 300;
     font-style: italic;
-  }
-  
-  @font-face {
-    font-family: "Ubuntu";
-    src: url("/font/Ubuntu-RegularItalic.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Lato";
+    src: url("/font/Lato-RegularItalic.woff2") format("woff2");
     font-weight: 400;
     font-style: italic;
-  }
-  
-  @font-face {
-    font-family: "Ubuntu";
-    src: url("/font/Ubuntu-MediumItalic.woff2") format("woff2");
-    font-weight: 500;
-    font-style: italic;
-  }
-  
-  @font-face {
-    font-family: "Ubuntu";
-    src: url("/font/Ubuntu-BoldItalic.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Lato";
+    src: url("/font/Lato-BoldItalic.woff2") format("woff2");
     font-weight: 700;
     font-style: italic;
-  }
-  
-  body {
-    font-family: "Ubuntu", sans-serif;
+}
+
+body {
+    font-family: "Lato", sans-serif;
     font-weight: 400; /* Regular */
-  }
-  
-  h1 {
-    font-family: "Ubuntu", sans-serif;
+}
+
+h1, h2 {
+    font-family: "Lato", sans-serif;
     font-weight: 700; /* Bold */
-  }
-  h2 {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 700; /* Bold */
-  }
-  
-  p {
-    font-family: "Ubuntu", sans-serif;
+}
+
+p {
+    font-family: "Lato", sans-serif;
     font-weight: 300; /* Light */
-    font-style: italic; /* Cursiva */
-  }
-  li{
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300; /* Medium */
-  }
+    font-style: italic;
+}
+
+li {
+    font-family: "Lato", sans-serif;
+    font-weight: 400; /* Regular */
+}
 
   
 /* Estilos generales del calendario */
@@ -149,12 +132,6 @@
   .svg-hover-taskEva:hover path {
     fill: #edf2f4; /* Color al pasar el mouse */
   }
-  /* Estilos generales del scroll */
-.scroll-container {
-  overflow-y: auto;
-  scrollbar-width: thin; /* Para Firefox */
-  scrollbar-color: #ffccc8 transparent; /* Color del scroll y fondo */
-}
 
 /* Estilos para el botón */
 .button-custom {

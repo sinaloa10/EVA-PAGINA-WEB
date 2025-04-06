@@ -40,6 +40,33 @@ const anxietyData = [
   { day: 'Día 5', anxiety: 40 }
 ];
 
+const Sidebar = () => {
+  return (
+    <div className="w-64 bg-white min-h-screen shadow-xl fixed top-0 left-0 z-10">
+      <div className="text-center p-6 border-b border-gray-200">
+        <h1 className="text-2xl font-bold text-[#4A90E2]">EVA Salud Mental 👩‍⚕️</h1>
+      </div>
+      <nav className="mt-4 space-y-2 p-4">
+        <SidebarItem icon="🏠" label="Inicio / Panel general" />
+        <SidebarItem icon="👤" label="Pacientes" />
+        <SidebarItem icon="📄" label="Informes automáticos" />
+        <SidebarItem icon="📊" label="Seguimiento clínico" />
+        <SidebarItem icon="📅" label="Agenda / Citas" />
+        <SidebarItem icon="⚙️" label="Configuración" />
+        <SidebarItem icon="🔒" label="Cerrar sesión" />
+      </nav>
+    </div>
+  );
+};
+
+const SidebarItem = ({ icon, label }) => (
+  <div className="flex items-center space-x-3 px-4 py-2 text-gray-700 rounded-lg hover:bg-[#8cc8fa] hover:text-white cursor-pointer transition-all duration-200">
+    <span className="text-xl">{icon}</span>
+    <span className="text-sm font-medium">{label}</span>
+  </div>
+);
+
+
 
 const Dashboard = () => {
   const [patientsData, setPatientsData] = useState([]);
@@ -116,7 +143,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="pt-20 font-sans bg-gray-100 min-h-screen">
+    <div className="flex">
+      <Sidebar /> {/* Sidebar on the left */}
+    <div className="ml-64 font-sans bg-gray-100 min-h-screen">
       <div className="container mx-auto p-4 flex-wrap">
         <div className="flex flex-row gap-6 mb-6 items-center p-8 border rounded-3xl bg-white shadow-lg">
           {/* Reporte General SEMANAL */}
@@ -288,6 +317,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -5,14 +5,26 @@ import {
     UsersIcon
 } from '@heroicons/react/24/outline';
 import { useState } from "react";
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom';
+import { CloudArrowUpIcon, LockClosedIcon, ServerIcon } from '@heroicons/react/20/solid'
+
+
 
 const benefits = [
-    { titulo: "Accesibilidad", descripcion: "Plataforma fácil de usar para gestionar pacientes y seguimiento." },
-    { titulo: "Automatización", descripcion: "Nuestro chatbot genera informes personalizados para facilitar el tratamiento." },
-    { titulo: "Soporte Profesional", descripcion: "Asesoramiento continuo sobre cómo usar la plataforma de manera efectiva." }
+    {
+        titulo: "Mejora la calidad en la atención psicólogica: ",
+        descripcion: "EVA facilita el acceso a datos detallados sobre el historial emocional y de comportamiento de los pacientes, lo que permite a los psicólogos ofrecer una atención más precisa, personalizada y fundamentada en hechos.",
+    },
+    {
+        titulo: "Aumento en la eficiencia de las consultas: ",
+        descripcion: "EVA reduce el tiempo dedicado a la recopilación de datos y la elaboración de informes, permitiendo a los psicólogos centrarse en el tratamiento y la atención al paciente.",
+    },
+    {
+        titulo: "Mejora de la salud mental de los pacientes: ",
+        descripcion: "Contamos con asesoría psicológica continua en el desarrollo. EVA no reemplaza tu labor, la potencia.",
+    },
 ];
+
 
 const problems = [
     {
@@ -93,7 +105,7 @@ function ChatBot() {
                 />
                 <button
                     onClick={handleSendMessage}
-                    className="ml-2 bg-[#38b000] text-white px-4 py-2 rounded-full"
+                    className="ml-2 bg-[#38b000] text-white px-4 py-2 rounded-full cursor-pointer hover:bg-[#0077b6] transition duration-300"
                 >
                     Enviar
                 </button>
@@ -104,7 +116,7 @@ function ChatBot() {
 
 
 export default function HOME() {
-    
+    const navigate = useNavigate();
     return (
         <div className="font-sans">
 
@@ -115,7 +127,7 @@ export default function HOME() {
                     <p className="text-xl mt-4 text-[#023d6d] opacity-80 animate__animated animate__fadeIn animate__delay-1s">
                         Automatiza informes, mejora el seguimiento de pacientes y optimiza tus consultas
                     </p>
-                    <button className="mt-6 bg-gradient-to-r from-blue-400 to-green-400 text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300">
+                    <button className="mt-6 bg-[#023d6d] text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300 cursor-pointer animate__animated animate__fadeIn animate__delay-2s">
                         Prueba gratis
                     </button>
                 </div>
@@ -124,10 +136,10 @@ export default function HOME() {
             <section className="bg-white py-24 sm:py-32">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-2xl lg:text-center">
-                        <h2 className="mt-2 text-4xl text-[#023d6d] sm:text-5xl">
+                        <h2 className="mt-2 text-4xl text-[#023d6d] sm:text-5xl text-center">
                             Los psciólogos son héroes, pero a veces necesitan un poco de ayuda
                         </h2>
-                        <p className="mt-6 text-lg/8 text-gray-600">
+                        <p className="mt-6 text-lg/8 text-gray-600 text-center" >
                             Con Eva, los profesionales de la salud mental pueden centrarse en lo que realmente importa: el bienestar de sus pacientes.
                         </p>
                     </div>
@@ -149,44 +161,79 @@ export default function HOME() {
                 </div>
             </section>
 
-
-
-            {/* Beneficios */}
-            <section className="py-16 text-center bg-gradient-to-b from-white via-blue-50 to-white">
-                <h2 className="text-3xl font-semibold text-[#023d6d] mb-6 animate__animated animate__fadeIn">
-                    Nuestra solución
-                </h2>
-                <div className="mt-6 grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                    {benefits.map((benefit, index) => (
-                        <div key={index} className="bg-white shadow-xl p-8 rounded-lg transform hover:scale-105 transition-all ease-in-out duration-300">
-                            <h3 className="font-semibold text-lg text-[#023d6d]">{benefit.titulo}</h3>
-                            <p className="text-gray-600 mt-4 text-md">{benefit.descripcion}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* Características y valor agregado */}
-            <section className="mt-16 py-16 bg-[#f5f9ff] backdrop-blur-md text-center rounded-3xl mx-4 md:mx-auto max-w-5xl border border-white/50 shadow-xl">
-                <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
-                    <div className="px-6 text-center">
-                        <h3 className="text-2xl font-bold text-[#023d6d]">Optimiza tu práctica con Eva</h3>
-                        <p className="mt-4 text-gray-700 text-lg">
-                            Eva te ayuda a mejorar la calidad del servicio a tus pacientes, con informes automáticos y seguimiento personalizado.
+            <section className="relative bg-white py-5 px-6 md:px-12 lg:px-24">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl md:text-5xl font-extrabold text-[#023d6d] leading-tight mb-4">
+                            Conoce EVA
+                        </h2>
+                        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                            Una herramienta innovadora diseñada para transformar la salud mental. EVA conecta a profesionales y pacientes a través de plataformas inteligentes y fáciles de usar.
                         </p>
-                        <button className="mt-6 bg-gradient-to-r from-blue-400 to-green-400 text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300">
-                            Más detalles
-                        </button>
                     </div>
-                    <div className="flex justify-center">
+
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#023d6d] hover:scale-[1.02] transition duration-300 ease-in-out">
+                            <h3 className="text-2xl font-semibold text-[#023d6d] mb-4">
+                                Plataforma para Psicólogos
+                            </h3>
+                            <p className="text-gray-700 leading-relaxed">
+                                Administra tus pacientes con eficiencia. Obtén informes emocionales automáticos, lleva un historial completo de sesiones y mejora tu práctica con datos en tiempo real.
+                            </p>
+                        </div>
+
+                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#ffccc8] hover:scale-[1.02] transition duration-300 ease-in-out">
+                            <h3 className="text-2xl font-semibold text-[#ffccc8] mb-4">
+                                App EVA Tracking
+                            </h3>
+                            <p className="text-gray-700 leading-relaxed">
+                                Otorga una aplicación para tus pacientes, donde podrán hablar con un chatbot de salud mental, recibir recomendaciones y ejercicios personalizados, y llevar un seguimiento de su bienestar emocional. ¡Todo al alcance de su mano!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Elemento decorativo sutil */}
+                <div className="absolute top-0 left-0 w-40 h-40 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10 animate-pulse"></div>
+                <div className="absolute bottom-0 right-0 w-52 h-52 bg-orange-100 rounded-full blur-3xl opacity-40 -z-10 animate-pulse delay-200"></div>
+            </section>
+
+            {/* Sección de Beneficios */}
+            <section className="overflow-hidden bg-white py-24 sm:py-32">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+                        <div className="lg:pt-4 lg:pr-8">
+                            <div className="lg:max-w-lg">
+                                <h2 className="text-base/7 font-semibold text-indigo-600">Mejora tu práctica</h2>
+                                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">
+                                    Beneficios de EVA para Psicólogos
+                                </p>
+                                <p className="mt-6 text-lg/8 text-gray-600">
+                                    Obtén informes automáticos, seguimiento de pacientes y herramientas de gestión que te ayudarán a optimizar tu práctica profesional.
+                                </p>
+                                <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
+                                    {benefits.map((benefit) => (
+                                        <div key={benefit.titulo} className="relative pl-9">
+                                            <dt className="inline font-semibold text-gray-900">
+                                                <span className="absolute top-1 left-1 size-5 text-indigo-600"></span>
+                                                {benefit.titulo}
+                                            </dt>
+                                            <dd className="inline">{benefit.descripcion}</dd>
+                                        </div>
+                                    ))}
+                                </dl>
+                            </div>
+                        </div>
                         <img
-                            src="/img/img1.png"
                             alt="Psicólogo usando EVA"
-                            className="rounded-3xl shadow-xl transform hover:scale-105 transition-all duration-300"
+                            src="https://tailwindcss.com/plus-assets/img/component-images/dark-project-app-screenshot.png"
+                            className="w-[30rem] h-[30rem] lg:w-[40rem] lg:h-[40rem] rounded-xl ring-1 ring-gray-400/10 object-contain ml-auto"
                         />
+                        
                     </div>
                 </div>
             </section>
+
 
             {/* Sección de Aplicación para Pacientes con Chatbot */}
             <section className="mt-16 py-16 bg-[#f5f9ff] backdrop-blur-md text-center rounded-3xl mx-4 md:mx-auto max-w-5xl border border-white/50 shadow-xl">
@@ -200,7 +247,7 @@ export default function HOME() {
                         <p className="mt-4 text-gray-700 text-lg">
                             Nuestra aplicación facilita el acceso a herramientas de apoyo emocional y seguimiento personalizado para cada paciente.
                         </p>
-                        <button className="mt-6 bg-gradient-to-r from-blue-400 to-green-400 text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300">
+                        <button className="mt-6 bg-[#023d6d] to-green-400 text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300 cursor-pointer">
                             Descubre más
                         </button>
                     </div>
@@ -215,7 +262,8 @@ export default function HOME() {
                         Regístrate y ofrece a tus pacientes un servicio de calidad con la ayuda de la inteligencia artificial.
                     </p>
                     <button
-                        className="mt-6 bg-gradient-to-r from-blue-400 to-green-400 text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300"
+                        className="mt-6 bg-[#023d6d] text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300 cursor-pointer"
+                        onClick={() => navigate('/register')}
                     >
                         Crear cuenta
                     </button>

@@ -34,7 +34,7 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen sinBarraDesplazamiento">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-96">
+      <div className="bg-[#f5e2e1] p-8 rounded-xl shadow-lg w-96">
         <h2 className="text-3xl text-center font-semibold text-[#023d6d] mb-6">Iniciar Sesión</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">

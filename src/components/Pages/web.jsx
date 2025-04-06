@@ -226,8 +226,8 @@ export default function HOME() {
                         </div>
                         <img
                             alt="Psicólogo usando EVA"
-                            src="https://tailwindcss.com/plus-assets/img/component-images/dark-project-app-screenshot.png"
-                            className="w-[30rem] h-[30rem] lg:w-[40rem] lg:h-[40rem] rounded-xl ring-1 ring-gray-400/10 object-contain ml-auto"
+                            src="/img/psicologo.png"
+                            className="w-[30rem] h-[30rem] lg:w-[40rem] lg:h-[40rem] rounded-xl object-contain ml-auto"
                         />
                         
                     </div>

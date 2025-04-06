@@ -9,7 +9,7 @@ import Footer from './components/Footer/footer';
 
 function App() {
   return (
-    <div className="bg-[#EAE5EE] w-screen min-h-screen flex flex-col justify-between items-center"> {/* Asegurar estructura flexible */}
+    <div className="bg-white w-screen min-h-screen flex flex-col justify-between items-center"> {/* Asegurar estructura flexible */}
     <Navbar /> {/* Navbar en la parte superior */}
       <div className=' flex-grow'>
         {/* Agregar rutas aquí */}

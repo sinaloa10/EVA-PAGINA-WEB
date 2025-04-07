@@ -21,7 +21,7 @@ const benefits = [
     },
     {
         titulo: "Mejora de la salud mental de los pacientes: ",
-        descripcion: "Contamos con asesoría psicológica continua en el desarrollo. EVA no reemplaza tu labor, la potencia.",
+        descripcion: "La aplicación para pacientes ofrece herramientas interactivas y ejercicios que ayudan a mantener el bienestar emocional entre sesiones, lo que fomenta la autoayuda y el autocuidado, mejorando la salud mental de manera continua fuera del entorno terapéutico.",
     },
 ];
 
@@ -172,8 +172,8 @@ export default function HOME() {
                         </p>
                     </div>
 
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#023d6d] hover:scale-[1.02] transition duration-300 ease-in-out">
+                    <div className="grid lg:grid-cols-2 gap-16 items-stretch">
+                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#ffccc8] hover:scale-[1.02] transition duration-300 ease-in-out h-full">
                             <h3 className="text-2xl font-semibold text-[#023d6d] mb-4">
                                 Plataforma para Psicólogos
                             </h3>
@@ -182,8 +182,8 @@ export default function HOME() {
                             </p>
                         </div>
 
-                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#ffccc8] hover:scale-[1.02] transition duration-300 ease-in-out">
-                            <h3 className="text-2xl font-semibold text-[#ffccc8] mb-4">
+                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#ffccc8] hover:scale-[1.02] transition duration-300 ease-in-out h-full">
+                            <h3 className="text-2xl font-semibold text-[#023d6d] mb-4">
                                 App EVA Tracking
                             </h3>
                             <p className="text-gray-700 leading-relaxed">
@@ -191,11 +191,9 @@ export default function HOME() {
                             </p>
                         </div>
                     </div>
+
                 </div>
 
-                {/* Elemento decorativo sutil */}
-                <div className="absolute top-0 left-0 w-40 h-40 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10 animate-pulse"></div>
-                <div className="absolute bottom-0 right-0 w-52 h-52 bg-orange-100 rounded-full blur-3xl opacity-40 -z-10 animate-pulse delay-200"></div>
             </section>
 
             {/* Sección de Beneficios */}
@@ -204,17 +202,20 @@ export default function HOME() {
                     <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                         <div className="lg:pt-4 lg:pr-8">
                             <div className="lg:max-w-lg">
-                                <h2 className="text-base/7 font-semibold text-indigo-600">Mejora tu práctica</h2>
-                                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">
+                                <h2 className="text-base/7">Mejora tu práctica</h2>
+                                <p
+                                    style={{ fontStyle: 'normal', fontWeight: 400 }}
+                                    className="mt-3 text-4xl tracking-tight text-[#023d6d] sm:text-5xl"
+                                >
                                     Beneficios de EVA para Psicólogos
                                 </p>
-                                <p className="mt-6 text-lg/8 text-gray-600">
+                                <p style={{ fontStyle: 'normal', fontWeight: 400 }} className="mt-6 text-lg/8 text-gray-700">
                                     Obtén informes automáticos, seguimiento de pacientes y herramientas de gestión que te ayudarán a optimizar tu práctica profesional.
                                 </p>
-                                <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
+                                <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-black lg:max-w-none">
                                     {benefits.map((benefit) => (
                                         <div key={benefit.titulo} className="relative pl-9">
-                                            <dt className="inline font-semibold text-gray-900">
+                                            <dt className="inline font-semibold text-black">
                                                 <span className="absolute top-1 left-1 size-5 text-indigo-600"></span>
                                                 {benefit.titulo}
                                             </dt>
@@ -227,16 +228,15 @@ export default function HOME() {
                         <img
                             alt="Psicólogo usando EVA"
                             src="/img/psicologo.png"
-                            className="w-[30rem] h-[30rem] lg:w-[40rem] lg:h-[40rem] rounded-xl object-contain ml-auto"
+                            className="w-[30rem] h-[30rem] lg:w-[40rem] lg:h-[55rem] rounded-xl object-contain ml-auto"
                         />
-                        
                     </div>
                 </div>
             </section>
 
 
             {/* Sección de Aplicación para Pacientes con Chatbot */}
-            <section className="mt-16 py-16 bg-[#f5f9ff] backdrop-blur-md text-center rounded-3xl mx-4 md:mx-auto max-w-5xl border border-white/50 shadow-xl">
+            <section className="mt-1 py-5 bg-[#f5f9ff] backdrop-blur-md text-center rounded-3xl mx-4 md:mx-auto max-w-5xl border border-white/50 shadow-xl">
                 <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
                     {/* ChatBot en lugar de imagen */}
                     <div className="flex justify-center">
@@ -255,7 +255,7 @@ export default function HOME() {
             </section>
 
             {/* Llamado a la acción */}
-            <section className="py-16 text-center max-w-5xl mx-auto flex justify-center items-center">
+            <section className="py-34 text-center max-w-5xl mx-auto flex justify-center items-center">
                 <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-xl transform hover:scale-105 transition-all ease-in-out duration-300">
                     <h3 className="text-2xl font-bold text-[#023d6d]">Comienza tu aventura con EVA</h3>
                     <p className="text-gray-600 mt-4 text-lg">

@@ -44,16 +44,16 @@ const Sidebar = () => {
   return (
     <div className="w-64 bg-white min-h-screen shadow-xl fixed top-0 left-0 z-10">
       <div className="text-center p-6 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-[#4A90E2]">EVA Salud Mental 👩‍⚕️</h1>
+        <h1 className="text-2xl font-bold text-[#4A90E2]">EVA Salud Mental</h1>
       </div>
       <nav className="mt-4 space-y-2 p-4">
-        <SidebarItem icon="🏠" label="Inicio / Panel general" />
-        <SidebarItem icon="👤" label="Pacientes" />
-        <SidebarItem icon="📄" label="Informes automáticos" />
-        <SidebarItem icon="📊" label="Seguimiento clínico" />
-        <SidebarItem icon="📅" label="Agenda / Citas" />
-        <SidebarItem icon="⚙️" label="Configuración" />
-        <SidebarItem icon="🔒" label="Cerrar sesión" />
+        <SidebarItem label="Inicio / Panel general" />
+        <SidebarItem label="Pacientes" />
+        <SidebarItem label="Informes automáticos" />
+        <SidebarItem label="Seguimiento clínico" />
+        <SidebarItem label="Agenda / Citas" />
+        <SidebarItem label="Configuración" />
+        <SidebarItem label="Cerrar sesión" />
       </nav>
     </div>
   );

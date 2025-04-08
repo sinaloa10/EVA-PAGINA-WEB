@@ -44,7 +44,7 @@ const Sidebar = () => {
   return (
     <div className="w-64 bg-white min-h-screen shadow-xl fixed top-0 left-0 z-10">
       <div className="text-center p-6 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-[#4A90E2]">EVA Salud Mental</h1>
+        <h1 className="text-2xl font-bold text-[#023d6d]">EVA Salud Mental</h1>
       </div>
       <nav className="mt-4 space-y-2 p-4">
         <SidebarItem label="Inicio / Panel general" />

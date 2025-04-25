@@ -4,8 +4,8 @@ import {
     HeartIcon,
     UsersIcon
 } from '@heroicons/react/24/outline';
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
 import { CloudArrowUpIcon, LockClosedIcon, ServerIcon } from '@heroicons/react/20/solid'
 
 
@@ -75,7 +75,7 @@ function ChatBot() {
     };
 
     return (
-        <div className="w-[350px] h-[500px] bg-[#ebf8ff] rounded-3xl shadow-xl flex flex-col">
+        <div id='appmovil' className="w-[350px] h-[500px] bg-[#ebf8ff] rounded-3xl shadow-xl flex flex-col">
             {/* Encabezado */}
             <div className="bg-[#0077b6] text-white text-lg font-bold p-3 rounded-t-3xl">
                 EVA - Chat de prueba
@@ -116,6 +116,21 @@ function ChatBot() {
 
 
 export default function HOME() {
+
+    const location = useLocation(); // Obtener la ruta actual
+    // Verificar si la ruta actual tiene un hash
+    // y hacer scroll a ese elemento si existe
+    useEffect(() => {
+        if (location.hash) {
+          const element = document.querySelector(location.hash);
+          if (element) {
+            const centerID = ['#appmovil', '#acerca','#producto'];
+            const isCenter = centerID.includes(location.hash);
+            element.scrollIntoView({ behavior: 'smooth', block: isCenter ? 'center': 'start' });
+          }
+        }
+      }, [location]);
+
     const navigate = useNavigate();
     return (
         <div className="font-sans">
@@ -127,13 +142,13 @@ export default function HOME() {
                     <p className="text-xl mt-4 text-[#023d6d] opacity-80 animate__animated animate__fadeIn animate__delay-1s">
                         Automatiza informes, mejora el seguimiento de pacientes y optimiza tus consultas
                     </p>
-                    <button className="mt-6 bg-[#023d6d] text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300 cursor-pointer animate__animated animate__fadeIn animate__delay-2s">
+                    <button className="mt-6 bg-[#8DC8FA] text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300 cursor-pointer animate__animated animate__fadeIn animate__delay-2s">
                         Prueba gratis
                     </button>
                 </div>
             </div>
 
-            <section className="bg-white py-24 sm:py-32">
+            <section id='producto' className="bg-white py-24 sm:py-32">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-2xl lg:text-center">
                         <h2 className="mt-2 text-4xl text-[#023d6d] sm:text-5xl text-center">
@@ -148,7 +163,7 @@ export default function HOME() {
                             {problems.map((problem) => (
                                 <div key={problem.name} className="relative pl-16">
                                     <dt className="text-base/7 font-bold text-gray-700">
-                                        <div className="absolute top-0 left-0 flex size-10 items-center justify-center rounded-lg bg-[#ffccc8]">
+                                        <div className="absolute top-0 left-0 flex size-10 items-center justify-center rounded-lg bg-[#8DC8FA]">
                                             <problem.icon aria-hidden="true" className="size-6 text-white" />
                                         </div>
                                         {problem.name}
@@ -161,7 +176,7 @@ export default function HOME() {
                 </div>
             </section>
 
-            <section className="relative bg-white py-5 px-6 md:px-12 lg:px-24">
+            <section id="acerca"  className="relative bg-[#EAF7FF] py-10 px-6 md:px-12 lg:px-24">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-extrabold text-[#023d6d] leading-tight mb-4">
@@ -173,7 +188,7 @@ export default function HOME() {
                     </div>
 
                     <div className="grid lg:grid-cols-2 gap-16 items-stretch">
-                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#ffccc8] hover:scale-[1.02] transition duration-300 ease-in-out h-full">
+                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#8DC8FA] hover:scale-[1.02] transition duration-300 ease-in-out h-full">
                             <h3 className="text-2xl font-semibold text-[#023d6d] mb-4">
                                 Plataforma para Psicólogos
                             </h3>
@@ -182,7 +197,7 @@ export default function HOME() {
                             </p>
                         </div>
 
-                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#ffccc8] hover:scale-[1.02] transition duration-300 ease-in-out h-full">
+                        <div className="bg-white rounded-3xl p-10 shadow-2xl border-t-4 border-[#8DC8FA] hover:scale-[1.02] transition duration-300 ease-in-out h-full">
                             <h3 className="text-2xl font-semibold text-[#023d6d] mb-4">
                                 App EVA Tracking
                             </h3>
@@ -197,12 +212,12 @@ export default function HOME() {
             </section>
 
             {/* Sección de Beneficios */}
-            <section className="overflow-hidden bg-white py-24 sm:py-32">
+            <section   className="overflow-hidden bg-white py-24 sm:py-32">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                         <div className="lg:pt-4 lg:pr-8">
                             <div className="lg:max-w-lg">
-                                <h2 className="text-base/7">Mejora tu práctica</h2>
+                                <h2  id='funcion' className="text-base/7">Mejora tu práctica</h2>
                                 <p
                                     style={{ fontStyle: 'normal', fontWeight: 400 }}
                                     className="mt-3 text-4xl tracking-tight text-[#023d6d] sm:text-5xl"
@@ -219,7 +234,7 @@ export default function HOME() {
                                                 <span className="absolute top-1 left-1 size-5 text-indigo-600"></span>
                                                 {benefit.titulo}
                                             </dt>
-                                            <dd className="inline">{benefit.descripcion}</dd>
+                                            <dd className="inline ">{benefit.descripcion}</dd>
                                         </div>
                                     ))}
                                 </dl>
@@ -227,7 +242,7 @@ export default function HOME() {
                         </div>
                         <img
                             alt="Psicólogo usando EVA"
-                            src="/img/psicologo.png"
+                            src="/img/foto_psicologo.jpg"
                             className="w-[30rem] h-[30rem] lg:w-[40rem] lg:h-[55rem] rounded-xl object-contain ml-auto"
                         />
                     </div>
@@ -247,7 +262,7 @@ export default function HOME() {
                         <p className="mt-4 text-gray-700 text-lg">
                             Nuestra aplicación facilita el acceso a herramientas de apoyo emocional y seguimiento personalizado para cada paciente.
                         </p>
-                        <button className="mt-6 bg-[#023d6d] to-green-400 text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300 cursor-pointer">
+                        <button className="mt-6 bg-[#8DC8FA] to-green-400 text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300 cursor-pointer">
                             Descubre más
                         </button>
                     </div>
@@ -256,13 +271,13 @@ export default function HOME() {
 
             {/* Llamado a la acción */}
             <section className="py-34 text-center max-w-5xl mx-auto flex justify-center items-center">
-                <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-xl transform hover:scale-105 transition-all ease-in-out duration-300">
+                <div className="w-full max-w-lg bg-white border-t-4 border-[#8DC8FA]  p-8 rounded-lg shadow-xl transform hover:scale-105 transition-all ease-in-out duration-300">
                     <h3 className="text-2xl font-bold text-[#023d6d]">Comienza tu aventura con EVA</h3>
                     <p className="text-gray-600 mt-4 text-lg">
                         Regístrate y ofrece a tus pacientes un servicio de calidad con la ayuda de la inteligencia artificial.
                     </p>
                     <button
-                        className="mt-6 bg-[#023d6d] text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300 cursor-pointer"
+                        className="mt-6 bg-[#8DC8FA] text-white px-8 py-4 rounded-full shadow-md transition-all hover:scale-110 transform duration-300 cursor-pointer"
                         onClick={() => navigate('/register')}
                     >
                         Crear cuenta

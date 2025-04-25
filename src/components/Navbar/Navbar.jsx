@@ -4,10 +4,10 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Producto', href: '#' },
-  { name: 'Funcionalidades', href: '#' },
-  { name: 'Aplicación Móvil', href: '#' },
-  { name: 'Acerca de', href: '#' },
+  { name: 'Producto', href: '#producto' },
+  { name: 'Funcionalidades', href: '#funcion' },
+  { name: 'Aplicación Móvil', href: '#appmovil' },
+  { name: 'Acerca de', href: '#acerca' },
 ];
 
 const Navbar = () => {

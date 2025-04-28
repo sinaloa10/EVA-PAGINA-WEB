@@ -37,9 +37,10 @@ const Navbar = () => {
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
-        <div className="hidden lg:flex lg:gap-x-12">
+        <div className="hidden lg:flex lg:gap-x-12 ">
           {navigation.map((item) => (
-            <Link key={item.name} to={item.href} className="text-sm/6 font-semibold text-[#023d6d]">
+            <Link key={item.name} to={item.href} className="border-b-4 border-b-[#8dc7fa00] px-5 rounded-md text-sm/6 font-semibold text-[#023d6d] 
+              hover:text-[#8dc7fac2] hover:border-b-4 hover:border-b-[#8dc7fac2] ">
               {item.name}
             </Link>
           ))}

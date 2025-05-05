@@ -1,6 +1,8 @@
 import Calendar from "react-calendar";
 import './Dashboard.css';
 
+//SE MANEJARÁ DASHBOARD EN PAGES
+
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useState, useEffect } from "react";
 import axios from "axios";

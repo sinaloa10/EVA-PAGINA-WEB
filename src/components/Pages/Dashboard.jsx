@@ -95,6 +95,8 @@ const Dashboard = () => {
     fetchPatients();
   }, [psychologistId]);
 
+  //arreglar fetch
+
   useEffect(() => {
     const fetchActivities = async () => {
       try {

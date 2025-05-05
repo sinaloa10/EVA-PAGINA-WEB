@@ -4,10 +4,10 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Producto', href: '#' },
-  { name: 'Funcionalidades', href: '#' },
-  { name: 'Aplicación Móvil', href: '#' },
-  { name: 'Acerca de', href: '#' },
+  { name: 'Producto', href: '#producto' },
+  { name: 'Funcionalidades', href: '#funcion' },
+  { name: 'Aplicación Móvil', href: '#appmovil' },
+  { name: 'Acerca de', href: '#acerca' },
 ];
 
 const Navbar = () => {
@@ -37,9 +37,10 @@ const Navbar = () => {
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
-        <div className="hidden lg:flex lg:gap-x-12">
+        <div className="hidden lg:flex lg:gap-x-12 ">
           {navigation.map((item) => (
-            <Link key={item.name} to={item.href} className="text-sm/6 font-semibold text-[#023d6d]">
+            <Link key={item.name} to={item.href} className="border-b-4 border-b-[#8dc7fa00] px-5 rounded-md text-sm/6 font-semibold text-[#023d6d] 
+              hover:text-[#8dc7fac2] hover:border-b-4 hover:border-b-[#8dc7fac2] ">
               {item.name}
             </Link>
           ))}

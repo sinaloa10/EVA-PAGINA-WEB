@@ -25,7 +25,7 @@ function App() {
           <Route path="/" element={
             <>
               <Principal />
-              <Footer />
+              {/*<Footer /> Se repetia*/}
             </>
           } />
           <Route path="/dashboard" element={<Dashboard className="p-96" />} />

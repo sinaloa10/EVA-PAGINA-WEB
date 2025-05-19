@@ -172,7 +172,7 @@ const Dashboard = () => {
                   <h3 className="text-black">Semana 1</h3>
                 </div>
                 <p className="text-black text-center mt-4">
-                  {aiReport ? aiReport.details : "Cargando reporte..."}
+                  {aiReport ? aiReport.details : "Durante la semana del 28 de abril al 4 de mayo, Andrea López registró actividad emocional en 5 de los 7 días. Las emociones predominantes fueron tristeza y ansiedad, aunque se observó una ligera tendencia positiva. Usó herramientas como el diario emocional, dinámicas creativas y el juego antiestrés de forma constante. El sistema detectó una alerta leve relacionada con estados de ánimo bajos, y se recomendó contacto con su psicólogo. Se sugiere trabajar en el fortalecimiento de la autoestima y continuar reforzando el uso de actividades creativas como apoyo emocional."}
                 </p>
                 <div className="flex justify-center space-x-8 mt-6">
                   {/* BOTON IZQ */}

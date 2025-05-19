@@ -1,7 +1,7 @@
 import Calendar from "react-calendar";
 import './Dashboard.css';
 
-//SE MANEJARÁ DASHBOARD Y PÁGINAS RELACIONADAS EN PAGES
+//SE MANEJARÁ DASHBOARD Y EN PAGES
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useState, useEffect } from "react";

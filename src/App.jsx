@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Form, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import Principal from './components/Pages/web';
 import Dashboard from './components/Pages/Dashboard';
@@ -6,6 +6,7 @@ import Login from './components/Login/login';
 import Register from './components/Login/register';
 import Navbar from '../src/components/Navbar/Navbar';
 import Footer from './components/Footer/footer';
+import Survey from './components/Pages/Survey';
 
 function App() {
   const location = useLocation(); // Obtener la ruta actual
@@ -29,6 +30,7 @@ function App() {
             </>
           } />
           <Route path="/dashboard" element={<Dashboard className="p-96" />} />
+          <Route path="/survey" element={<Survey />} />
           <Route path="/register" element={<Register />} />
         </Routes>
       </div>

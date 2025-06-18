@@ -1,327 +1,341 @@
-import Calendar from "react-calendar";
-import './Dashboard.css';
+import React, { useState } from 'react';
+import { 
+    LayoutDashboard, Users, UserPlus, Calendar, FileText, MessageSquare, Settings, BrainCircuit, 
+    PanelLeftClose, Bell, LogOut, Search, MessageCircle, TrendingDown, AlertCircle, CalendarCheck, 
+    AlertTriangle, Video, MapPin, CheckCircle2, XCircle, Clock, Download, Brain, Send, User, CalendarClock
+} from 'lucide-react';
 
-//SE MANEJARÁ DASHBOARD Y EN PAGES
+// --- Reusable Components ---
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { useState, useEffect } from "react";
-import axios from "axios";
-
-const emotionColors = {
-  ansioso: "bg-yellow-300 text-yellow-900",
-  triste: "bg-blue-300 text-blue-900",
-  estable: "bg-green-300 text-green-900",
-  "en-crisis": "bg-red-400 text-red-900",
-};
-
-const alertas = [
-  { message: 'Mostró señales de crisis. Revisar urgentemente.' },
-  { message: 'Reportó aumento de tristeza.' },
-  { message: 'Reportó ansiedad.' },
-  { message: 'Reportó aumento de ansiedad.' },
-  { message: 'Reportó crisis emocional.' },
-  { message: 'Reportó crisis emocional.' },
-];
-
-
-const tasks = [
-  { task: 'Responder mensaje de Paciente 3' },
-  { task: 'Revisar informe de Paciente 1' },
-  { task: 'Revisar informe de Paciente 2' },
-  { task: 'Responder mensaje de Paciente 1' },
-  { task: 'Revisar informe de Paciente 3' },
-];
-
-
-
-const anxietyData = [
-  { day: 'Día 1', anxiety: 80 },
-  { day: 'Día 2', anxiety: 70 },
-  { day: 'Día 3', anxiety: 60 },
-  { day: 'Día 4', anxiety: 50 },
-  { day: 'Día 5', anxiety: 40 }
-];
-
-const Sidebar = () => {
-  return (
-    <div className="w-64 bg-white min-h-screen shadow-xl fixed top-0 left-0 z-10">
-      <div className="text-center p-6 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-[#023d6d]">EVA Salud Mental</h1>
-      </div>
-      <nav className="mt-4 space-y-2 p-4">
-        <SidebarItem label="Inicio / Panel general" />
-        <SidebarItem label="Pacientes" />
-        <SidebarItem label="Informes automáticos" />
-        <SidebarItem label="Seguimiento clínico" />
-        <SidebarItem label="Agenda / Citas" />
-        <SidebarItem label="Configuración" />
-        <SidebarItem label="Cerrar sesión" />
-      </nav>
+const StatsCard = ({ icon, title, value, change, iconBgColor, iconTextColor }) => (
+    <div className="bg-white p-6 rounded-xl shadow-sm flex items-center justify-between">
+        <div>
+            <p className="text-sm text-gray-500">{title}</p>
+            <p className="text-3xl font-bold text-gray-800">{value}</p>
+            <p className={`text-xs mt-1 ${change.startsWith('+') ? 'text-green-500' : 'text-gray-400'}`}>{change}</p>
+        </div>
+        <div className={`p-3 rounded-full ${iconBgColor}`}>
+            {React.cloneElement(icon, { className: iconTextColor })}
+        </div>
     </div>
-  );
-};
-
-const SidebarItem = ({ icon, label }) => (
-  <div className="flex items-center space-x-3 px-4 py-2 text-gray-700 rounded-lg hover:bg-[#8cc8fa] hover:text-white cursor-pointer transition-all duration-200">
-    <span className="text-xl">{icon}</span>
-    <span className="text-sm font-medium">{label}</span>
-  </div>
 );
 
-
-
-const Dashboard = () => {
-  const [patientsData, setPatientsData] = useState([]);
-  const [tasksEva, setTaskEva] = useState([]);
-  const [newTaskEva, setNewTaskEva] = useState("");
-  const [aiReport, setAiReport] = useState(null);
-  const [selectedPatient, setSelectedPatient] = useState(null);
-
-  const psychologistId = localStorage.getItem('psychologist_id'); // Recuperar psychologist_id desde localStorage
-
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/patients/${psychologistId}`);
-        setPatientsData(response.data.patients || []);
-        if (response.data.patients.length > 0) {
-          setSelectedPatient(response.data.patients[0]);
-        }
-      } catch (error) {
-        console.error('Error fetching patients:', error);
-      }
-    };
-
-    fetchPatients();
-  }, [psychologistId]);
-
-  useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/activities/${selectedPatient.patient_id}`);
-        setTaskEva(response.data.activities || []);
-      } catch (error) {
-        console.error('Error fetching activities:', error);
-      }
-    };
-
-    if (selectedPatient) {
-      fetchActivities();
-    }
-  }, [selectedPatient]);
-
-  const fetchAiReport = async (psychologistId, patientId) => {
-    try {
-      const response = await axios.get(`http://evasalud.com.mx:3000/api/dash/ai-reports/${psychologistId}/${patientId}`);
-      setAiReport(response.data.ai_reports[0] || null);
-    } catch (error) {
-      console.error('Error fetching AI report:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (selectedPatient) {
-      fetchAiReport(psychologistId, selectedPatient.patient_id);
-      console.log(selectedPatient.patient_id);
-    }
-  }, [selectedPatient]);
-
-  const handleAddTask = async (e) => {
-    e.preventDefault();
-    if (newTaskEva.trim()) {
-      try {
-        await axios.post('http://evasalud.com.mx:3000/api/dash/activities', {
-          psychologist_id: psychologistId,
-          description: newTaskEva,
-          recommendation_date: new Date().toISOString(),
-          patient_id: selectedPatient.patient_id // Use the selected patient's ID
-        });
-        setTaskEva([...tasksEva, { taskEva: newTaskEva }]);
-        setNewTaskEva(""); // Clear the input field after submission
-      } catch (error) {
-        console.error('Error adding activity:', error);
-      }
-    }
-  };
-
-  return (
-    <div className="flex">
-      <Sidebar /> {/* Sidebar on the left */}
-    <div className="ml-64 font-sans bg-gray-100 min-h-screen">
-      <div className="container mx-auto p-4 flex-wrap">
-        <div className="flex flex-row gap-6 mb-6 items-center p-8 border rounded-3xl bg-white shadow-lg">
-          {/* Reporte General SEMANAL */}
-          <div className="flex-1 p-10">
-            <div className="flex items-center">
-              {/* Imagen a la izquierda */}
-              <div className="mr-6">
-                <img className="rounded-full object-cover w-60 h-45 shadow-md"
-                  src="https://i.pinimg.com/736x/3c/13/98/3c139858ade16fe6bf2b3c8f7f2cd0fd.jpg"
-                  alt="image paciente"
-                />
-                <h3 className="text-black text-center font-bold mt-4">Paciente:</h3>
-                <h3 className="text-black text-center">{selectedPatient ? selectedPatient.name : "Cargando..."}</h3>
-              </div>
-
-              {/* Texto a la derecha de la imagen */}
-              <div className="w-full">
-                <div className="text-center text-4xl">
-                  <h2 className="text-black">Reporte General</h2>
-                  <h3 className="text-black">Semana 1</h3>
-                </div>
-                <p className="text-black text-center mt-4">
-                  {aiReport ? aiReport.details : "Cargando reporte..."}
-                </p>
-                <div className="flex justify-center space-x-8 mt-6">
-                  {/* BOTON IZQ */}
-                  <button className="button-custom">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512">
-                      <path fill="#8cc8fa" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-                    </svg>
-                  </button>
-                  {/* BOTON DERECHO */}
-                  <button className="button-custom">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512">
-                      <path fill="#8cc8fa" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+const PatientCard = ({ avatarSrc, name, age, interactionStatus, interactionIcon, interactionBg, interactionText }) => (
+    <div className="bg-white rounded-xl shadow-sm p-5 text-center flex flex-col items-center">
+        <img src={avatarSrc} alt="Avatar" className="w-20 h-20 rounded-full mb-4 object-cover" />
+        <h4 className="font-bold text-gray-800">{name}</h4>
+        <p className="text-sm text-gray-500">{age}</p>
+        <div className={`mt-4 flex items-center gap-2 text-sm ${interactionText} ${interactionBg} px-3 py-1 rounded-full`}>
+            {interactionIcon}
+            <span>{interactionStatus}</span>
         </div>
+        <button className="mt-5 w-full bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+            Ver Perfil
+        </button>
+    </div>
+);
 
+// --- Section Components ---
+
+const DashboardSection = () => (
+    <section id="inicio">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Pacientes */}
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-2 text-black">Pacientes</h2>
-            <div className="max-h-80 overflow-y-auto scroll-container">
-              <ul>
-                {patientsData.map((patient, index) => (
-                  <li key={index} className="p-2 border-b last:border-none cursor-pointer hover:bg-gray-100" onClick={() => setSelectedPatient(patient)}>
-                    <div className="text-black">{patient.name}</div>
-                    <div className={`text-sm font-medium px-2 py-1 rounded ${emotionColors[patient.emotionalState?.toLowerCase().replace(' ', '-')] || "bg-gray-200"}`}>
-                      {patient.emotionalState}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          {/* Alertas Urgentes */}
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-2 text-black">Alertas Urgentes</h2>
-            <div className="max-h-80 overflow-y-auto scroll-container">
-              <ul>
-                {alertas.map((alert, index) => (
-                  <li
-                    key={index}
-                    className="group p-2 text-black flex items-center hover:rounded-2xl hover:bg-[#8cc8fa] hover:text-white"
-                  >
-                    <div style={{ width: '30px', height: '30px', marginRight: '8px', flexShrink: 0 }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style={{ width: '100%', height: '100%' }}>
-                        <path
-                          className="fill-[#8cc8fa] group-hover:fill-white"
-                          d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
-                        />
-                      </svg>
-                    </div>
-                    <span>{alert.message}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-
-          {/* Próximas citas */}
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-2 text-black">Próximas Citas</h2>
-            <div className="flex justify-center">
-              <Calendar />
-            </div>
-          </div>
-
-          {/* Tareas Pendientes */}
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-2 text-black">Tareas Pendientes</h2>
-            <div className="max-h-96 overflow-y-auto scroll-container">
-              <ul>
-                {tasks.map((task, index) => (
-                  <li
-                    key={index}
-                    className="group p-2 text-black flex items-center hover:rounded-2xl hover:bg-[#8cc8fa] hover:text-white"
-                  >
-                    <div style={{ width: '30px', height: '30px', marginRight: '8px', flexShrink: 0 }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style={{ width: '100%', height: '100%' }}>
-                        <path
-                          className="fill-[#8cc8fa] group-hover:fill-white"
-                          d="M192 0c-41.8 0-77.4 26.7-90.5 64L64 64C28.7 64 0 92.7 0 128L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64l-37.5 0C269.4 26.7 233.8 0 192 0zm0 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64zM128 256a64 64 0 1 1 128 0 64 64 0 1 1 -128 0zM80 432c0-44.2 35.8-80 80-80l64 0c44.2 0 80 35.8 80 80c0 8.8-7.2 16-16 16L96 448c-8.8 0-16-7.2-16-16z"
-                        />
-                      </svg>
-                    </div>
-                    <span>{task.task}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-
-          {/* TAREAS PARA EVA */}
-          <div className="bg-white p-4 rounded-lg shadow-lg md:col-span-2">
-            <h2 className="text-xl font-semibold mb-2 text-black">Establece una actividad para el paciente</h2>
-            <div className="flex flex-col h-[400px]">
-              <div className="max-h-[288px] overflow-y-auto scroll-container flex-grow">
-                <ul>
-                  {tasksEva.map((taskEva, index) => (
-                    <li key={index} className="p-2 text-black flex items-center hover:rounded-2xl hover:bg-pink-500 hover:text-white">
-                      <div style={{ width: "30px", height: "30px", marginRight: "8px", flexShrink: 0 }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="36" viewBox="0 0 576 512">
-                          <path fill="#8cc8fa" d="M96 80c0-26.5 21.5-48 48-48l288 0c26.5 0 48 21.5 48 48l0 304L96 384 96 80zm313 47c-9.4-9.4-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L409 161c9.4-9.4 9.4-24.6 0-33.9zM0 336c0-26.5 21.5-48 48-48l16 0 0 128 448 0 0-128 16 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48L48 480c-26.5 0-48-21.5-48-48l0-96z" />
-                        </svg>
-                      </div>
-                      <span>{taskEva.description}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <form onSubmit={handleAddTask} className="mt-4 flex">
-                <input
-                  type="text"
-                  value={newTaskEva}
-                  onChange={(e) => setNewTaskEva(e.target.value)}
-                  placeholder="Escribe un mensaje..."
-                  className="p-2 border border-gray-300 rounded-l-lg flex-grow text-black"
-                />
-                <button type="submit" className="button-custom text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512">
-                    <path fill="#8cc8fa" d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z" />
-                  </svg>
-                </button>
-              </form>
-            </div>
-          </div>
-
-          {/* Gráficos de Evolución de Pacientes */}
-          <div className="bg-white p-4 rounded-lg shadow-lg col-span-1 md:col-span-full">
-            <h2 className="text-xl font-semibold mb-2 text-black">Gráficos de evolución del paciente</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={anxietyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis domain={[0, 100]} />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="anxiety" stroke="#8cc8fa" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+            <StatsCard icon={<Users />} title="Pacientes Activos" value="24" change="+2 esta semana" iconBgColor="bg-blue-100" iconTextColor="text-blue-500" />
+            <StatsCard icon={<CalendarCheck />} title="Sesiones para Hoy" value="4" change="1 pendiente de confirmar" iconBgColor="bg-purple-100" iconTextColor="text-purple-500" />
+            <StatsCard icon={<AlertTriangle />} title="Alertas Importantes" value="3" change="Requieren atención" iconBgColor="bg-red-100" iconTextColor="text-red-500" />
         </div>
-      </div>
-    </div>
-    </div>
-  );
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6">
+            <div className="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm">
+                <h3 className="font-semibold text-gray-800 mb-4">Últimos Registros Emocionales</h3>
+                <div className="flex justify-around items-end h-48 border-l border-b border-gray-200 p-2">
+                    <div className="text-center w-1/5"><div className="bg-green-200 rounded-t-lg mx-auto" style={{ height: '80%' }}></div><p className="text-xs text-gray-500 mt-2">Feliz</p></div>
+                    <div className="text-center w-1/5"><div className="bg-blue-200 rounded-t-lg mx-auto" style={{ height: '60%' }}></div><p className="text-xs text-gray-500 mt-2">Tranquilo</p></div>
+                    <div className="text-center w-1/5"><div className="bg-yellow-200 rounded-t-lg mx-auto" style={{ height: '45%' }}></div><p className="text-xs text-gray-500 mt-2">Ansioso</p></div>
+                    <div className="text-center w-1/5"><div className="bg-red-200 rounded-t-lg mx-auto" style={{ height: '30%' }}></div><p className="text-xs text-gray-500 mt-2">Triste</p></div>
+                    <div className="text-center w-1/5"><div className="bg-gray-200 rounded-t-lg mx-auto" style={{ height: '50%' }}></div><p className="text-xs text-gray-500 mt-2">Neutral</p></div>
+                </div>
+            </div>
+            <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm">
+                <h3 className="font-semibold text-gray-800 mb-4">Resúmenes de EVA AI</h3>
+                <div className="space-y-4">
+                    <div className="bg-gray-50 p-3 rounded-lg"><p className="text-sm font-medium text-gray-700">Laura Gómez</p><p className="text-xs text-gray-500">EVA detectó un patrón de insomnio en sus últimos 3 registros de diario.</p></div>
+                    <div className="bg-gray-50 p-3 rounded-lg"><p className="text-sm font-medium text-gray-700">Carlos Ruiz</p><p className="text-xs text-gray-500">El sentimiento dominante en su última semana fue la ansiedad.</p></div>
+                    <div className="bg-gray-50 p-3 rounded-lg"><p className="text-sm font-medium text-gray-700">Ana Torres</p><p className="text-xs text-gray-500">Completó el test de autoestima con resultados positivos.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+);
+
+const PatientsSection = () => {
+    const patients = [
+        { name: 'Laura Gómez', age: '28 años', avatarSrc: 'https://placehold.co/80x80/E2F1FE/3B82F6?text=LG', status: 'Interacción Alta', icon: <MessageCircle className="w-4 h-4" />, bg: 'bg-green-100', text: 'text-green-600' },
+        { name: 'Carlos Ruiz', age: '35 años', avatarSrc: 'https://placehold.co/80x80/FEF3C7/F59E0B?text=CR', status: 'Interacción Media', icon: <TrendingDown className="w-4 h-4" />, bg: 'bg-yellow-100', text: 'text-yellow-600' },
+        { name: 'Ana Torres', age: '42 años', avatarSrc: 'https://placehold.co/80x80/FEE2E2/EF4444?text=AT', status: 'Interacción Baja', icon: <AlertCircle className="w-4 h-4" />, bg: 'bg-red-100', text: 'text-red-600' },
+        { name: 'Marcos Peña', age: '22 años', avatarSrc: 'https://placehold.co/80x80/D1FAE5/10B981?text=MP', status: 'Interacción Alta', icon: <MessageCircle className="w-4 h-4" />, bg: 'bg-green-100', text: 'text-green-600' }
+    ];
+    return (
+        <section id="pacientes" className="flex flex-col flex-1 min-h-0 w-full">
+            <div className="mb-6 flex flex-col md:flex-row gap-4 items-center">
+                <div className="relative w-full md:w-1/3"><Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /><input type="text" placeholder="Buscar paciente..." className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" /></div>
+                <select className="w-full md:w-auto border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400"><option>Filtrar por estado</option><option>Estable</option><option>Ansioso</option><option>En riesgo</option></select>
+                <button className="w-full md:w-auto bg-blue-400 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-500 transition-colors">Buscar</button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 flex-1">
+                {patients.map(p => (<PatientCard key={p.name} name={p.name} age={p.age} avatarSrc={p.avatarSrc} interactionStatus={p.status} interactionIcon={p.icon} interactionBg={p.bg} interactionText={p.text} />))}
+            </div>
+        </section>
+    );
 };
 
-export default Dashboard;
+const AgendaSection = () => {
+    const sessions = [
+        { name: 'Laura Gómez', time: '10:00 AM', modality: 'Virtual', icon: <Video className="w-5 h-5 text-purple-500" />, status: 'Confirmada', statusColor: 'text-green-500', statusIcon: <CheckCircle2 /> },
+        { name: 'Carlos Ruiz', time: '11:30 AM', modality: 'Presencial', icon: <MapPin className="w-5 h-5 text-blue-500" />, status: 'Confirmada', statusColor: 'text-green-500', statusIcon: <CheckCircle2 /> },
+        { name: 'Marcos Peña', time: '02:00 PM', modality: 'Virtual', icon: <Video className="w-5 h-5 text-purple-500" />, status: 'Pendiente', statusColor: 'text-yellow-500', statusIcon: <Clock /> },
+        { name: 'Ana Torres', time: '04:30 PM', modality: 'Presencial', icon: <MapPin className="w-5 h-5 text-blue-500" />, status: 'Cancelada', statusColor: 'text-red-500', statusIcon: <XCircle /> }
+    ];
+    return (
+        <section id="agenda" className="flex flex-col flex-1 min-h-0 w-full">
+            <div className="bg-white p-4 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row gap-4 items-center justify-between w-full">
+                <div className="flex flex-col md:flex-row gap-4 items-center">
+                    <input type="date" defaultValue={new Date().toISOString().substring(0, 10)} className="border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    <select className="w-full md:w-auto border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400"><option>Todos los estados</option><option>Confirmada</option><option>Pendiente</option><option>Cancelada</option></select>
+                </div>
+                <button className="w-full md:w-auto bg-blue-400 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-500 transition-colors flex items-center gap-2 justify-center"><CalendarClock className="w-5 h-5" /> Agendar nueva sesión</button>
+            </div>
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden w-full">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left text-gray-500">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" className="px-6 py-3">Paciente</th>
+                                <th scope="col" className="px-6 py-3">Hora</th>
+                                <th scope="col" className="px-6 py-3">Modalidad</th>
+                                <th scope="col" className="px-6 py-3">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {sessions.map(session => (
+                                <tr key={session.name} className="bg-white border-b hover:bg-gray-50">
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{session.name}</th>
+                                    <td className="px-6 py-4">{session.time}</td>
+                                    <td className="px-6 py-4 flex items-center gap-2">{session.icon} {session.modality}</td>
+                                    <td className={`px-6 py-4 font-semibold ${session.statusColor}`}>
+                                        <div className="flex items-center gap-2">
+                                            {React.cloneElement(session.statusIcon, { className: "w-5 h-5" })} {session.status}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const InformesSection = () => {
+    const reports = [
+        { patient: 'Laura Gómez', date: '2024-05-18', type: 'Estado emocional', icon: <Brain />, content: 'Patrón de ansiedad recurrente los fines de semana.' },
+        { patient: 'Carlos Ruiz', date: '2024-05-17', type: 'Resultados de test', icon: <FileText />, content: 'Puntuación media-baja en el test de autoestima GAD-7.' },
+        { patient: 'Marcos Peña', date: '2024-05-16', type: 'Patrones de sueño', icon: <Clock />, content: 'Insomnio intermitente detectado, con un promedio de 4.5h de sueño.' }
+    ];
+    return (
+        <section id="informes" className="flex flex-col flex-1 min-h-0 w-full">
+            <div className="bg-white p-4 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+                <select className="w-full md:w-auto border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option>Todos los informes</option><option>Estado emocional</option><option>Resultados de test</option><option>Patrones de sueño</option>
+                </select>
+                <button className="w-full md:w-auto bg-gray-800 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2 justify-center"><Download className="w-5 h-5" /> Exportar a PDF</button>
+            </div>
+            <div className="space-y-4 overflow-y-auto pr-2">
+                {reports.map((report, index) => (
+                    <div key={index} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <h4 className="font-bold text-gray-800">{report.patient}</h4>
+                                <div className="flex items-center gap-4 text-xs text-gray-500 mt-1">
+                                    <span className="flex items-center gap-1.5">{React.cloneElement(report.icon, { className: "w-4 h-4" })} {report.type}</span>
+                                    <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {report.date}</span>
+                                </div>
+                            </div>
+                            <button className="text-gray-400 hover:text-blue-500"><Download className="w-5 h-5"/></button>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-3">{report.content}</p>
+                    </div>
+                ))}
+            </div>
+        </section>
+    );
+};
+
+const MensajesSection = () => {
+    const [selectedChat, setSelectedChat] = useState(null);
+    const conversations = [
+        { id: 1, name: 'Laura Gómez', avatar: 'https://placehold.co/40x40/E2F1FE/3B82F6?text=LG', lastMessage: 'Entendido, lo haré. ¡Gracias!', time: '10:45 AM', unread: 2 },
+        { id: 2, name: 'Carlos Ruiz', avatar: 'https://placehold.co/40x40/FEF3C7/F59E0B?text=CR', lastMessage: 'Hola Dr., quería comentarle algo...', time: 'Ayer', unread: 0 },
+        { id: 3, name: 'Marcos Peña', avatar: 'https://placehold.co/40x40/D1FAE5/10B981?text=MP', lastMessage: 'Perfecto, nos vemos en la sesión.', time: 'Hace 3 días', unread: 0 },
+    ];
+    const messages = {
+        1: [
+            { from: 'other', text: 'Hola Dr., he estado teniendo problemas para dormir de nuevo.', time: '10:40 AM' },
+            { from: 'me', text: 'Hola Laura, lamento escuchar eso. ¿Has intentado las técnicas de respiración que discutimos?', time: '10:42 AM' },
+            { from: 'other', text: 'Sí, pero mi mente sigue muy activa.', time: '10:43 AM' },
+            { from: 'other', text: 'Entendido, lo haré. ¡Gracias!', time: '10:45 AM' },
+        ],
+        2: [{ from: 'other', text: 'Hola Dr., quería comentarle algo...', time: 'Ayer' }],
+        3: [{ from: 'me', text: 'Perfecto, nos vemos en la sesión.', time: 'Hace 3 días' }]
+    };
+    
+    const activeChat = selectedChat ? conversations.find(c => c.id === selectedChat) : null;
+
+    return (
+        <section>
+            <div className="flex bg-white rounded-xl shadow-sm overflow-hidden" style={{minHeight: 'calc(100vh - 12rem)'}}>
+                {/* Conversations List */}
+                <div className={`w-full md:w-1/3 border-r border-gray-200 flex flex-col ${selectedChat && 'hidden md:flex'}`}>
+                    <div className="p-4 border-b">
+                        <input type="text" placeholder="Buscar en mensajes..." className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    </div>
+                    <div className="flex-1 overflow-y-auto">
+                        {conversations.map(conv => (
+                            <div key={conv.id} onClick={() => setSelectedChat(conv.id)}
+                                 className={`flex items-center gap-4 p-4 cursor-pointer border-l-4 ${selectedChat === conv.id ? 'border-blue-500 bg-blue-50' : 'border-transparent hover:bg-gray-50'}`}>
+                                <img src={conv.avatar} alt={conv.name} className="w-12 h-12 rounded-full" />
+                                <div className="flex-1 overflow-hidden">
+                                    <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold text-gray-800">{conv.name}</h5>
+                                        <span className="text-xs text-gray-400">{conv.time}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <p className="text-sm text-gray-500 truncate">{conv.lastMessage}</p>
+                                        {conv.unread > 0 && <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{conv.unread}</span>}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                
+                {/* Chat Panel */}
+                <div className="flex-1 flex flex-col">
+                    {activeChat ? (
+                        <>
+                            <div className="p-4 border-b flex items-center gap-4">
+                               {selectedChat && <button onClick={() => setSelectedChat(null)} className="md:hidden p-2 rounded-full hover:bg-gray-100"> &larr; </button>}
+                                <img src={activeChat.avatar} alt={activeChat.name} className="w-10 h-10 rounded-full" />
+                                <h4 className="font-semibold text-gray-800">{activeChat.name}</h4>
+                            </div>
+                            <div className="flex-1 p-6 overflow-y-auto bg-gray-50 space-y-4">
+                                {messages[selectedChat].map((msg, i) => (
+                                    <div key={i} className={`flex gap-3 ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}>
+                                        {msg.from === 'other' && <img src={activeChat.avatar} className="w-8 h-8 rounded-full" />}
+                                        <div className={`max-w-xs lg:max-w-md p-3 rounded-2xl ${msg.from === 'me' ? 'bg-blue-500 text-white rounded-br-none' : 'bg-gray-200 text-gray-800 rounded-bl-none'}`}>
+                                            <p>{msg.text}</p>
+                                            <span className={`text-xs mt-1 block text-right ${msg.from === 'me' ? 'text-blue-200' : 'text-gray-500'}`}>{msg.time}</span>
+                                        </div>
+                                        {msg.from === 'me' && <img src="https://placehold.co/40x40/8DC8FA/FFFFFF?text=D" className="w-8 h-8 rounded-full" />}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="p-4 bg-white border-t">
+                                <div className="relative">
+                                    <input type="text" placeholder="Escribe un mensaje..." className="w-full pr-12 pl-4 py-3 border rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                                    <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-500 text-white p-2.5 rounded-full hover:bg-blue-600"><Send className="w-5 h-5" /></button>
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex-1 flex flex-col items-center justify-center text-center text-gray-500 bg-gray-50">
+                            <MessageCircle className="w-16 h-16 text-gray-300 mb-4" />
+                            <h3 className="text-xl font-semibold">Bienvenido a tus mensajes</h3>
+                            <p>Selecciona una conversación para comenzar a chatear.</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// --- Layout Components ---
+
+const navItemsList = [
+    { id: 'inicio', text: 'Inicio', icon: <LayoutDashboard /> },
+    { id: 'pacientes', text: 'Mis pacientes', icon: <Users /> },
+    { id: 'solicitudes', text: 'Solicitudes', icon: <UserPlus /> },
+    { id: 'agenda', text: 'Agenda', icon: <Calendar /> },
+    { id: 'informes', text: 'Informes AI', icon: <FileText /> },
+    { id: 'mensajes', text: 'Mensajes', icon: <MessageSquare /> },
+];
+
+const Sidebar = ({ isCollapsed, activeSection, setActiveSection }) => (
+    <aside className={`bg-white shadow-lg flex-shrink-0 flex flex-col justify-between transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-64'} p-5`}>
+        <div>
+            <div className={`flex items-center gap-3 mb-10 ${isCollapsed ? 'justify-center' : ''}`}>
+                <div className="p-2 rounded-lg">
+                    <img src="/img/logo1.png" alt="Logo EVA" className="w-20 h-20 object-contain" />
+                </div>
+                {!isCollapsed && <h1 className="text-2xl font-bold text-gray-800">EVA</h1>}
+            </div>
+            <nav className="flex flex-col gap-3">
+                {navItemsList.map(item => (<a href="#" key={item.id} onClick={(e) => { e.preventDefault(); setActiveSection(item.id); }} className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${isCollapsed ? 'justify-center' : ''} ${activeSection === item.id ? 'bg-blue-100 font-semibold text-gray-800' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-800'}`}>{item.icon}{!isCollapsed && <span>{item.text}</span>}</a>))}
+            </nav>
+        </div>
+        <div className="flex flex-col gap-3">
+            <a href="#" className={`flex items-center gap-4 p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-800 ${isCollapsed ? 'justify-center' : ''}`}><Settings />{!isCollapsed && <span>Configuración</span>}</a>
+        </div>
+    </aside>
+);
+
+const Header = ({ toggleSidebar, sectionTitle }) => (
+    <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-10 p-4 border-b border-gray-200 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+            <button onClick={toggleSidebar} className="p-2 rounded-md hover:bg-gray-100 text-gray-600"><PanelLeftClose /></button>
+            <h2 className="text-xl font-semibold text-gray-800 capitalize">{sectionTitle}</h2>
+        </div>
+        <div className="flex items-center gap-6">
+            <button className="relative text-gray-600 hover:text-gray-900"><Bell /><span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">2</span></button>
+            <div className="flex items-center gap-3">
+                <img src="https://placehold.co/40x40/8DC8FA/FFFFFF?text=D" alt="Avatar del psicólogo" className="w-10 h-10 rounded-full object-cover" />
+                <div><p className="font-semibold text-sm text-gray-800">Adilene Ruiz</p><p className="text-xs text-gray-500">Psicólogo Clínico</p></div>
+            </div>
+            <button className="text-gray-600 hover:text-gray-900" title="Cerrar Sesión"><LogOut /></button>
+        </div>
+    </header>
+);
+
+// --- Main App Component ---
+
+export default function App() {
+    const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [activeSection, setActiveSection] = useState('inicio');
+
+    const renderSection = () => {
+        switch (activeSection) {
+            case 'inicio': return <DashboardSection />;
+            case 'pacientes': return <PatientsSection />;
+            case 'agenda': return <AgendaSection />;
+            case 'informes': return <InformesSection />;
+            case 'mensajes': return <MensajesSection />;
+            default: return <DashboardSection />;
+        }
+    };
+    
+    const sectionName = navItemsList.find(item => item.id === activeSection)?.text || 'Dashboard';
+
+    return (
+        <div className="flex min-h-screen w-screen bg-gray-50 font-sans">
+            <Sidebar isCollapsed={isSidebarCollapsed} activeSection={activeSection} setActiveSection={setActiveSection} />
+            <div className="flex-1 flex flex-col min-h-screen w-full">
+                <Header toggleSidebar={() => setSidebarCollapsed(!isSidebarCollapsed)} sectionTitle={sectionName} />
+                <main className="flex-1 flex flex-col w-full min-h-0 p-0">
+                    {/* Elimina el div interior con padding, y aplica padding solo a los elementos que lo necesiten */}
+                    {renderSection()}
+                </main>
+            </div>
+        </div>
+    );
+}

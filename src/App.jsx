@@ -30,7 +30,7 @@ function App() {
             </>
           } />
           <Route path="/dashboard" element={<Dashboard className="p-96" />} />
-          <Route path="/survey" element={<Survey />} />
+          <Route path="/encuesta" element={<Survey />} />
           <Route path="/register" element={<Register />} />
         </Routes>
       </div>

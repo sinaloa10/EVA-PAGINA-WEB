@@ -19,11 +19,11 @@ const Navbar = () => {
       <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
+            <span className="sr-only">EVA Salud Mental</span>
             <img
               alt=""
-              src="img/logo.png"
-              className="h-20 w-auto"
+              src="img/logo1.png"
+              className="h-35 w-auto"
             />
           </Link>
         </div>

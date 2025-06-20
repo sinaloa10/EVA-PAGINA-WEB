@@ -47,6 +47,7 @@ function Survey() {
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [accessPassword, setAccessPassword] = useState(''); // Guarda la contraseña validada
+  const [stepError, setStepError] = useState('');
 
   const totalSteps = 5;
 
@@ -72,8 +73,48 @@ function Survey() {
     }
   };
 
+  // --- Validación de campos obligatorios por paso ---
+  const requiredFieldsByStep = [
+    // Paso 0
+    ['experiencia', 'pacientes', 'problematicas'],
+    // Paso 1
+    ['tareas_consumen_tiempo', 'abandono_jovenes', 'factores_abandono', 'frecuencia_contacto'],
+    // Paso 2
+    ['disposicion_pacientes', 'preocupacion_ia', 'utilidad'],
+    // Paso 3
+    ['factores_inversion', 'probar_beta'],
+    // Paso 4
+    ['dirigido_a', 'dispuesto_pagar', 'exito_terapeutico'],
+  ];
 
+  // Función para validar si los campos obligatorios del paso actual están completos
+  const isStepValid = () => {
+    const required = requiredFieldsByStep[currentStep];
+    for (let field of required) {
+      if (field === 'pacientes' || field === 'tareas_consumen_tiempo' || field === 'factores_abandono') {
+        if (!Array.isArray(formData[field]) || formData[field].length === 0) return false;
+      } else if (field === 'utilidad') {
+        // Todas las herramientas deben tener respuesta
+        const tools = ['diario', 'mindfulness', 'dibujo', 'chatbot', 'mascota'];
+        if (!formData.utilidad || tools.some(tool => !formData.utilidad[tool])) return false;
+      } else {
+        if (!formData[field] || String(formData[field]).trim() === '') return false;
+      }
+    }
+    // Validación condicional para campos dependientes
+    if (currentStep === 1 && formData.abandono_jovenes === 'si' && (!formData.caso_marcado || formData.caso_marcado.trim() === '')) {
+      return false;
+    }
+    return true;
+  };
+
+  // Modifica los handlers de navegación para validar antes de avanzar
   const handleNextStep = () => {
+    setStepError('');
+    if (!isStepValid()) {
+      setStepError('Por favor, responde todas las preguntas obligatorias antes de continuar.');
+      return;
+    }
     if (currentStep < totalSteps - 1) setCurrentStep(currentStep + 1);
   };
 
@@ -110,6 +151,11 @@ function Survey() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setStepError('');
+    if (!isStepValid()) {
+      setStepError('Por favor, responde todas las preguntas obligatorias antes de enviar.');
+      return;
+    }
     
     // Mapeo de claves del estado a preguntas legibles
     const questionMap = {
@@ -185,9 +231,9 @@ function Survey() {
   if (!isAuthenticated) {
     return (
        <div className="text-gray-700 font-sans">
-        <section id="inicio" className="py-20 md:py-45" >
+        <section id="inicio" className="py-20 md:py-20" >
           <div className="container mx-auto px-6 text-center">
-            <h1 className="text-4xl md:text-6xl text-[#023d6d] font-bold leading-tight">
+            <h1 className="text-4xl md:text-6xl text-[#023d6d] font-bold leading-tight mt-20">
               Tu experiencia puede transformar la salud mental digital.
             </h1>
             <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Ayúdanos a construir herramientas más efectivas y humanas contestando esta valiosa encuesta.</p>
@@ -229,7 +275,7 @@ function Survey() {
             <h2 className="text-3xl font-bold text-[#023d6d]">¿Qué es EVA Salud Mental?</h2>
             <div className="w-24 h-1 mx-auto my-6 rounded" style={{ backgroundColor: evaColors.accent }}></div>
             <p className="text-lg text-gray-600 leading-relaxed">
-              EVA Salud Mental es una plataforma de terapia digital centrada en el vínculo humano, donde los psicólogos conservan el control y la ética de su trabajo. Creemos que la tecnología debe ser un puente, no una barrera, para potenciar la conexión terapéutica y facilitar un seguimiento más profundo y significativo.
+              EVA Salud Mental es una plataforma digital diseñada para mejorar la atención psicológica, facilitando la conexión entre pacientes y profesionales de manera efectiva, accesible y continua. Su enfoque inteligente optimiza el seguimiento terapéutico y potencia los resultados del tratamiento.
             </p>
           </div>
         </section>
@@ -414,7 +460,7 @@ function Survey() {
   return (
     <div className="text-gray-700 font-sans">
       <main>
-        <section id="encuesta" className="py-20 md:py-40 bg-white">
+        <section id="encuesta" className="py-20 md:py-40 bg-white mt-25">
           <div className="container mx-auto px-6">
             <div className="max-w-3xl mx-auto">
               <h2 className="text-3xl font-bold text-center mb-4 text-gray-800">Encuesta para Profesionales</h2>
@@ -439,6 +485,9 @@ function Survey() {
                     </div>
                     <form onSubmit={handleSubmit}>
                       {renderStep()}
+                      {stepError && (
+                        <div className="text-red-600 text-sm mt-4 mb-2">{stepError}</div>
+                      )}
                       <div className="mt-8 flex justify-between items-center">
                         <button type="button" onClick={handlePrevStep} className="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition-all" style={{ display: currentStep === 0 ? 'none' : 'inline-block' }}>Anterior</button>
                         {currentStep < totalSteps - 1 && (

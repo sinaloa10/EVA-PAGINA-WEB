@@ -7,34 +7,48 @@ import Register from './components/Login/register';
 import Navbar from '../src/components/Navbar/Navbar';
 import Footer from './components/Footer/footer';
 import Survey from './components/Pages/Survey';
+import NotFound from './components/Pages/NotFound';
 
 function App() {
-  const location = useLocation(); // Obtener la ruta actual
+  const location = useLocation();
 
-  // Lista de rutas que NO deben mostrar Navbar ni Footer
-  const hideLayoutRoutes = ['/dashboard'];
+  const hideLayoutRoutes = ['/dashboard', '/register', '/login'];
 
-  // Verificar si la ruta actual está en la lista
   const shouldHideLayout = hideLayoutRoutes.includes(location.pathname);
 
   return (
     <div className="bg-white w-screen min-h-screen flex flex-col justify-between items-center">
-      {!shouldHideLayout && <Navbar />}
-      <div className='flex-grow'>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={
-            <>
-              <Principal />
-              {/*<Footer /> Se repetia*/}
-            </>
-          } />
-          <Route path="/dashboard" element={<Dashboard className="p-96" />} />
-          <Route path="/encuesta" element={<Survey />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </div>
-      {!shouldHideLayout && location.pathname === '/' && <Footer />}
+      <Routes>
+        <Route path="/login" element={
+          <>
+            {!shouldHideLayout && <Navbar />}
+            <Login />
+          </>
+        } />
+        <Route path="/" element={
+          <>
+            {!shouldHideLayout && <Navbar />}
+            <Principal />
+            <Footer />
+          </>
+        } />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/encuesta" element={
+          <>
+            {!shouldHideLayout && <Navbar />}
+            <Survey />
+          </>
+        } />
+        <Route path="/register" element={
+          <>
+            {!shouldHideLayout && <Navbar />}
+            <Register />
+          </>
+        } />
+
+        {/* Ruta 404 sin Navbar ni Footer */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 }

@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
+
+
 
 // --- Constantes y Componentes (sin cambios) ---
 const evaColors = {
@@ -176,7 +179,7 @@ function Survey() {
       probar_beta: '17. ¿Estaría dispuesto/a a probar una herramienta en versión beta?',
       contacto_entrevista: '17.1. Email de contacto para entrevista',
       dirigido_a: '20. ¿A quién debería estar dirigida la herramienta?',
-      dispuesto_pagar: '21. ¿Estaría dispuesto/a a pagar por una herramienta así?',
+      dispuesto_pagar: '21. ¿Estaría dispuesto/a pagar por una herramienta así?',
       exito_terapeutico: '24. ¿Cómo define el éxito terapéutico?',
     };
     
@@ -458,7 +461,12 @@ function Survey() {
   };
 
   return (
+    
+
     <div className="text-gray-700 font-sans">
+      <Helmet>
+        <title>Encuesta EVA Salud Mental</title>
+      </Helmet>
       <main>
         <section id="encuesta" className="py-20 md:py-40 bg-white mt-25">
           <div className="container mx-auto px-6">

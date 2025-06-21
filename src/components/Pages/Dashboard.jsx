@@ -39,12 +39,12 @@ const PatientCard = ({ avatarSrc, name, age, interactionStatus, interactionIcon,
 
 const DashboardSection = () => (
     <section id="inicio">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-11 pt-10">
             <StatsCard icon={<Users />} title="Pacientes Activos" value="24" change="+2 esta semana" iconBgColor="bg-blue-100" iconTextColor="text-blue-500" />
             <StatsCard icon={<CalendarCheck />} title="Sesiones para Hoy" value="4" change="1 pendiente de confirmar" iconBgColor="bg-purple-100" iconTextColor="text-purple-500" />
             <StatsCard icon={<AlertTriangle />} title="Alertas Importantes" value="3" change="Requieren atención" iconBgColor="bg-red-100" iconTextColor="text-red-500" />
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6 px-11 pt-10">
             <div className="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm">
                 <h3 className="font-semibold text-gray-800 mb-4">Últimos Registros Emocionales</h3>
                 <div className="flex justify-around items-end h-48 border-l border-b border-gray-200 p-2">
@@ -75,7 +75,7 @@ const PatientsSection = () => {
         { name: 'Marcos Peña', age: '22 años', avatarSrc: 'https://placehold.co/80x80/D1FAE5/10B981?text=MP', status: 'Interacción Alta', icon: <MessageCircle className="w-4 h-4" />, bg: 'bg-green-100', text: 'text-green-600' }
     ];
     return (
-        <section id="pacientes" className="flex flex-col flex-1 min-h-0 w-full">
+        <section id="pacientes" className="flex flex-col flex-1 min-h-0 w-full px-11 py-5">
             <div className="mb-6 flex flex-col md:flex-row gap-4 items-center">
                 <div className="relative w-full md:w-1/3"><Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /><input type="text" placeholder="Buscar paciente..." className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" /></div>
                 <select className="w-full md:w-auto border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400"><option>Filtrar por estado</option><option>Estable</option><option>Ansioso</option><option>En riesgo</option></select>
@@ -96,7 +96,7 @@ const AgendaSection = () => {
         { name: 'Ana Torres', time: '04:30 PM', modality: 'Presencial', icon: <MapPin className="w-5 h-5 text-blue-500" />, status: 'Cancelada', statusColor: 'text-red-500', statusIcon: <XCircle /> }
     ];
     return (
-        <section id="agenda" className="flex flex-col flex-1 min-h-0 w-full">
+        <section id="agenda" className="flex flex-col flex-1 min-h-0 w-full px-11 py-5">
             <div className="bg-white p-4 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row gap-4 items-center justify-between w-full">
                 <div className="flex flex-col md:flex-row gap-4 items-center">
                     <input type="date" defaultValue={new Date().toISOString().substring(0, 10)} className="border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400" />
@@ -143,7 +143,7 @@ const InformesSection = () => {
         { patient: 'Marcos Peña', date: '2024-05-16', type: 'Patrones de sueño', icon: <Clock />, content: 'Insomnio intermitente detectado, con un promedio de 4.5h de sueño.' }
     ];
     return (
-        <section id="informes" className="flex flex-col flex-1 min-h-0 w-full">
+        <section id="informes" className="flex flex-col flex-1 min-h-0 w-full px-11 py-5">
             <div className="bg-white p-4 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
                 <select className="w-full md:w-auto border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <option>Todos los informes</option><option>Estado emocional</option><option>Resultados de test</option><option>Patrones de sueño</option>
@@ -192,8 +192,8 @@ const MensajesSection = () => {
     const activeChat = selectedChat ? conversations.find(c => c.id === selectedChat) : null;
 
     return (
-        <section>
-            <div className="flex bg-white rounded-xl shadow-sm overflow-hidden" style={{minHeight: 'calc(100vh - 12rem)'}}>
+        <section className='px-11 py-5'>
+            <div className="flex bg-white rounded-xl shadow-sm overflow-hidden " style={{minHeight: 'calc(100vh - 12rem)'}}>
                 {/* Conversations List */}
                 <div className={`w-full md:w-1/3 border-r border-gray-200 flex flex-col ${selectedChat && 'hidden md:flex'}`}>
                     <div className="p-4 border-b">
@@ -272,11 +272,11 @@ const navItemsList = [
 ];
 
 const Sidebar = ({ isCollapsed, activeSection, setActiveSection }) => (
-    <aside className={`bg-white shadow-lg flex-shrink-0 flex flex-col justify-between transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-64'} p-5`}>
+<aside className={`bg-white shadow-lg flex-shrink-0 flex flex-col justify-between transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20 p-2' : 'w-64 p-10'}`}>
         <div>
             <div className={`flex items-center gap-3 mb-10 ${isCollapsed ? 'justify-center' : ''}`}>
                 <div className="p-2 rounded-lg">
-                    <img src="/img/logo1.png" alt="Logo EVA" className="w-20 h-20 object-contain" />
+                    <img src="/img/logo1.png" alt="Logo EVA"  className={`${isCollapsed ? 'w-12 h-12' : 'w-20 h-20'} object-contain mx-auto`} />
                 </div>
                 {!isCollapsed && <h1 className="text-2xl font-bold text-gray-800">EVA</h1>}
             </div>

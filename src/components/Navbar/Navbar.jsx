@@ -4,11 +4,13 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Producto', href: '#producto' },
-  { name: 'Funcionalidades', href: '#funcion' },
-  { name: 'Aplicación Móvil', href: '#appmovil' },
-  { name: 'Acerca de', href: '#acerca' },
+  { name: 'Producto', href: '/producto' },
+  { name: 'Funcionalidades', href: '/funcion' },
+  { name: 'Aplicación Móvil', href: '/appmovil' },
+  { name: 'Acerca de', href: '/acerca' },
+  { name: 'Encuesta', href: '/encuesta' },
 ];
+
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -16,9 +18,9 @@ const Navbar = () => {
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
-      <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
+      <nav aria-label="Global" className="flex items-center justify-between pr-5 pl-0 py-2 sm:pl-0 sm:pr-6 lg:pl-5 lg:pr-20">
         <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
+          <Link to="/" className="">
             <span className="sr-only">EVA Salud Mental</span>
             <img
               alt=""
@@ -37,6 +39,7 @@ const Navbar = () => {
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
+        {/* Genera las opciones del Navbar*/}
         <div className="hidden lg:flex lg:gap-x-12 ">
           {navigation.map((item) => (
             <Link key={item.name} to={item.href} className="border-b-4 border-b-[#8dc7fa00] px-5 rounded-md text-sm/6 font-semibold text-[#023d6d] 

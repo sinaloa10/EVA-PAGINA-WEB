@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
+
 
 
 
@@ -19,6 +22,8 @@ const API_URL = 'https://survey-service-nf9d.onrender.com';
 function Survey() {
   // --- Estados del Componente ---
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     experiencia: '',
@@ -130,6 +135,8 @@ function Survey() {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     setPasswordError('');
+    setLoading(true); // Inicia el estado de carga
+    setDisableButton(true); // Desactiva el botón para evitar múltiples envíos
     try {
       const response = await fetch(`${API_URL}/api/validate-password`, {
         method: 'POST',
@@ -149,6 +156,9 @@ function Survey() {
     } catch (error) {
       console.error('Error de conexión:', error);
       setPasswordError('No se pudo conectar con el servidor. Inténtalo de nuevo.');
+    } finally{
+      setLoading(false); // Finaliza el estado de carga
+      setDisableButton(false); // Reactiva el botón
     }
   };
 
@@ -254,27 +264,37 @@ function Survey() {
                 <label className="block mb-2 font-medium text-gray-700" htmlFor="survey-password">
                   Ingresa la clave de acceso:
                 </label>
-                <input
-                  id="survey-password"
-                  type="password"
-                  value={passwordInput}
-                  onChange={e => setPasswordInput(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2"
-                  style={{ '--tw-ring-color': evaColors.accent }}
-                  placeholder="Contraseña"
-                  autoFocus
-                />
+                <div className='flex items-stretch gap-2'>
+                  <input
+                    id="survey-password"
+                    type="password"
+                    value={passwordInput}
+                    onChange={e => setPasswordInput(e.target.value)}
+                    className="flex-grow p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2"
+                    style={{ '--tw-ring-color': evaColors.accent }}
+                    placeholder="Contraseña"
+                    autoFocus
+                  
+                  />
+                  {loading && (
+                    <AiOutlineLoading3Quarters className="animate-spin text-[#83c6eb] text-4xl" />
+                  )}
+                </div>
                 {passwordError && (
                   <div className="mb-4 text-red-600 text-sm">{passwordError}</div>
                 )}
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-md font-semibold text-white transition-opacity hover:opacity-90"
+                  disabled={disableButton}
+                  className={`w-full py-3 rounded-md font-semibold text-white transition-opacity
+                            ${disableButton ? 'opacity-25  cursor-not-allowed' : 'hover:opacity-90 cursor-pointer'}`}
                   style={{ backgroundColor: evaColors.accent }}
                 >
                   Ingresar
                 </button>
+                
               </form>
+              
             </div>
           </div>
         </section>

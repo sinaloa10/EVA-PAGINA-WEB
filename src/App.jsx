@@ -32,7 +32,6 @@ function App() {
             <Footer />
           </>
         } />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/encuesta" element={
           <>
             {!shouldHideLayout && <Navbar />}

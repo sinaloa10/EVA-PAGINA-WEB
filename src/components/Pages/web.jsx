@@ -4,15 +4,15 @@ import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 // Importando íconos de Lucide-React para un look más moderno
-import { 
-    BrainCircuit, 
-    BarChart3, 
-    HeartHandshake, 
-    ShieldCheck, 
-    Clock, 
-    FileText, 
+import {
+    BrainCircuit,
+    BarChart3,
+    HeartHandshake,
+    ShieldCheck,
+    Clock,
+    FileText,
     MessageSquare,
-    Moon, 
+    Moon,
     Sun,
     Star,
     BookHeart, // Icono para Diario Emocional
@@ -93,8 +93,8 @@ function ChatBotDemo() {
                 {messages.map((msg, index) => (
                     <div key={index} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
                         <div className={`py-2 px-4 rounded-2xl text-sm max-w-[85%] leading-relaxed shadow-sm ${msg.sender === "user"
-                                ? "bg-[#8DC8FA] text-black rounded-br-none"
-                                : "bg-gray-200 text-gray-800 rounded-bl-none"
+                            ? "bg-[#8DC8FA] text-black rounded-br-none"
+                            : "bg-gray-200 text-gray-800 rounded-bl-none"
                             }`}>
                             {msg.text}
                         </div>
@@ -141,7 +141,7 @@ const WellnessToolsSection = () => {
         {
             icon: Gamepad2,
             title: "Juegos Antiestrés",
-            description: "Actividades lúdicas diseñadas para reducir la ansiedad y mejorar el enfoque en momentos de crisis.",
+            description: "Actividades lúdicas diseñadas para reducir la ansiedad y mejorar el enfoque en momentos difíciles.",
         },
         {
             icon: Wind,
@@ -176,26 +176,21 @@ const WellnessToolsSection = () => {
                     {tools.map((tool) => (
                         <motion.div
                             key={tool.title}
-                            className={`p-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-2 ${
-                                tool.isSpecial
+                            className={`p-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-2 ${tool.isSpecial
                                     ? "bg-gradient-to-br from-[#8DC8FA] to-[#0077b6] text-white shadow-2xl"
                                     : "bg-gray-50 shadow-lg border border-gray-200"
-                            }`}
-                             whileHover={{ scale: 1.05 }}
+                                }`}
+                            whileHover={{ scale: 1.05 }}
                         >
-                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-6 ${
-                                tool.isSpecial ? "bg-white/20" : "bg-[#EBF8FF]"
-                            }`}>
-                                <tool.icon className={`w-6 h-6 ${
-                                    tool.isSpecial ? "text-white" : "text-[#0077b6]"
-                                }`} />
+                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-6 ${tool.isSpecial ? "bg-white/20" : "bg-[#EBF8FF]"
+                                }`}>
+                                <tool.icon className={`w-6 h-6 ${tool.isSpecial ? "text-white" : "text-[#0077b6]"
+                                    }`} />
                             </div>
-                            <h3 className={`text-xl font-semibold mb-2 ${
-                                tool.isSpecial ? "text-white" : "text-gray-900"
-                            }`}>{tool.title}</h3>
-                            <p className={`${
-                                tool.isSpecial ? "text-sky-100" : "text-gray-600"
-                            }`}>{tool.description}</p>
+                            <h3 className={`text-xl font-semibold mb-2 ${tool.isSpecial ? "text-white" : "text-gray-900"
+                                }`}>{tool.title}</h3>
+                            <p className={`${tool.isSpecial ? "text-sky-100" : "text-gray-600"
+                                }`}>{tool.description}</p>
                         </motion.div>
                     ))}
                 </div>
@@ -305,7 +300,7 @@ export default function HomePage() {
                                 onClick={() => navigate('/register')}
                                 className="w-full sm:w-auto bg-[#8DC8FA] text-black font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-[#6AA5D7] transition-all duration-300 transform hover:scale-105"
                             >
-                                Inicia tu prueba gratuita
+                                Solicita acceso anticipado
                             </button>
                             <a href="#demo" className="w-full sm:w-auto text-gray-700 font-semibold px-8 py-4 rounded-xl hover:bg-gray-100 transition-colors duration-300">
                                 Ver una demo
@@ -317,7 +312,7 @@ export default function HomePage() {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.5, delay: 0.6 }}
                         >
-                            Usado por más de <span className="font-semibold text-gray-800">500</span> psicólogos en Latinoamérica.
+                            <span className="font-semibold text-gray-800">EVA</span> es la plataforma más innovadora de salud mental desarrollada en México.
                         </motion.p>
                     </div>
                 </AnimatedSection>
@@ -438,9 +433,11 @@ export default function HomePage() {
                                 onClick={() => navigate('/register')}
                                 className="mt-8 bg-[#0077b6] text-white font-bold px-10 py-4 rounded-xl shadow-lg hover:bg-[#023e8a] transition-all duration-300 transform hover:scale-105"
                             >
-                                Empieza gratis hoy mismo
+                                Solicitar acceso anticipado
                             </button>
-                            <p className="mt-4 text-sm text-gray-600">Prueba de 14 días. Sin tarjeta de crédito. Cancela cuando quieras.</p>
+                            <p className="mt-4 text-sm text-gray-600">
+                                Cupos limitados para la beta. Sé parte del cambio en la salud mental.
+                            </p>
                         </div>
                     </div>
                 </AnimatedSection>

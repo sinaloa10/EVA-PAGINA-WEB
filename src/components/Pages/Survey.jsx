@@ -9,9 +9,9 @@ const evaColors = {
   accent: '#8DC8FA',
 };
 
-const HeartIcon = ({ style, className }) => ( <svg style={style} className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg> );
-const HamburgerIcon = () => ( <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg> );
-const CheckCircleIcon = ({ className }) => ( <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> );
+const HeartIcon = ({ style, className }) => (<svg style={style} className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>);
+const HamburgerIcon = () => (<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>);
+const CheckCircleIcon = ({ className }) => (<svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>);
 
 // URL base de tu API. Cambia `localhost:3000` si tu backend corre en otro lugar.
 const API_URL = 'https://survey-service-nf9d.onrender.com';
@@ -44,7 +44,7 @@ function Survey() {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [footerMessage, setFooterMessage] = useState(false);
-  
+
   // --- Estado para control de acceso ---
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
@@ -55,7 +55,7 @@ function Survey() {
   const totalSteps = 5;
 
   // --- Manejadores de eventos (handleInputChange sin cambios) ---
-   const handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
     if (type === 'checkbox') {
@@ -124,7 +124,7 @@ function Survey() {
   const handlePrevStep = () => {
     if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
-  
+
   // --- LÓGICA DE CONEXIÓN CON BACKEND ---
 
   const handlePasswordSubmit = async (e) => {
@@ -159,7 +159,7 @@ function Survey() {
       setStepError('Por favor, responde todas las preguntas obligatorias antes de enviar.');
       return;
     }
-    
+
     // Mapeo de claves del estado a preguntas legibles
     const questionMap = {
       experiencia: '1. ¿Cuántos años lleva ejerciendo como psicólogo/a clínico/a?',
@@ -182,7 +182,7 @@ function Survey() {
       dispuesto_pagar: '21. ¿Estaría dispuesto/a pagar por una herramienta así?',
       exito_terapeutico: '24. ¿Cómo define el éxito terapéutico?',
     };
-    
+
     // Transforma el objeto formData en el array que espera el backend
     const answers = Object.entries(formData)
       .filter(([key, value]) => questionMap[key] && value && String(value).length > 0)
@@ -233,13 +233,19 @@ function Survey() {
   // --- Renderizado (el resto del JSX no necesita cambios) ---
   if (!isAuthenticated) {
     return (
-       <div className="text-gray-700 font-sans">
-        <section id="inicio" className="py-20 md:py-20" >
+      <div className="text-gray-700 font-sans">
+        <section id="inicio" className="py-20 md:py-20 md-20 mt-20" >
           <div className="container mx-auto px-6 text-center">
-            <h1 className="text-4xl md:text-6xl text-[#023d6d] font-bold leading-tight mt-20">
-              Tu experiencia puede transformar la salud mental digital.
+            <h1
+              className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              Ayúdanos a construir,
+              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#8DC8FA] to-[#0077b6]">la mejor herramienta para ti</span>
             </h1>
-            <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Ayúdanos a construir herramientas más efectivas y humanas contestando esta valiosa encuesta.</p>
+            <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Las respuestas de tu encuesta serán anónimas y nos ayudarán a lanzar una herramienta valiosa</p>
             <div className="flex items-center justify-center mt-8">
               <form
                 onSubmit={handlePasswordSubmit}
@@ -254,7 +260,7 @@ function Survey() {
                   value={passwordInput}
                   onChange={e => setPasswordInput(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2"
-                  style={{'--tw-ring-color': evaColors.accent}}
+                  style={{ '--tw-ring-color': evaColors.accent }}
                   placeholder="Contraseña"
                   autoFocus
                 />
@@ -287,8 +293,8 @@ function Survey() {
   }
 
   const renderStep = () => {
-      // ... (El contenido de renderStep no cambia)
-       switch (currentStep) {
+    // ... (El contenido de renderStep no cambia)
+    switch (currentStep) {
       case 0: // Fase 1
         return (
           <div>
@@ -461,7 +467,7 @@ function Survey() {
   };
 
   return (
-    
+
 
     <div className="text-gray-700 font-sans">
       <Helmet>
@@ -517,7 +523,7 @@ function Survey() {
             <h3 className="text-2xl font-bold text-gray-800">¿Te interesa colaborar más adelante?</h3>
             <p className="text-gray-600 mt-2 mb-8">Déjanos tu correo y te contactaremos para futuras entrevistas o pruebas de concepto.</p>
             <form onSubmit={handleFooterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input type="email" name="footer_email" required value={formData.footer_email} onChange={handleInputChange} className="flex-grow p-3 border border-gray-300 rounded-md focus:ring-2 focus:outline-none" style={{ '--tw-ring-color': evaColors.accent }} placeholder="Tu correo electrónico"/>
+              <input type="email" name="footer_email" required value={formData.footer_email} onChange={handleInputChange} className="flex-grow p-3 border border-gray-300 rounded-md focus:ring-2 focus:outline-none" style={{ '--tw-ring-color': evaColors.accent }} placeholder="Tu correo electrónico" />
               <button type="submit" className="bg-gray-800 text-white font-semibold py-3 px-8 rounded-md hover:bg-gray-700 transition-all">Quiero que me contacten</button>
             </form>
             {footerMessage && (

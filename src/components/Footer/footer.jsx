@@ -4,9 +4,9 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/f
 
 export default function Footer() {
   const socialLinks = [
-    { name: 'Facebook', icon: FaFacebookF, url: 'https://facebook.com' },
+    { name: 'Facebook', icon: FaFacebookF, url: 'https://www.facebook.com/profile.php?id=61577117230451' },
     { name: 'Twitter', icon: FaTwitter, url: 'https://twitter.com' },
-    { name: 'Instagram', icon: FaInstagram, url: 'https://instagram.com' },
+    { name: 'Instagram', icon: FaInstagram, url: 'https://www.instagram.com/evasalud.ai/' },
     { name: 'LinkedIn', icon: FaLinkedinIn, url: 'https://linkedin.com' },
   ];
 

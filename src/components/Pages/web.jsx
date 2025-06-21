@@ -267,7 +267,7 @@ export default function HomePage() {
     const navigate = useNavigate();
 
     return (
-        <div className="bg-white text-gray-800 font-sans transition-colors duration-300">
+        <div className="bg-white text-gray-800 font-sans transition-colors duration-300 mt-8">
             <main className="pt-20">
                 {/* --- HERO SECTION --- */}
                 <AnimatedSection className="text-center pt-16 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">

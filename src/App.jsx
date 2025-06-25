@@ -9,7 +9,7 @@ import Footer from './components/Footer/footer';
 import Survey from './components/Pages/Survey';
 import NotFound from './components/Pages/NotFound';
 import Chatbot from './components/Pages/chatbot';
-
+//error en nombre de archivo, debe ser chatbot.jsx
 function App() {
   const location = useLocation();
 

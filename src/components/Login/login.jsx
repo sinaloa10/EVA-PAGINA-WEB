@@ -1,109 +1,199 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios'; // Importar Axios
+import axios from 'axios';
+
+// Icono SVG para el loader, se puede mover a su propio componente si se reutiliza.
+const LoadingSpinner = () => (
+  <svg
+    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <circle
+      className="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="4"
+    ></circle>
+    <path
+      className="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+    ></path>
+  </svg>
+);
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [hoveredOlvido, setHoveredOlvido] = useState(false);
-  const [hoveredRegistrar, setHoveredRegistrar] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    
+    if (!email || !password) {
+      setError('Por favor, ingresa tu correo y contraseña.');
+      return;
+    }
+    
+    setLoading(true);
 
     try {
-      // Enviar solicitud de inicio de sesión al backend
-      const response = await axios.post('http://evasalud.com.mx:3000/api/auth/login/psychologist', {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        'https://api.evasalud.com.mx/auth/api/login/',
+        { email, password },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
 
-      // Si la respuesta es exitosa, navegar al dashboard
       if (response.data.token) {
-        localStorage.setItem('token', response.data.token); // Guardar token en localStorage
-        localStorage.setItem('psychologist_id', response.data.psychologist_id); // Guardar psychologist_id en localStorage
-        navigate('/dashboard');
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('psychologist_id', response.data.psychologist_id);
+        navigate('/chatbot');
+      } else {
+        setError('Error desconocido al iniciar sesión. Inténtalo de nuevo.');
       }
-    } catch (error) {
-      alert('Correo electrónico o contraseña incorrectos');
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 401) {
+          setError('Correo electrónico o contraseña incorrectos.');
+        } else if (err.response.data && err.response.data.detail) {
+          setError(err.response.data.detail);
+        } else {
+          setError('Ocurrió un error inesperado. Por favor, intenta de nuevo.');
+        }
+      } else if (err.request) {
+        setError('No se pudo conectar al servidor. Verifica tu conexión a internet.');
+      } else {
+        setError('Error al configurar la solicitud. Por favor, contacta a soporte.');
+      }
       setEmail('');
       setPassword('');
+    } finally {
+      setLoading(false);
     }
   };
+  
+  const isFormInvalid = !email || !password || loading;
 
   return (
-    <section className="bg-white">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:w-screen md:h-screen lg:py-0">
-        <div className="w-full bg-white rounded-lg shadow border border-[#023d6d] md:mt-0 sm:max-w-md xl:p-0">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-[#023d6d] md:text-2xl">
-              Inicia sesión en tu cuenta
-            </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
-              <div>
-                <label htmlFor="email" className="block mb-2 text-sm font-medium text-[#023d6d]">
-                  Correo electrónico
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="bg-gray-50 border border-[#ffccc8] text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="name@company.com"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
-                  Contraseña
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  required
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label htmlFor="remember" className="text-gray-500">
-                      Recuerdame
-                    </label>
-                  </div>
-                </div>
-                <a href="#" className="text-sm font-medium text-primary-600 hover:underline">
-                  ¿Olvidaste tu contraseña?
-                </a>
-              </div>
-              <button
-                type="submit"
-                className="w-full text-white bg-black hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Sign in
-              </button>
-              <p className="text-sm font-light text-gray-500">
-                ¿Todavía no tienes una cuenta?{' '}
-                <a href="#" className="font-medium text-primary-600 hover:underline">
-                  Regístrate
-                </a>
-              </p>
-            </form>
-          </div>
+    <main
+      className="min-h-screen w-full flex items-center justify-center bg-[#EAF7FF] p-4 font-sans"
+      style={{ background: '#EAF7FF' }} // Fallback por si Tailwind JIT no procesa el color
+    >
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            Bienvenido de Nuevo
+          </h1>
+          <p className="text-slate-500">
+            Inicia sesión para continuar
+          </p>
         </div>
+
+        {error && (
+          <div
+            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg relative"
+            role="alert"
+          >
+            <p className="text-sm">{error}</p>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Correo electrónico
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="tu@ejemplo.com"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8DC8FA] focus:border-transparent transition duration-300 ease-in-out"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Contraseña
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8DC8FA] focus:border-transparent transition duration-300 ease-in-out"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center">
+              <input
+                id="remember_me"
+                name="remember_me"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="h-4 w-4 rounded border-slate-300 text-[#8DC8FA] focus:ring-[#8DC8FA] focus:ring-offset-0"
+              />
+              <label
+                htmlFor="remember_me"
+                className="ml-2 block text-slate-600"
+              >
+                Recordarme
+              </label>
+            </div>
+            <Link
+              to="/forgot-password"
+              className="font-medium text-[#8DC8FA] hover:underline"
+            >
+              ¿Olvidé mi contraseña?
+            </Link>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isFormInvalid}
+            className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-[#8DC8FA] hover:bg-[#7bbef9] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8DC8FA] disabled:bg-[#a0d2f9] disabled:cursor-not-allowed transition-colors duration-300 ease-in-out"
+            style={{ background: loading ? '#a0d2f9' : '#8DC8FA' }}
+          >
+            {loading && <LoadingSpinner />}
+            {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-slate-500">
+          ¿No tienes una cuenta?{' '}
+          <Link
+            to="/register"
+            className="font-medium text-[#8DC8FA] hover:underline"
+          >
+            Regístrate aquí
+          </Link>
+        </p>
       </div>
-    </section>
+    </main>
   );
 };
 

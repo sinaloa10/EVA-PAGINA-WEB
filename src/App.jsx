@@ -8,11 +8,12 @@ import Navbar from '../src/components/Navbar/Navbar';
 import Footer from './components/Footer/footer';
 import Survey from './components/Pages/Survey';
 import NotFound from './components/Pages/NotFound';
+import Chatbot from './components/Pages/chatbot';
 
 function App() {
   const location = useLocation();
 
-  const hideLayoutRoutes = ['/dashboard', '/register', '/login'];
+  const hideLayoutRoutes = ['/dashboard', '/register', '/login', '/chatbot'];
 
   const shouldHideLayout = hideLayoutRoutes.includes(location.pathname);
 
@@ -25,7 +26,7 @@ function App() {
             <Login />
           </>
         } />
-        <Route path="/dash" element={
+        <Route path="/dashboard" element={
           <>
           
             <Dashboard />
@@ -48,6 +49,12 @@ function App() {
           <>
             {!shouldHideLayout && <Navbar />}
             <Register />
+          </>
+        } />
+        <Route path="/chatbot" element={
+          <>
+            {!shouldHideLayout && <Navbar />}
+            <Chatbot />
           </>
         } />
 

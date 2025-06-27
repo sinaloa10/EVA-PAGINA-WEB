@@ -47,12 +47,10 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/login/',
+        'https://api.evasalud.com.mx/auth/api/login',
         { email, password },
         { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
       );
-
-      console.log('Respuesta backend login:', response.data);
 
       if (response.status = 200) {
         localStorage.setItem('psychologist_id', response.data.psychologist_id);

@@ -1,20 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Producto', href: '/producto' },
   { name: 'Funcionalidades', href: '/funcion' },
   { name: 'Aplicación Móvil', href: '/appmovil' },
   { name: 'Acerca de', href: '/acerca' },
   { name: 'Encuesta', href: '/encuesta' },
 ];
 
+const serviciosDropdown = [
+  { name: 'Dinamo', href: 'https://dinamo-frontend.vercel.app/', external: true },
+  { name: 'EVA Salud Nutricional', href: '/eva-nutricional', external: false },
+  { name: 'EVA Better Job', href: '/eva-better-job', external: false },
+];
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState(null);
+  const [serviciosOpen, setServiciosOpen] = useState(false);
+  const closeTimeout = useRef();
+
+  // Mantener abierto el dropdown mientras el mouse esté sobre el botón o el menú
+  const handleServiciosEnter = () => {
+    if (closeTimeout.current) clearTimeout(closeTimeout.current);
+    setServiciosOpen(true);
+  };
+  const handleServiciosLeave = () => {
+    closeTimeout.current = setTimeout(() => setServiciosOpen(false), 150);
+  };
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -39,8 +54,57 @@ const Navbar = () => {
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
-        {/* Genera las opciones del Navbar*/}
+        {/* Navbar opciones */}
         <div className="hidden lg:flex lg:gap-x-12 ">
+          {/* Servicios Dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={handleServiciosEnter}
+            onMouseLeave={handleServiciosLeave}
+          >
+            <button
+              className="border-b-4 border-b-[#8dc7fa00] px-5 rounded-md text-sm/6 font-semibold text-[#023d6d] hover:text-[#8dc7fac2] hover:border-b-4 hover:border-b-[#8dc7fac2] flex items-center gap-1"
+              onClick={() => setServiciosOpen((open) => !open)}
+              type="button"
+            >
+              Servicios
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {serviciosOpen && (
+              <div
+                className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
+                onMouseEnter={handleServiciosEnter}
+                onMouseLeave={handleServiciosLeave}
+              >
+                <div className="py-1">
+                  {serviciosDropdown.map((item) =>
+                    item.external ? (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block px-4 py-2 text-sm text-[#023d6d] hover:bg-[#f0f8ff] hover:text-[#8dc7fac2]"
+                      >
+                        {item.name}
+                      </a>
+                    ) : (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className="block px-4 py-2 text-sm text-[#023d6d] hover:bg-[#f0f8ff] hover:text-[#8dc7fac2]"
+                      >
+                        {item.name}
+                      </Link>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          {/* Resto de navegación */}
           {navigation.map((item) => (
             <Link key={item.name} to={item.href} className="border-b-4 border-b-[#8dc7fa00] px-5 rounded-md text-sm/6 font-semibold text-[#023d6d] 
               hover:text-[#8dc7fac2] hover:border-b-4 hover:border-b-[#8dc7fac2] ">
@@ -55,6 +119,7 @@ const Navbar = () => {
         </div>
       </nav>
 
+      {/* Menú móvil */}
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
@@ -79,6 +144,36 @@ const Navbar = () => {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
+                {/* Servicios Dropdown en móvil */}
+                <div className="block">
+                  <span className="block px-3 py-2 text-base/7 font-semibold text-gray-900">
+                    Servicios
+                  </span>
+                  <div className="pl-4">
+                    {serviciosDropdown.map((item) =>
+                      item.external ? (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block px-3 py-2 text-base/7 text-[#023d6d] hover:bg-[#f0f8ff] hover:text-[#8dc7fac2]"
+                        >
+                          {item.name}
+                        </a>
+                      ) : (
+                        <Link
+                          key={item.name}
+                          to={item.href}
+                          className="block px-3 py-2 text-base/7 text-[#023d6d] hover:bg-[#f0f8ff] hover:text-[#8dc7fac2]"
+                        >
+                          {item.name}
+                        </Link>
+                      )
+                    )}
+                  </div>
+                </div>
+                {/* Resto de navegación */}
                 {navigation.map((item) => (
                   <Link
                     key={item.name}

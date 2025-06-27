@@ -47,13 +47,14 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        'https://api.evasalud.com.mx/auth/api/login/',
+        'http://localhost:3000/api/login/',
         { email, password },
-        { headers: { 'Content-Type': 'application/json' } }
+        { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
       );
 
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+      console.log('Respuesta backend login:', response.data);
+
+      if (response.status = 200) {
         localStorage.setItem('psychologist_id', response.data.psychologist_id);
         navigate('/chatbot');
       } else {

@@ -8,7 +8,8 @@ import Navbar from '../src/components/Navbar/Navbar';
 import Footer from './components/Footer/footer';
 import Survey from './components/Pages/Survey';
 import NotFound from './components/Pages/NotFound';
-import Chatbot from './components/Pages/Chateva';
+import Terms from './components/Pages/terms';
+import Privacy from './components/Pages/Privacy';
 //error en nombre de archivo, debe ser chatbot.jsx
 function App() {
   const location = useLocation();
@@ -51,12 +52,21 @@ function App() {
             <Register />
           </>
         } />
-        <Route path="/chatbot" element={
+        <Route path="/terms" element={
           <>
             {!shouldHideLayout && <Navbar />}
-            <Chatbot />
+            <Terms />
+            <Footer />
           </>
         } />
+        <Route path="/privacy" element={
+          <>
+            {!shouldHideLayout && <Navbar />}
+            <Privacy />
+            <Footer />
+          </>
+        } />
+
 
         {/* Ruta 404 sin Navbar ni Footer */}
         <Route path="*" element={<NotFound />} />

@@ -52,7 +52,7 @@ const Login = () => {
         { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
       );
 
-      if (response.status = 200) {
+      if (response.status === 200) {
         localStorage.setItem('psychologist_id', response.data.psychologist_id);
         navigate('/chatbot');
       } else {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -54,10 +54,56 @@ function Survey() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [accessPassword, setAccessPassword] = useState(''); // Guarda la contraseña validada
+  const [accessPassword, setAccessPassword] = useState('');
   const [stepError, setStepError] = useState('');
-
   const totalSteps = 5;
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const accessCodeFromURL = params.get('code');
+    if (accessCodeFromURL) {
+      validateCode(accessCodeFromURL);
+    }
+  }, []);
+
+  // --- LÓGICA DE CONEXIÓN CON BACKEND ---
+
+  // NUEVA FUNCIÓN REUTILIZABLE para validar el código
+  const validateCode = async (codeToValidate) => {
+    setPasswordError('');
+    setLoading(true);
+    setDisableButton(true);
+    try {
+      const response = await fetch(`${API_URL}/api/validate-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: codeToValidate }), // El backend espera un campo 'password'
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.isValid) {
+        setIsAuthenticated(true);
+        setAccessPassword(codeToValidate); // Guarda el código/contraseña para el envío final
+        setPasswordInput('');
+      } else {
+        // Si el código de la URL es inválido, muestra un error y el formulario normal.
+        setPasswordError(data.message || 'El código de acceso no es válido. Inténtalo de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error de conexión:', error);
+      setPasswordError('No se pudo conectar con el servidor. Inténtalo de nuevo.');
+    } finally {
+      setLoading(false);
+      setDisableButton(false);
+    }
+  };
+
+ const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    await validateCode(passwordInput);
+  };
+
 
   // --- Manejadores de eventos (handleInputChange sin cambios) ---
   const handleInputChange = (e) => {
@@ -131,36 +177,6 @@ function Survey() {
   };
 
   // --- LÓGICA DE CONEXIÓN CON BACKEND ---
-
-  const handlePasswordSubmit = async (e) => {
-    e.preventDefault();
-    setPasswordError('');
-    setLoading(true); // Inicia el estado de carga
-    setDisableButton(true); // Desactiva el botón para evitar múltiples envíos
-    try {
-      const response = await fetch(`${API_URL}/api/validate-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: passwordInput }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.isValid) {
-        setIsAuthenticated(true);
-        setAccessPassword(passwordInput); // Guarda la contraseña para el envío final
-        setPasswordInput('');
-      } else {
-        setPasswordError(data.message || 'Contraseña incorrecta');
-      }
-    } catch (error) {
-      console.error('Error de conexión:', error);
-      setPasswordError('No se pudo conectar con el servidor. Inténtalo de nuevo.');
-    } finally{
-      setLoading(false); // Finaliza el estado de carga
-      setDisableButton(false); // Reactiva el botón
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -274,7 +290,7 @@ function Survey() {
                     style={{ '--tw-ring-color': evaColors.accent }}
                     placeholder="Contraseña"
                     autoFocus
-                  
+
                   />
                   {loading && (
                     <AiOutlineLoading3Quarters className="animate-spin text-[#83c6eb] text-4xl" />
@@ -292,9 +308,9 @@ function Survey() {
                 >
                   Ingresar
                 </button>
-                
+
               </form>
-              
+
             </div>
           </div>
         </section>

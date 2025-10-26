@@ -518,61 +518,46 @@ const IsItForYou = () => {
 const PlansAndPrice = () => {
     return (
         <AnimatedSection id="plans" className="py-24 bg-white">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Encuentra el plan perfecto para ti
+                        Únete a la versión Beta de EVA
                     </h2>
                     <p className="mt-4 text-lg text-gray-600">
-                        Empieza gratis y descubre herramientas poderosas para tu bienestar.
+                        Accede gratuitamente a todas las herramientas mientras probamos la beta pública.
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-                    {/* Plan Freemium */}
-                    <div className="bg-white p-8 rounded-3xl shadow-xl border-2 border-[#8DC8FA] flex flex-col">
-                        <h3 className="text-2xl font-semibold text-gray-900">Freemium</h3>
-                        <p className="mt-2 text-gray-600">Lo esencial para empezar tu camino.</p>
+
+                {/* Card centrado */}
+                <div className="flex justify-center">
+                    <div className="relative bg-white p-10 rounded-3xl shadow-2xl border-2 border-[#8DC8FA] flex flex-col w-full max-w-md text-center">
+                        
+                        {/* Etiqueta Beta */}
+                        <span className="absolute top-[-12px] left-1/2 transform -translate-x-1/2 bg-[#8DC8FA] text-black text-sm font-semibold px-4 py-1 rounded-full shadow-md">
+                            Versión Beta · Gratis
+                        </span>
+
+                        <h3 className="text-2xl font-semibold text-gray-900 mt-4">Acceso Beta</h3>
+                        <p className="mt-2 text-gray-600">Prueba todas las funciones sin costo durante la fase beta.</p>
+
                         <div className="mt-6">
                             <span className="text-5xl font-extrabold text-gray-900">$0</span>
-                            <span className="text-lg text-gray-600">/siempre</span>
+                            <span className="text-lg text-gray-600">/beta</span>
                         </div>
-                        <ul className="mt-8 space-y-4 text-gray-700 flex-grow">
-                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Chat básico con EVA</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Diario emocional</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />3 ejercicios de respiración</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />1 test de auto-evaluación al mes</li>
+
+                        <ul className="mt-8 space-y-4 text-gray-700 flex-grow text-left mx-auto w-fit">
+                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Chat con EVA 24/7</li>
+                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Diario emocional interactivo</li>
+                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Ejercicios de respiración guiados</li>
+                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Tests psicológicos y seguimiento</li>
                         </ul>
+
                         <motion.a
-                            href="javascript:void(0)"
+                            href="https://app.evasalud.com.mx/register"
                             className="mt-10 block w-full text-center bg-[#8DC8FA] text-black font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-[#6AA5D7] transition-all"
                             whileHover={{ scale: 1.05 }}
                         >
-                            Empieza gratis
-                        </motion.a>
-                    </div>
-
-                    {/* Plan Premium */}
-                    <div className="bg-gray-900 text-white p-8 rounded-3xl shadow-2xl flex flex-col">
-                        <h3 className="text-2xl font-semibold">Premium</h3>
-                        <p className="mt-2 text-gray-300">Todas las herramientas para potenciarte.</p>
-                        <div className="mt-6">
-                            <span className="text-5xl font-extrabold">$X</span>
-                            <span className="text-lg text-gray-400">/mes</span>
-                        </div>
-                        <ul className="mt-8 space-y-4 text-gray-200 flex-grow">
-                            <li className="flex items-center"><Check className="w-5 h-5 text-[#8DC8FA] mr-3" />Todo lo de Freemium, y...</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-[#8DC8FA] mr-3" />Chat ilimitado y avanzado</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-[#8DC8FA] mr-3" />Diario con análisis de IA</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-[#8DC8FA] mr-3" />+10 ejercicios y meditaciones</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-[#8DC8FA] mr-3" />Tests ilimitados</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-[#8DC8FA] mr-3" />Exportar reportes en PDF</li>
-                        </ul>
-                        <motion.a
-                            href="#download"
-                            className="mt-10 block w-full text-center bg-white text-gray-900 font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-gray-200 transition-all"
-                            whileHover={{ scale: 1.05 }}
-                        >
-                            Ver planes (Pronto)
+                            Unirme a la Beta Gratis
                         </motion.a>
                     </div>
                 </div>
@@ -580,6 +565,7 @@ const PlansAndPrice = () => {
         </AnimatedSection>
     );
 };
+
 
 // --- 12. Lead Magnet ---
 const LeadMagnet = () => {
@@ -678,7 +664,7 @@ const Faq = () => {
         },
         {
             question: "¿Es realmente gratuita?",
-            answer: "Sí, tenemos una versión gratuita (Freemium) que te da acceso a las herramientas esenciales, como el chat básico y el diario. También ofreceremos una versión Premium con funciones avanzadas, pero siempre podrás usar la versión gratuita."
+            answer: "Sí, podrás usar la versión beta de nuestra app de forma gratuita. Más adelante, ofreceremos una versión premium con funciones adicionales, pero la versión básica siempre será accesible sin costo."
         },
         {
             question: "¿Qué hago en caso de una crisis?",
@@ -876,7 +862,6 @@ export default function App() {
                 <SecurityAndPrivacy />
                 <IsItForYou />
                 <PlansAndPrice />
-                <LeadMagnet />
                 <Faq />
             </main>
 

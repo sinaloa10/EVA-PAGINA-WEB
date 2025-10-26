@@ -86,12 +86,12 @@ const Hero = () => {
                         </p>
                         <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
                             <motion.a
-                                href="javascript:void(0)"
+                                href="https://app.evasalud.com.mx/register"
                                 className="w-full sm:w-auto bg-[#8DC8FA] text-black font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-[#6AA5D7] transition-all text-center"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                Descarga la app — Es gratis
+                                Registrate en la app — Es gratis
                             </motion.a>
                             <motion.a
                                 className="w-full sm:w-auto text-gray-700 font-semibold px-8 py-4 rounded-xl hover:bg-gray-100 transition-colors text-center"
@@ -107,7 +107,7 @@ const Hero = () => {
                     </motion.div>
 
                     {/* Visual / Lottie Placeholder */}
-                    <motion.div
+                    {/*<motion.div
                         className="flex justify-center items-center"
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -122,7 +122,7 @@ const Hero = () => {
                                 (Animación de un chatbot interactuando con un usuario en un teléfono)
                             </p>
                         </div>
-                    </motion.div>
+                    </motion.div>*/}
                 </div>
             </div>
             {/* Fondo decorativo */}

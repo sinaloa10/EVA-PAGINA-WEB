@@ -67,7 +67,7 @@ function App() {
             <Footer />
           </>
         } />
-        <Route path="/landing" element={
+        <Route path="/app" element={
           <>
             <Navbar />
             <AppLanding />

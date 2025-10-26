@@ -47,14 +47,7 @@ export default function PrivacyPolicyPage() {
 
                     <div className="space-y-10 text-lg leading-relaxed">
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">1. IDENTIDAD DEL RESPONSABLE</h2>
-                            <p className="text-gray-700">
-                                El responsable del tratamiento de sus datos personales es Oscar Alejandro Sinaloa García, titular del proyecto EVA, con domicilio electrónico para contacto: <a href="mailto:avisoprivacidad@evasalud.com.mx" className="text-[#0077b6] hover:underline">avisoprivacidad@evasalud.com.mx</a>.
-                            </p>
-                        </section>
-
-                        <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">2. DATOS PERSONALES QUE SE RECABAN</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">1. DATOS PERSONALES QUE SE RECABAN</h2>
                             <p className="text-gray-700">Durante el uso de la aplicación EVA, se podrán recopilar los siguientes datos:</p>
                             <h3 className="text-xl font-semibold text-gray-900 mt-4 mb-2">a) Datos de identificación:</h3>
                             <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
@@ -72,6 +65,8 @@ export default function PrivacyPolicyPage() {
                                 <li>Resultados de test psicológicos</li>
                                 <li>Audios, dibujos, notas y entradas en la app</li>
                                 <li>Información proporcionada en actividades de seguimiento emocional</li>
+                                <li>Todo lo que compartes con la aplicación de EVA se utiliza únicamente para mejorar tu experiencia, ofrecerte orientación personalizada y ayudar a tu especialista a darte un mejor seguimiento. Nunca usamos tus conversaciones con fines de publicidad ni las compartimos con terceros. Parte de la información puede analizarse de forma anónima para mejorar el funcionamiento de la aplicación y sus herramientas de bienestar.</li>
+                            
                             </ul>
                             <h3 className="text-xl font-semibold text-gray-900 mt-4 mb-2">c) Datos técnicos y de uso:</h3>
                             <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
@@ -84,7 +79,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">3. FINALIDADES DEL TRATAMIENTO DE LOS DATOS</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">2. FINALIDADES DEL TRATAMIENTO DE LOS DATOS</h2>
                             <p className="text-gray-700">Los datos personales recabados tienen las siguientes finalidades primarias:</p>
                             <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
                                 <li>Crear y mantener su cuenta de usuario</li>
@@ -93,7 +88,7 @@ export default function PrivacyPolicyPage() {
                                 <li>Facilitar la vinculación con psicólogos profesionales validados</li>
                                 <li>Personalizar su experiencia dentro de la app</li>
                                 <li>Proteger la seguridad del sistema y prevenir abusos</li>
-                            </ul>
+                                </ul>
                             <p className="text-gray-700 mt-4">Y las siguientes finalidades secundarias (opcionales):</p>
                             <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
                                 <li>Realizar análisis estadísticos y de mejora del sistema</li>
@@ -104,7 +99,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">4. CONSENTIMIENTO EXPRESO Y REVOCACIÓN</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">3. CONSENTIMIENTO EXPRESO Y REVOCACIÓN</h2>
                             <p className="text-gray-700">
                                 Al registrarse, usted otorga consentimiento expreso e informado para el tratamiento de sus datos, incluyendo los sensibles.
                             </p>
@@ -114,7 +109,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">5. TRANSFERENCIA DE DATOS</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">4. TRANSFERENCIA DE DATOS</h2>
                             <p className="text-gray-700">EVA no vende ni renta sus datos personales.</p>
                             <p className="mt-2 text-gray-700">Sólo se transfieren sus datos en los siguientes casos:</p>
                             <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
@@ -126,7 +121,7 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">6. DERECHOS ARCO (ACCESO, RECTIFICACIÓN, CANCELACIÓN Y OPOSICIÓN)</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">5. DERECHOS ARCO (ACCESO, RECTIFICACIÓN, CANCELACIÓN Y OPOSICIÓN)</h2>
                             <p className="text-gray-700">Usted tiene derecho a:</p>
                             <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
                                 <li>Conocer qué datos tenemos de usted y cómo los usamos (Acceso)</li>
@@ -145,30 +140,36 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">7. MEDIDAS DE SEGURIDAD</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">6. MEDIDAS DE SEGURIDAD</h2>
                             <p className="text-gray-700">
                                 Sus datos son almacenados en servidores seguros, cifrados, con protocolos de acceso restringido y monitoreo continuo. EVA realiza revisiones periódicas de su infraestructura y políticas para proteger su información contra pérdida, robo, acceso no autorizado o modificación.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">8. LIMITACIÓN DE RESPONSABILIDAD</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">7. LIMITACIÓN DE RESPONSABILIDAD</h2>
                             <p className="text-gray-700">
                                 La aplicación se encuentra en fase beta. EVA no garantiza disponibilidad continua ni libre de errores. Usted reconoce y acepta que el uso de la aplicación es voluntario y bajo su propia responsabilidad.
+                            </p>
+                            <p className="mt-2 text-gray-700">
+                                En situaciones de riesgo emocional, ideas de suicidio, autolesión o cualquier emergencia, el usuario debe contactar de inmediato a profesionales capacitados o líneas de ayuda.
+                            </p>
+                            <p className="mt-2 text-gray-700">
+                                El uso de herramientas de expresión, mindfulness o juegos es bajo la responsabilidad del usuario, y EVA no garantiza resultados terapéuticos.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">9. CAMBIOS AL AVISO DE PRIVACIDAD</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">8. CAMBIOS AL AVISO DE PRIVACIDAD</h2>
                             <p className="text-gray-700">
                                 Este aviso puede ser modificado en cualquier momento. Las modificaciones se notificarán por correo electrónico o mediante la aplicación. El uso continuo de la plataforma tras una modificación implica su aceptación.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">10. AUTORIDAD COMPETENTE</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">9. AUTORIDAD COMPETENTE</h2>
                             <p className="text-gray-700">
-                                Si considera que su derecho de protección de datos ha sido vulnerado, puede acudir al Instituto Nacional de Transparencia, Acceso a la Información y Protección de Datos Personales (INAI) en México.
+                                Si considera que su derecho de protección de datos ha sido vulnerado, puede acudir al Secretaria Anticorrupción y buen gobierno (SABG) en México.
                             </p>
                         </section>
                     </div>

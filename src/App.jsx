@@ -10,11 +10,13 @@ import Survey from './components/Pages/Survey';
 import NotFound from './components/Pages/NotFound';
 import Terms from './components/Pages/terms';
 import Privacy from './components/Pages/Privacy';
+import AppLanding from './components/Pages/AppLanding';
+
 //error en nombre de archivo, debe ser chatbot.jsx
 function App() {
   const location = useLocation();
 
-  const hideLayoutRoutes = ['/dashboard', '/register', '/login', '/chatbot'];
+  const hideLayoutRoutes = ['/dashboard', '/register', '/login', '/chatbot', '/landing'];
 
   const shouldHideLayout = hideLayoutRoutes.includes(location.pathname);
 
@@ -29,7 +31,6 @@ function App() {
         } />
         <Route path="/dashboard" element={
           <>
-          
             <Dashboard />
           </>
         } />
@@ -66,7 +67,12 @@ function App() {
             <Footer />
           </>
         } />
-
+        <Route path="/landing" element={
+          <>
+            <Navbar />
+            <AppLanding />
+          </>
+        } />
 
         {/* Ruta 404 sin Navbar ni Footer */}
         <Route path="*" element={<NotFound />} />

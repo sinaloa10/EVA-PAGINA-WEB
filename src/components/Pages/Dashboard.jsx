@@ -448,7 +448,6 @@ const MensajesSection = () => {
 const navItemsList = [
     { id: 'inicio', text: 'Inicio', icon: <LayoutDashboard /> },
     { id: 'pacientes', text: 'Mis pacientes', icon: <Users /> },
-    { id: 'solicitudes', text: 'Solicitudes', icon: <UserPlus /> },
     { id: 'agenda', text: 'Agenda', icon: <Calendar /> },
     { id: 'informes', text: 'Informes AI', icon: <FileText /> },
     { id: 'mensajes', text: 'Mensajes', icon: <MessageSquare /> },

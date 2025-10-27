@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { 
     LayoutDashboard, Users, UserPlus, Calendar, FileText, MessageSquare, Settings, BrainCircuit, 
-    PanelLeftClose, Bell, LogOut, Search, MessageCircle, TrendingDown, AlertCircle, CalendarCheck, 
-    AlertTriangle, Video, MapPin, CheckCircle2, XCircle, Clock, Download, Brain, Send, User, CalendarClock
+    PanelLeftClose, Bell, LogOut, Search, MessageCircle, TrendingDown, AlertCircle, CalendarCheck, Activity ,
+    AlertTriangle, Video, MapPin, CheckCircle2, XCircle, Clock, Download, Brain, Send, User, CalendarClock,
+    UserRoundCheck
 } from 'lucide-react';
 
+import {Pie, Bar} from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale,LinearScale } from 'chart.js';
 // --- Reusable Components ---
 
 const StatsCard = ({ icon, title, value, change, iconBgColor, iconTextColor }) => (
@@ -20,50 +23,218 @@ const StatsCard = ({ icon, title, value, change, iconBgColor, iconTextColor }) =
     </div>
 );
 
-const PatientCard = ({ avatarSrc, name, age, interactionStatus, interactionIcon, interactionBg, interactionText }) => (
-    <div className="bg-white rounded-xl shadow-sm p-5 text-center flex flex-col items-center">
-        <img src={avatarSrc} alt="Avatar" className="w-20 h-20 rounded-full mb-4 object-cover" />
-        <h4 className="font-bold text-gray-800">{name}</h4>
-        <p className="text-sm text-gray-500">{age}</p>
-        <div className={`mt-4 flex items-center gap-2 text-sm ${interactionText} ${interactionBg} px-3 py-1 rounded-full`}>
-            {interactionIcon}
-            <span>{interactionStatus}</span>
+const PatientCard = ({ name, age, avatarSrc, interactionStatus, interactionIcon, interactionBg, interactionText }) => (
+  <div className="bg-white p-4 rounded-xl shadow-sm flex flex-col gap-3 relative">
+    <div className="flex">
+      {/* Iconos accion rapido */}
+      <div className="flex flex-col gap-2 mr-4">
+        <div className="relative group">
+          <button className="p-2 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors">
+            <Calendar className="w-4 h-4" />
+          </button>
+          <span className="absolute left-full ml-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+            Agendar sesión
+          </span>
         </div>
-        <button className="mt-5 w-full bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
-            Ver Perfil
+
+        <div className="relative group">
+          <button className="p-2 bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
+            <MessageCircle className="w-4 h-4" />
+          </button>
+          <span className="absolute left-full ml-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+            Enviar mensaje motivacional
+          </span>
+        </div>
+
+        <div className="relative group">
+          <button className="p-2 bg-purple-100 text-purple-700 rounded-full hover:bg-purple-200 transition-colors">
+            <Activity className="w-4 h-4" />
+          </button>
+          <span className="absolute left-full ml-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+            Asignar ejercicio
+          </span>
+        </div>
+      </div>
+
+      {/* Contenido del paciente */}
+      <div className="flex-1 flex flex-col gap-2">
+        <div className="flex items-center gap-3">
+          <img src={avatarSrc} alt={name} className="w-16 h-16 rounded-full object-cover" />
+          <div className="flex flex-col">
+            <p className="font-semibold text-gray-800">{name}</p>
+            <p className="text-sm text-gray-500">{age}</p>
+          </div>
+        </div>
+
+        <div className={`flex items-center gap-1 text-sm font-medium ${interactionText}`}>
+          <span className={`p-1 rounded-full ${interactionBg}`}>{interactionIcon}</span>
+          {interactionStatus}
+        </div>
+
+        {/* Boton Ver perfil*/}
+        <button className="mt-auto w-full bg-cyan-900 text-white font-semibold py-2 rounded-lg hover:bg-cyan-700 transition-colors">
+          Ver perfil
         </button>
+      </div>
     </div>
+  </div>
 );
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement,);
+const barData = {
+  labels: ['Feliz', 'Tranquilo', 'Ansioso', 'Triste', 'Neutral'],
+  datasets: [
+    {
+      label: 'Número de pacientes',
+      data: [8, 6, 4, 3, 5], // reemplaza con tus valores reales
+      backgroundColor: ['#86efac', '#bfdbfe', '#fef08a', '#fecaca', '#e5e7eb'],
+      borderRadius: 6,
+    },
+  ],
+};
+
+const barOptions = {
+  responsive: true,
+  plugins: {
+    legend: { display: false },
+  },
+  scales: {
+    y: { beginAtZero: true, ticks: { stepSize: 1 } },
+  },
+};
+
+const BarChartCard = ({ title }) => (
+  <div className="lg:col-span-4 bg-white p-6 rounded-xl shadow-sm">
+        <h3 className="font-semibold text-gray-800 mb-4">{ title }</h3>
+        <div className="w-full h-[400px]">
+            <Bar data={barData} options={barOptions} />
+        </div>
+  </div>
+);
+
+const pacientes = [
+  { nombre: "Ana", estadoHoy: 8, estadoAyer: 6 },
+  { nombre: "Luis", estadoHoy: 4, estadoAyer: 5 },
+  { nombre: "Carla", estadoHoy: 7, estadoAyer: 7 },
+];
+
+const getTendencia = (hoy, ayer) => {
+  if (hoy > ayer) return "⬆️"; 
+  if (hoy < ayer) return "⬇️"; 
+  return "➡️";
+};
+
+const TendenciaGlobal = () => {
+  return (
+    <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {pacientes.map(p => (
+        <div key={p.nombre} className="bg-white p-4 rounded-2xl shadow-md flex justify-between items-center hover:shadow-lg transition-shadow">
+          <div>
+            <p className="text-sm text-gray-500">Paciente</p>
+            <h4 className="font-bold text-gray-800">{p.nombre}</h4>
+          </div>
+          <div className={`text-2xl ${p.estadoHoy > p.estadoAyer ? 'text-green-500' : p.estadoHoy < p.estadoAyer ? 'text-red-500' : 'text-gray-400'}`}>
+            {getTendencia(p.estadoHoy, p.estadoAyer)}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// --- Nuevos componentes ---
+const QuickInsights = () => {
+  return (
+    <aside className="hidden lg:flex lg:flex-col lg:w-80 p-6 gap-4 bg-white rounded-xl shadow-sm">
+      <h3 className="font-semibold text-gray-800 ">Resumen Diario</h3>
+      <div className="space-y-2">
+        {/* Alertas urgentes */}
+        <div>
+          <p className="text-sm text-gray-500 mb-2">Alertas urgentes</p>
+          <ul className="space-y-1">
+            <li className="flex items-center gap-2 p-2 rounded-lg bg-red-100 text-red-700 hover:shadow-md cursor-pointer">
+              ⚠️ Laura Gómez - Insomnio severo
+            </li>
+            <li className="flex items-center gap-2 p-2 rounded-lg bg-red-100 text-red-700 hover:shadow-md cursor-pointer">
+              ⚠️ Carlos Ruiz - Ansiedad alta
+            </li>
+          </ul>
+        </div>
+
+        {/* Top preocupaciones hoy */}
+        <div>
+          <p className="text-sm text-gray-500 mb-2">Top preocupaciones</p>
+          <ul className="space-y-1">
+            <li className="flex items-center gap-2 p-2 rounded-lg bg-yellow-100 text-yellow-700 hover:shadow-md cursor-pointer">
+              💛 Ansiedad
+            </li>
+            <li className="flex items-center gap-2 p-2 rounded-lg bg-yellow-100 text-yellow-700 hover:shadow-md cursor-pointer">
+              💛 Estrés
+            </li>
+            <li className="flex items-center gap-2 p-2 rounded-lg bg-yellow-100 text-yellow-700 hover:shadow-md cursor-pointer">
+              💛 Insomnio
+            </li>
+          </ul>
+        </div>
+
+        {/* Actividades completadas */}
+        <div>
+          <p className="text-sm text-gray-500 mb-2">Actividades completadas</p>
+          <ul className="space-y-1">
+            <li className="flex items-center gap-2 p-2 rounded-lg bg-green-100 text-green-700 hover:shadow-md cursor-pointer">
+              ✅ 3 diarios completados
+            </li>
+            <li className="flex items-center gap-2 p-2 rounded-lg bg-green-100 text-green-700 hover:shadow-md cursor-pointer">
+              ✅ 2 ejercicios de respiración
+            </li>
+            <li className="flex items-center gap-2 p-2 rounded-lg bg-green-100 text-green-700 hover:shadow-md cursor-pointer">
+              ✅ 1 dibujo del día
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  );
+};
 
 // --- Section Components ---
 
 const DashboardSection = () => (
     <section id="inicio">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-11 pt-10">
-            <StatsCard icon={<Users />} title="Pacientes Activos" value="24" change="+2 esta semana" iconBgColor="bg-blue-100" iconTextColor="text-blue-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-11 pt-10">
+            <StatsCard icon={<Users />} title="Pacientes" value="40" change="" iconBgColor="bg-blue-100" iconTextColor="text-blue-500" />
+            <StatsCard icon={<UserRoundCheck />} title="Pacientes Activos" value="24" change="+2 esta semana" iconBgColor="bg-green-100" iconTextColor="text-green-500" />
             <StatsCard icon={<CalendarCheck />} title="Sesiones para Hoy" value="4" change="1 pendiente de confirmar" iconBgColor="bg-purple-100" iconTextColor="text-purple-500" />
             <StatsCard icon={<AlertTriangle />} title="Alertas Importantes" value="3" change="Requieren atención" iconBgColor="bg-red-100" iconTextColor="text-red-500" />
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6 px-11 pt-10">
-            <div className="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm">
-                <h3 className="font-semibold text-gray-800 mb-4">Últimos Registros Emocionales</h3>
-                <div className="flex justify-around items-end h-48 border-l border-b border-gray-200 p-2">
-                    <div className="text-center w-1/5"><div className="bg-green-200 rounded-t-lg mx-auto" style={{ height: '80%' }}></div><p className="text-xs text-gray-500 mt-2">Feliz</p></div>
-                    <div className="text-center w-1/5"><div className="bg-blue-200 rounded-t-lg mx-auto" style={{ height: '60%' }}></div><p className="text-xs text-gray-500 mt-2">Tranquilo</p></div>
-                    <div className="text-center w-1/5"><div className="bg-yellow-200 rounded-t-lg mx-auto" style={{ height: '45%' }}></div><p className="text-xs text-gray-500 mt-2">Ansioso</p></div>
-                    <div className="text-center w-1/5"><div className="bg-red-200 rounded-t-lg mx-auto" style={{ height: '30%' }}></div><p className="text-xs text-gray-500 mt-2">Triste</p></div>
-                    <div className="text-center w-1/5"><div className="bg-gray-200 rounded-t-lg mx-auto" style={{ height: '50%' }}></div><p className="text-xs text-gray-500 mt-2">Neutral</p></div>
-                </div>
-            </div>
-            <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm">
+        
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-6 px-11 pt-10">
+        <div className="lg:col-span-4 flex flex-col lg:flex-row gap-6">
+            <QuickInsights />
+
+            <div className="bg-white p-6 rounded-xl shadow-sm flex-1">
                 <h3 className="font-semibold text-gray-800 mb-4">Resúmenes de EVA AI</h3>
                 <div className="space-y-4">
-                    <div className="bg-gray-50 p-3 rounded-lg"><p className="text-sm font-medium text-gray-700">Laura Gómez</p><p className="text-xs text-gray-500">EVA detectó un patrón de insomnio en sus últimos 3 registros de diario.</p></div>
-                    <div className="bg-gray-50 p-3 rounded-lg"><p className="text-sm font-medium text-gray-700">Carlos Ruiz</p><p className="text-xs text-gray-500">El sentimiento dominante en su última semana fue la ansiedad.</p></div>
-                    <div className="bg-gray-50 p-3 rounded-lg"><p className="text-sm font-medium text-gray-700">Ana Torres</p><p className="text-xs text-gray-500">Completó el test de autoestima con resultados positivos.</p></div>
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm font-medium text-gray-700">Laura Gómez</p>
+                    <p className="text-xs text-gray-500">EVA detectó un patrón de insomnio en sus últimos 3 registros de diario.</p>
+                    </div>
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm font-medium text-gray-700">Carlos Ruiz</p>
+                    <p className="text-xs text-gray-500">El sentimiento dominante en su última semana fue la ansiedad.</p>
+                    </div>
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm font-medium text-gray-700">Ana Torres</p>
+                    <p className="text-xs text-gray-500">Completó el test de autoestima con resultados positivos.</p>
+                    </div>
                 </div>
             </div>
         </div>
+
+        {/* BarChart separado */}
+        <BarChartCard title={"Distribución Emocional"} />
+        </div>
+        
     </section>
 );
 
@@ -75,14 +246,26 @@ const PatientsSection = () => {
         { name: 'Marcos Peña', age: '22 años', avatarSrc: 'https://placehold.co/80x80/D1FAE5/10B981?text=MP', status: 'Interacción Alta', icon: <MessageCircle className="w-4 h-4" />, bg: 'bg-green-100', text: 'text-green-600' }
     ];
     return (
-        <section id="pacientes" className="flex flex-col flex-1 min-h-0 w-full px-11 py-5">
+        <section id="pacientes" className="flex flex-col flex-1 min-h-0 w-{p.name} px-11 py-5">
             <div className="mb-6 flex flex-col md:flex-row gap-4 items-center">
                 <div className="relative w-full md:w-1/3"><Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /><input type="text" placeholder="Buscar paciente..." className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" /></div>
                 <select className="w-full md:w-auto border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400"><option>Filtrar por estado</option><option>Estable</option><option>Ansioso</option><option>En riesgo</option></select>
                 <button className="w-full md:w-auto bg-blue-400 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-500 transition-colors">Buscar</button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 flex-1">
-                {patients.map(p => (<PatientCard key={p.name} name={p.name} age={p.age} avatarSrc={p.avatarSrc} interactionStatus={p.status} interactionIcon={p.icon} interactionBg={p.bg} interactionText={p.text} />))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {patients.map(p => (
+                    <div key={p.name} className="h-64">
+                    <PatientCard
+                        name={p.name}
+                        age={p.age}
+                        avatarSrc={p.avatarSrc}
+                        interactionStatus={p.status}
+                        interactionIcon={p.icon}
+                        interactionBg={p.bg}
+                        interactionText={p.text}
+                    />
+                    </div>
+                ))}
             </div>
         </section>
     );

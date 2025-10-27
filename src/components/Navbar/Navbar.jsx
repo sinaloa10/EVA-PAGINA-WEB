@@ -4,14 +4,13 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Funcionalidades', href: '/funcion' },
-  { name: 'Aplicación Móvil', href: '/appmovil' },
-  { name: 'Acerca de', href: '/acerca' },
+  { name: 'Aplicación para pacientes', href: '/appm' },
   { name: 'Encuesta', href: '/encuesta' },
+    { name: 'Términos y Condiciones', href: '/terms' },
 ];
 
 const serviciosDropdown = [
-  { name: 'Dinamo', href: 'https://dinamo-frontend.vercel.app/', external: true },
+  { name: 'Dinamo', href: 'https://dinamoapp.com/', external: true },
   { name: 'EVA Salud Nutricional', href: '/eva-nutricional', external: false },
   { name: 'EVA Better Job', href: '/eva-better-job', external: false },
 ];
@@ -113,7 +112,7 @@ const Navbar = () => {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link to="/login" className="text-sm/6 font-semibold text-[#023d6d]">
+          <Link to="/" className="text-sm/6 font-semibold text-[#023d6d]">
             Log in <span aria-hidden="true">&rarr;</span>
           </Link>
         </div>

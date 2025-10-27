@@ -400,7 +400,7 @@ const VideoDemoSection = () => (
     <AnimatedSection id="video-demo" className="py-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Velo en acción en 30 segundos</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Míralo en acción en 30 segundos</h2>
                 <p className="mt-4 text-lg text-gray-600">Descubre cómo fluye la información desde el paciente hasta tu panel de control.</p>
             </div>
             <div className="aspect-video bg-gray-900 rounded-2xl shadow-2xl overflow-hidden border-4 border-gray-200 flex items-center justify-center">
@@ -485,7 +485,7 @@ const WellnessToolsSection = () => {
 
 export default function HomePage() {
     const navigate = useNavigate();
-    const handleCtaClick = () => navigate('/register');
+    const handleCtaClick = () => window.location.href = "mailto:contacto@evasalud.com.mx?subject=Acceso%20anticipado&body=Hola,%20quiero%20acceso%20anticipado%20a%20EVA.";
 
     return (
         <div className="bg-white text-gray-800 font-sans transition-colors duration-300 mt-8">

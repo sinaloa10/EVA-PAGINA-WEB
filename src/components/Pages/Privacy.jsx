@@ -40,9 +40,9 @@ export default function PrivacyPolicyPage() {
                     <p className="text-center text-sm text-gray-500 mb-12">
                         Plataforma EVA – Salud Mental Digital
                         <br />
-                        Última actualización: 4 de julio de 2025
+                        Última actualización: 26 de octubre de 2025
                         <br />
-                        Versión: v0.9-beta
+                        Versión: v0.1-beta
                     </p>
 
                     <div className="space-y-10 text-lg leading-relaxed">

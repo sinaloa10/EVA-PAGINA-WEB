@@ -31,19 +31,19 @@ const AnimatedSection = ({ children, className }) => {
 
 export default function TermsAndConditionsPage() {
     return (
-        <div className="bg-white text-gray-800 font-sans transition-colors duration-300 pt-20">
+        <div className="bg-white text-gray-900 font-sans transition-colors duration-300 pt-20 dark:bg-white dark:text-gray-900">
             <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <AnimatedSection>
                     <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 text-center mb-8">
                         Términos y Condiciones de Uso – Versión Beta
                     </h1>
-                    <p className="text-center text-sm text-gray-500 mb-12">
-                        Última actualización: [4 de julio de 2025]
+                    <p className="text-center text-sm text-gray-600 mb-12">
+                        Última actualización: [26 de octubre de 2025]
                         <br />
                         Versión del documento: v0.1-beta
                     </p>
 
-                    <div className="space-y-10 text-lg leading-relaxed">
+                    <div className="space-y-10 text-base leading-relaxed text-gray-800">
                         <section>
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. ACEPTACIÓN DE LOS TÉRMINOS</h2>
                             <p className="text-gray-700">

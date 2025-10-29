@@ -210,13 +210,12 @@ const RadarEvaSection = () => (
                         </li>
                     </ul>
                 </div>
-                <div className="flex justify-center items-center bg-gray-100 rounded-2xl p-8 aspect-square shadow-lg border border-gray-200">
-                    {/* Placeholder visual para el mapa */}
-                    <div className="text-center text-gray-500">
-                        <MapPin className="w-24 h-24 mx-auto text-gray-400" />
-                        <p className="mt-4 font-semibold text-lg">[Mockup Visual: Radar EVA]</p>
-                        <p className="mt-2 text-sm">Aquí se mostrará una animación del mapa con pines y tarjetas de psicólogos.</p>
-                    </div>
+                <div className="flex justify-center items-center bg-gray-100 rounded-2xl shadow-lg border border-gray-200">
+                    <img
+                        src="/img/radar.png" // Asegúrate de que la imagen esté en el directorio public/img
+                        alt="Radar EVA"
+                        className="object-contain w-full h-full rounded-2xl"
+                    />
                 </div>
             </div>
         </div>
@@ -396,24 +395,35 @@ const NewTestimonialsSection = () => {
 };
 
 // 8. Video o demo visual
+
+
 const VideoDemoSection = () => (
     <AnimatedSection id="video-demo" className="py-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Míralo en acción en 30 segundos</h2>
-                <p className="mt-4 text-lg text-gray-600">Descubre cómo fluye la información desde el paciente hasta tu panel de control.</p>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                    Míralo en acción en 30 segundos
+                </h2>
+                <p className="mt-4 text-lg text-gray-600">
+                    Descubre cómo fluye la información desde el paciente hasta tu panel de control.
+                </p>
             </div>
-            <div className="aspect-video bg-gray-900 rounded-2xl shadow-2xl overflow-hidden border-4 border-gray-200 flex items-center justify-center">
-                {/* Placeholder para el video */}
-                <div className="text-center text-gray-400">
-                    <Video className="w-20 h-20 mx-auto" />
-                    <p className="mt-4 font-semibold text-lg">[Demo Visual del Ecosistema EVA]</p>
-                    <p className="text-sm">(Paciente en app → IA procesa → Psicólogo en dashboard)</p>
-                </div>
+
+            <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl shadow-2xl overflow-hidden border-4 border-gray-200 flex items-center justify-center">
+                <img
+                    src="img/demo-visual.png"
+                    alt="Demo Visual del Ecosistema EVA"
+                    className="object-contain w-full h-full"
+                />
             </div>
+
         </div>
     </AnimatedSection>
 );
+
+
+
+
 
 
 // --- SECCIONES EXISTENTES (MANTENIDAS) ---
@@ -490,7 +500,7 @@ export default function HomePage() {
     return (
         <div className="bg-white text-gray-800 font-sans transition-colors duration-300 mt-8">
             <main className="pt-20">
-                
+
                 {/* --- 1. HERO SECTION (Mantenido) --- */}
                 <AnimatedSection className="text-center pt-16 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-grid-gray-200/[0.3] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] -z-10"></div>
@@ -562,7 +572,7 @@ export default function HomePage() {
                         </div>
                     </div>
                 </AnimatedSection>
-                
+
                 {/* --- 4. Video Demo (NUEVA) --- */}
                 <VideoDemoSection />
 

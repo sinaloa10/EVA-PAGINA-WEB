@@ -29,11 +29,11 @@ function App() {
             <Login />
           </>
         } />
-        <Route path="/dashboard" element={
+        {/*<Route path="/dashboard" element={
           <>
             <Dashboard />
           </>
-        } />
+        } />*/}
         <Route path="/" element={
           <>
             {!shouldHideLayout && <Navbar />}

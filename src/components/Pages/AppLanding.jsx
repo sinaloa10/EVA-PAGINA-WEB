@@ -1,875 +1,1307 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import {
-    Heart,
-    MessageSquare,
-    Wind,
-    BarChart3,
-    BookOpen,
-    Gamepad2,
-    Paintbrush,
-    ClipboardCheck,
-    Bell,
-    BrainCircuit,
-    Smile,
-    Lock,
-    FileArchive,
-    ShieldCheck,
-    AlertTriangle,
-    CheckCircle,
-    ChevronDown,
-    Menu,
-    X,
-    Download,
-    Instagram,
-    Youtube,
-    Send,
-    User,
-    Users,
-    Briefcase,
-    Check
-} from 'lucide-react';
+import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { Dialog, DialogPanel } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
-// --- Colores (para referencia, aplicados directamente con Tailwind) ---
-// eva-sky-100: #8DC8FA
-// eva-blue:    #0077b6
-// eva-deep:    #023e8a
-// gray-50:     #f9fafb
-// muted:       #6b7280
-
-// --- Componente de Animación de Scroll ---
-const AnimatedSection = ({ children, className = "", once = true }) => {
-    const controls = useAnimation();
-    const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: once });
-
+// ─── Hooks ────────────────────────────────────────────────────────────────────
+function useInView(threshold = 0.15) {
+    const ref = useRef(null);
+    const [visible, setVisible] = useState(false);
     useEffect(() => {
-        if (inView) {
-            controls.start('visible');
-        }
-    }, [controls, inView]);
+        const obs = new IntersectionObserver(
+            ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
+            { threshold }
+        );
+        if (ref.current) obs.observe(ref.current);
+        return () => obs.disconnect();
+    }, []);
+    return [ref, visible];
+}
 
-    return (
-        <motion.section
-            ref={ref}
-            animate={controls}
-            initial="hidden"
-            variants={{
-                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
-                hidden: { opacity: 0, y: 50 },
-            }}
-            className={className}
-        >
-            {children}
-        </motion.section>
-    );
-};
+// ─── Global Styles ────────────────────────────────────────────────────────────
+const GlobalStyle = () => (
+    <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@200;300;400&display=swap');
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-// --- 2. Hero ---
-const Hero = () => {
-    return (
-        <AnimatedSection id="hero" className="pt-32 pb-24 bg-white relative overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    {/* Contenido de texto */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.7, ease: "easeOut" }}
-                    >
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                            Tu bienestar emocional, al alcance de tu mano
-                        </h1>
-                        <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-lg">
-                            EVA te acompaña cada día con un chatbot empático, ejercicios y herramientas para sentirte mejor paso a paso.
-                        </p>
-                        <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
-                            <motion.a
-                                href="https://app.evasalud.com.mx/register"
-                                className="w-full sm:w-auto bg-[#8DC8FA] text-black font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-[#6AA5D7] transition-all text-center"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                Registrate en la app — Es gratis
-                            </motion.a>
-                            <motion.a
-                                className="w-full sm:w-auto text-gray-700 font-semibold px-8 py-4 rounded-xl hover:bg-gray-100 transition-colors text-center"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                Ver demo (30s)
-                            </motion.a>
-                        </div>
-                        <p className="mt-6 text-sm text-gray-500">
-                            Creada junto a psicólogos. Privacidad y seguridad desde el diseño.
-                        </p>
-                    </motion.div>
+    :root {
+      --void: #0a0c10;
+      --deep: #0e1118;
+      --surface: #13161f;
+      --edge: #1c2030;
+      --mist: rgba(255,255,255,0.04);
+      --text-dim: rgba(255,255,255,0.28);
+      --text-mid: rgba(255,255,255,0.52);
+      --text-bright: rgba(255,255,255,0.84);
+      --accent: rgba(120,140,200,0.45);
+      --accent-glow: rgba(100,120,180,0.12);
+    }
 
-                    {/* Visual / Lottie Placeholder */}
-                    {/*<motion.div
-                        className="flex justify-center items-center"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-                    >
-                        <div className="w-full max-w-md aspect-square bg-gray-100 rounded-3xl shadow-xl border border-gray-200 flex flex-col items-center justify-center text-center p-8">
-                            <Heart className="w-24 h-24 text-gray-300" />
-                            <p className="mt-4 font-semibold text-lg text-gray-500">
-                                [Placeholder para Lottie/Video]
-                            </p>
-                            <p className="text-sm text-gray-400">
-                                (Animación de un chatbot interactuando con un usuario en un teléfono)
-                            </p>
-                        </div>
-                    </motion.div>*/}
-                </div>
-            </div>
-            {/* Fondo decorativo */}
-            <div className="absolute top-0 right-0 -z-10 transform translate-x-1/2 -translate-y-1/4" aria-hidden="true">
-                <div className="w-[60rem] h-[60rem] bg-gradient-to-br from-[#8DC8FA]/20 to-transparent rounded-full opacity-50 blur-3xl" />
-            </div>
-        </AnimatedSection>
-    );
-};
+    html { scroll-behavior: smooth; }
 
-// --- 3. Valor Inmediato (3 Beneficios) ---
-const ThreeBenefits = () => {
-    const benefits = [
-        {
-            icon: MessageSquare,
-            title: "Habla cuando lo necesites",
-            description: "Chat 24/7 para expresar cómo te sientes en cualquier momento."
-        },
-        {
-            icon: Wind,
-            title: "Pequeñas acciones que ayudan",
-            description: "Ejercicios diarios, respiración y juegos para calmar la mente."
-        },
-        {
-            icon: BarChart3,
-            title: "Sigue tu progreso",
-            description: "Registra tu estado de ánimo y revisa tu avance con gráficos sencillos."
-        }
-    ];
+    body {
+      background: var(--void);
+      color: var(--text-mid);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: default;
+    }
 
-    return (
-        <AnimatedSection className="py-24 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                    {benefits.map((benefit) => (
-                        <div key={benefit.title} className="p-6">
-                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-white shadow-md border border-gray-100 mx-auto mb-5">
-                                <benefit.icon className="h-8 w-8 text-[#0077b6]" />
-                            </div>
-                            <h3 className="text-xl font-semibold text-gray-900">{benefit.title}</h3>
-                            <p className="mt-2 text-gray-600">{benefit.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </AnimatedSection>
-    );
-};
+    ::selection { background: rgba(100,120,180,0.25); color: white; }
 
-// --- 4. Demo Interactiva (Chatbot) ---
-const ChatbotDemo = () => {
-    const [messages, setMessages] = useState([
-        { id: 1, sender: "bot", text: "Hola, soy EVA. ¿Quieres contarme cómo te sientes hoy?" }
-    ]);
-    const [input, setInput] = useState("");
-    const [isTyping, setIsTyping] = useState(false);
-    const messagesEndRef = useRef(null);
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--edge); }
 
-    // --- INICIO DE LA CORRECCIÓN ---
+    h1, h2, h3, .serif {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+    }
 
-    // 1. Añade esta línea para rastrear el primer renderizado
-    const isInitialRender = useRef(true);
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes breathe {
+      0%,100% { transform: scale(1); opacity: 0.5; }
+      50%      { transform: scale(1.04); opacity: 0.75; }
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 0.3; }
+      50%      { opacity: 0.9; }
+    }
+    @keyframes cursor-blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0; }
+    }
+    @keyframes drift {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      33%  { transform: translate(6px,-4px) rotate(0.5deg); }
+      66%  { transform: translate(-4px,6px) rotate(-0.5deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
+    .fade-up { opacity: 0; }
+    .fade-up.visible {
+      animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .fade-in { opacity: 0; }
+    .fade-in.visible {
+      animation: fadeIn 1.4s ease forwards;
+    }
 
-    // 2. Modifica este useEffect
-    useEffect(() => {
-        // Si es el primer renderizado...
-        if (isInitialRender.current) {
-            isInitialRender.current = false; // ...pon la bandera en 'false'
-            return; // ...y no hagas nada más (evita el scroll inicial)
-        }
+    .d1  { animation-delay: 0ms; }
+    .d2  { animation-delay: 180ms; }
+    .d3  { animation-delay: 360ms; }
+    .d4  { animation-delay: 540ms; }
+    .d5  { animation-delay: 720ms; }
+    .d6  { animation-delay: 900ms; }
 
-        // En todos los renderizados siguientes, sí se ejecutará el scroll
-        scrollToBottom();
-    }, [messages]); // La dependencia de [messages] sigue siendo correcta
+    /* ── RESPONSIVE UTILITIES ── */
 
-    // --- FIN DE LA CORRECCIÓN ---
+    /* Hide vertical text on small screens */
+    @media (max-width: 768px) {
+      .hide-mobile { display: none !important; }
+    }
 
+    /* Chat section grid → single column on mobile */
+    .chat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8vw;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .chat-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
 
-    const handleSendMessage = (e) => {
-        e.preventDefault();
-        if (input.trim() === "" || isTyping) return;
+    /* Diary section grid → single column on mobile */
+    .diary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 768px) {
+      .diary-grid {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .diary-right {
+        display: none !important;
+      }
+    }
 
-        const newUserMessage = { id: messages.length + 1, sender: "user", text: input };
-        setMessages([...messages, newUserMessage]);
-        setInput("");
-        setIsTyping(true);
+    /* Privacy section grid → single column on mobile */
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 8vw;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .privacy-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
 
-        // Simulación de respuesta del bot
-        setTimeout(() => {
-            const botResponse = {
-                id: messages.length + 2,
-                sender: "bot",
-                text: "Gracias por compartir. Lo registré para cuando lo pases a tu terapeuta o para revisarlo después."
-            };
-            setMessages(prev => [...prev, botResponse]);
-            setIsTyping(false);
-        }, 1500);
-    };
+    /* Privacy pillar items → single column on mobile */
+    .pillar-item {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .pillar-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
 
-    return (
-        <AnimatedSection id="demo" className="py-24 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    {/* Contenido de texto */}
-                    <div className="lg:pr-10">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                            Un espacio seguro para expresarte
-                        </h2>
-                        <p className="mt-4 text-lg text-gray-600">
-                            Prueba cómo funciona el chat de EVA. Es un lugar confidencial, sin juicios,
-                            diseñado para escucharte y ayudarte a organizar tus pensamientos.
-                        </p>
-                        <p className="mt-4 text-gray-600">
-                            Todo lo que escribes es privado y solo tú decides si quieres compartirlo con tu terapeuta.
-                        </p>
-                    </div>
+    /* Collage text alignment on mobile */
+    @media (max-width: 768px) {
+      .collage-text {
+        text-align: left !important;
+      }
+      .collage-text-inner {
+        max-width: 100% !important;
+      }
+    }
 
-                    {/* Demo del Chatbot */}
-                    <div className="w-full max-w-lg mx-auto h-[600px] bg-white rounded-3xl shadow-2xl flex flex-col border border-gray-200">
-                        {/* Encabezado */}
-                        <div className="bg-gradient-to-r from-[#8DC8FA] to-[#6AA5D7] text-black p-4 rounded-t-3xl flex items-center space-x-3">
-                            <div className="w-12 h-12 bg-white/50 rounded-full flex items-center justify-center border-2 border-white">
-                                <Heart className="w-7 h-7 text-white" />
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-lg">EVA Asistente</h3>
-                                <p className="text-xs opacity-90">Tu compañero de bienestar</p>
-                            </div>
-                        </div>
-
-                        {/* Mensajes */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-                            {messages.map((msg) => (
-                                <motion.div
-                                    key={msg.id}
-                                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <div className={`py-2.5 px-4 rounded-2xl text-sm max-w-[85%] leading-relaxed shadow-sm ${msg.sender === "user"
-                                        ? "bg-[#8DC8FA] text-black rounded-br-none"
-                                        : "bg-white text-gray-800 rounded-bl-none border border-gray-200"
-                                        }`}>
-                                        {msg.text}
-                                    </div>
-                                </motion.div>
-                            ))}
-                            {isTyping && (
-                                <motion.div
-                                    className="flex justify-start"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                >
-                                    <div className="py-2.5 px-4 rounded-2xl bg-white text-gray-800 rounded-bl-none border border-gray-200">
-                                        <div className="flex space-x-1.5 items-center h-5">
-                                            <motion.div className="w-2 h-2 bg-gray-400 rounded-full" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1, repeat: Infinity, delay: 0 }} />
-                                            <motion.div className="w-2 h-2 bg-gray-400 rounded-full" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1, repeat: Infinity, delay: 0.2 }} />
-                                            <motion.div className="w-2 h-2 bg-gray-400 rounded-full" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1, repeat: Infinity, delay: 0.4 }} />
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-                            <div ref={messagesEndRef} />
-                        </div>
-
-                        {/* Input */}
-                        <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-gray-200 rounded-b-3xl">
-                            <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
-                                <input
-                                    type="text"
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    className="flex-1 bg-transparent px-3 py-2.5 text-gray-800 placeholder-gray-500 focus:outline-none"
-                                    placeholder="Escribe cómo te sientes..."
-                                    aria-label="Escribe tu mensaje para EVA"
-                                />
-                                <button
-                                    type="submit"
-                                    className="bg-[#0077b6] text-white p-2.5 rounded-full hover:bg-[#023e8a] transition-colors focus:outline-none focus:ring-2 focus:ring-[#8DC8FA] disabled:opacity-50"
-                                    aria-label="Enviar mensaje"
-                                    disabled={isTyping}
-                                >
-                                    <Send className="w-5 h-5" />
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </AnimatedSection>
-    );
-};
-
-// --- 5. ¿Qué puedes hacer con EVA? (6 tarjetas) ---
-const ToolCard = ({ icon: Icon, title, description }) => (
-    <motion.div
-        className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col cursor-pointer"
-        whileHover={{ y: -6, scale: 1.03, shadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)" }}
-        transition={{ type: "spring", stiffness: 300, damping: 15 }}
-    >
-        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-[#EBF8FF] mb-4">
-            <Icon className="h-6 w-6 text-[#0077b6]" />
-        </div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-        <p className="text-gray-600">{description}</p>
-    </motion.div>
+    /* Input placeholder color */
+    input::placeholder {
+      color: rgba(255,255,255,0.2);
+      font-family: 'DM Sans', sans-serif;
+    }
+    input:focus {
+      outline: none;
+    }
+  `}</style>
 );
 
-const WhatYouCanDo = () => {
-    const tools = [
-        { icon: BookOpen, title: "Diario emocional", description: "Escribe o graba tus pensamientos. EVA crea resúmenes diarios." },
-        { icon: Wind, title: "Ejercicios guiados", description: "Respiración, grounding y meditación guiada en 3 minutos." },
-        { icon: Gamepad2, title: "Juegos antiestrés", description: "Mini-juegos para bajar la ansiedad en minutos." },
-        { icon: Paintbrush, title: "Dibujo terapéutico", description: "Expresa lo que no encuentras en palabras." },
-        { icon: ClipboardCheck, title: "Tests rápidos", description: "Cuestionarios (no diagnósticos) para entenderte mejor." },
-        { icon: Bell, title: "Recordatorios", description: "Rutinas personalizadas para mejorar sueño y hábitos." }
-    ];
+const navigation = [
+    { name: 'Encuesta', href: '/encuesta' },
+    { name: 'Términos y Condiciones', href: '/terms' },
+];
 
-    return (
-        <AnimatedSection id="tools" className="py-24 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        ¿Qué puedes hacer con EVA?
-                    </h2>
-                    <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-                        Herramientas prácticas creadas por expertos para tu bienestar diario.
-                    </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {tools.map((tool) => (
-                        <ToolCard key={tool.title} icon={tool.icon} title={tool.title} description={tool.description} />
-                    ))}
-                </div>
-            </div>
-        </AnimatedSection>
-    );
-};
+const serviciosDropdown = [
+    { name: 'Dinamo', href: 'https://dinamoapp.com/', external: true },
+    { name: 'EVA Salud Nutricional', href: '/eva-nutricional', external: false },
+    { name: 'EVA Better Job', href: '/eva-better-job', external: false },
+];
 
-// --- 6. Cómo funciona (3 pasos) ---
-const HowItWorks = () => {
-    const steps = [
-        { icon: MessageSquare, title: "Habla con EVA", description: "Cuéntale cómo te sientes, cuando quieras." },
-        { icon: BrainCircuit, title: "EVA organiza lo importante", description: "Resúmenes y ejercicios personalizados." },
-        { icon: Smile, title: "Sientes la diferencia", description: "Herramientas prácticas para tu día a día." }
-    ];
-
-    return (
-        <AnimatedSection id="how-it-works" className="py-24 bg-white">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Tan simple como 1, 2, 3
-                    </h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center relative">
-                    {/* Línea de conexión (desktop) */}
-                    <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gray-200 -translate-y-1/2 -z-10"
-                        style={{ top: "40px" }}>
-                        <div className="absolute top-0 left-0 h-0.5 bg-[#8DC8FA] w-full" />
-                    </div>
-
-                    {steps.map((step, index) => (
-                        <div key={step.title} className="flex flex-col items-center z-10">
-                            <div className="flex items-center justify-center h-20 w-20 rounded-full bg-white mb-6 border-4 border-[#8DC8FA] shadow-lg">
-                                <step.icon className="h-10 w-10 text-[#0077b6]" />
-                            </div>
-                            <h3 className="text-xl font-semibold text-gray-900">{step.title}</h3>
-                            <p className="mt-2 text-gray-600">{step.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </AnimatedSection>
-    );
-};
-
-// --- 7. Testimonios ---
-const TestimonialCard = ({ quote, name, age, avatar }) => (
-    <figure className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 flex flex-col justify-between h-full">
-        <blockquote className="text-lg text-gray-700 italic">
-            <p>“{quote}”</p>
-        </blockquote>
-        <figcaption className="mt-6">
-            <div className="flex items-center">
-                <img className="h-14 w-14 rounded-full bg-gray-200" src={avatar} alt={`Avatar de ${name}`} />
-                <div className="ml-4">
-                    <div className="font-semibold text-gray-900">{name}, {age}</div>
-                </div>
-            </div>
-        </figcaption>
-    </figure>
+// ─── Ambient orbs ─────────────────────────────────────────────────────────────
+const Orb = ({ style }) => (
+    <div style={{
+        position: "absolute", borderRadius: "50%",
+        filter: "blur(90px)", pointerEvents: "none",
+        animation: "drift 18s infinite ease-in-out",
+        ...style
+    }} />
 );
 
-const Testimonials = () => {
-    const stories = [
-        { quote: "EVA me ayuda a expresar lo que no puedo decir en persona. Ya no me siento tan sola.", name: "Mariana", age: 25, avatar: "https://placehold.co/100x100/E2E8F0/4A5568?text=M" },
-        { quote: "Con los ejercicios de respiración de 3 minutos he logrado calmar mis ataques de ansiedad en el trabajo. Es un salvavidas.", name: "Luis", age: 32, avatar: "https://placehold.co/100x100/E2E8F0/4A5568?text=L" },
-        { quote: "Me gusta mucho el diario. Me ayuda a ver mi progreso y cómo cambian mis estados de ánimo durante la semana.", name: "Ana", age: 21, avatar: "https://placehold.co/100x100/E2E8F0/4A5568?text=A" }
-    ];
+// ─── HEADER ───────────────────────────────────────────────────────────────────
+const Header = () => {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [serviciosOpen, setServiciosOpen] = useState(false);
+    const closeTimeout = useRef();
 
-    return (
-        <AnimatedSection id="testimonials" className="py-24 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Historias reales de personas como tú
-                    </h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {stories.map((story) => (
-                        <TestimonialCard key={story.name} {...story} />
-                    ))}
-                </div>
-            </div>
-        </AnimatedSection>
-    );
-};
-
-// --- 9. Seguridad y Privacidad ---
-const SecurityAndPrivacy = () => {
-    const points = [
-        { icon: Lock, text: "Tus datos están cifrados en tránsito y en reposo (AES-256 / TLS)." },
-        { icon: FileArchive, text: "Tus registros son tuyos: puedes exportarlos o eliminarlos cuando quieras." },
-        { icon: AlertTriangle, text: "EVA acompaña, no diagnostica. Para emergencias, contacta servicios locales." },
-        { icon: ShieldCheck, text: "No usamos tus datos para entrenar modelos sin tu permiso explícito." }
-    ];
-
-    return (
-        <AnimatedSection className="py-24 bg-white">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Privacidad en la que puedes confiar
-                    </h2>
-                    <p className="mt-4 text-lg text-gray-600">
-                        Tu confianza es nuestra prioridad número uno.
-                    </p>
-                </div>
-                <ul className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                    {points.map((point) => (
-                        <li key={point.text} className="flex items-start">
-                            <CheckCircle className="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" />
-                            <span className="text-gray-700">{point.text}</span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </AnimatedSection>
-    );
-};
-
-// --- 10. ¿Es para ti? (Segmentación) ---
-const IsItForYou = () => {
-    const segments = [
-        { icon: User, title: "Estudiantes", description: "Maneja el estrés de los exámenes y la vida social." },
-        { icon: Briefcase, title: "Profesionales", description: "Encuentra balance entre el trabajo, tu vida personal y tu bienestar." },
-        { icon: Users, title: "Padres y Madres", description: "Herramientas para encontrar calma y paciencia en la rutina diaria." }
-    ];
-    return (
-        <AnimatedSection className="py-24 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        ¿Es EVA para ti?
-                    </h2>
-                    <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-                        EVA está diseñada para cualquiera que busque mejorar su bienestar emocional, sin importar en qué etapa de la vida te encuentres.
-                    </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {segments.map((segment) => (
-                        <div key={segment.title} className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-center">
-                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-[#EBF8FF] mx-auto mb-5">
-                                <segment.icon className="h-8 w-8 text-[#0077b6]" />
-                            </div>
-                            <h3 className="text-xl font-semibold text-gray-900">{segment.title}</h3>
-                            <p className="mt-2 text-gray-600">{segment.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </AnimatedSection>
-    );
-};
-
-// --- 11. Planes y Precio ---
-const PlansAndPrice = () => {
-    return (
-        <AnimatedSection id="plans" className="py-24 bg-white">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Únete a la versión Beta de EVA
-                    </h2>
-                    <p className="mt-4 text-lg text-gray-600">
-                        Accede gratuitamente a todas las herramientas mientras probamos la beta pública.
-                    </p>
-                </div>
-
-                {/* Card centrado */}
-                <div className="flex justify-center">
-                    <div className="relative bg-white p-10 rounded-3xl shadow-2xl border-2 border-[#8DC8FA] flex flex-col w-full max-w-md text-center">
-                        
-                        {/* Etiqueta Beta */}
-                        <span className="absolute top-[-12px] left-1/2 transform -translate-x-1/2 bg-[#8DC8FA] text-black text-sm font-semibold px-4 py-1 rounded-full shadow-md">
-                            Versión Beta · Gratis
-                        </span>
-
-                        <h3 className="text-2xl font-semibold text-gray-900 mt-4">Acceso Beta</h3>
-                        <p className="mt-2 text-gray-600">Prueba todas las funciones sin costo durante la fase beta.</p>
-
-                        <div className="mt-6">
-                            <span className="text-5xl font-extrabold text-gray-900">$0</span>
-                            <span className="text-lg text-gray-600">/beta</span>
-                        </div>
-
-                        <ul className="mt-8 space-y-4 text-gray-700 flex-grow text-left mx-auto w-fit">
-                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Chat con EVA 24/7</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Diario emocional interactivo</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Ejercicios de respiración guiados</li>
-                            <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-3" />Tests psicológicos y seguimiento</li>
-                        </ul>
-
-                        <motion.a
-                            href="https://app.evasalud.com.mx/register"
-                            className="mt-10 block w-full text-center bg-[#8DC8FA] text-black font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-[#6AA5D7] transition-all"
-                            whileHover={{ scale: 1.05 }}
-                        >
-                            Unirme a la Beta Gratis
-                        </motion.a>
-                    </div>
-                </div>
-            </div>
-        </AnimatedSection>
-    );
-};
-
-
-// --- 12. Lead Magnet ---
-const LeadMagnet = () => {
-    const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Lógica de API (mock)
-        console.log("Email submitted:", email);
-        setMessage("¡Listo! Revisa tu inbox para descargar la guía.");
-        setEmail("");
-        setTimeout(() => setMessage(""), 3000);
+    const handleServiciosEnter = () => {
+        if (closeTimeout.current) clearTimeout(closeTimeout.current);
+        setServiciosOpen(true);
+    };
+    const handleServiciosLeave = () => {
+        closeTimeout.current = setTimeout(() => setServiciosOpen(false), 150);
     };
 
     return (
-        <AnimatedSection className="py-24 bg-gray-50">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-gradient-to-r from-[#8DC8FA] to-[#0077b6] text-white p-8 md:p-12 rounded-3xl shadow-xl grid md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h2 className="text-3xl font-extrabold">Descarga gratis</h2>
-                        <p className="text-xl font-semibold mt-1">5 ejercicios para calmar la ansiedad en minutos</p>
-                    </div>
-                    <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Tu correo electrónico"
-                            required
-                            aria-label="Tu correo electrónico"
-                            className="w-full px-5 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/50"
-                        />
-                        <button
-                            type="submit"
-                            className="w-full bg-white text-[#0077b6] font-bold px-5 py-3 rounded-lg shadow-md hover:bg-gray-100 transition-all"
-                        >
-                            Quiero mi guía
-                        </button>
-                        {message && <p className="text-sm text-center text-white pt-1">{message}</p>}
-                    </form>
+        <header style={{ position: "absolute", insetInline: "30px", top: 12, zIndex: 10 }}>
+            <nav aria-label="Global" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", flex: 1 }}>
+                    <Link to="/">
+                        <span className="sr-only">EVA Salud Mental</span>
+                        <img alt="" src="img/logo-umbra.png" style={{ height: 80, width: "auto" }} />
+                    </Link>
                 </div>
-            </div>
-        </AnimatedSection>
-    );
-};
 
-// --- 13. FAQs ---
-const FaqItem = ({ question, answer }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-        <div className="border-b border-gray-200 py-6">
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex justify-between items-center w-full text-left"
-                aria-expanded={isOpen}
-            >
-                <span className="text-lg font-semibold text-gray-900">{question}</span>
-                <motion.div
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                >
-                    <ChevronDown className="w-6 h-6 text-gray-500" />
-                </motion.div>
-            </button>
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial="collapsed"
-                        animate="open"
-                        exit="collapsed"
-                        variants={{
-                            open: { opacity: 1, height: "auto", marginTop: "16px" },
-                            collapsed: { opacity: 0, height: 0, marginTop: "0px" }
+                {/* Hamburger — mobile only */}
+                <div style={{ display: "flex" }} className="lg:hidden">
+                    <button
+                        type="button"
+                        onClick={() => setMobileMenuOpen(true)}
+                        style={{
+                            margin: "-10px",
+                            display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            borderRadius: 6, padding: 10,
+                            background: "none", border: "none", cursor: "pointer",
+                            color: "rgba(255,255,255,0.7)"
                         }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="overflow-hidden"
                     >
-                        <p className="text-gray-600 leading-relaxed">{answer}</p>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
+                        <span className="sr-only">Open main menu</span>
+                        <Bars3Icon aria-hidden="true" style={{ width: 24, height: 24 }} />
+                    </button>
+                </div>
+
+                {/* Desktop nav */}
+                <div className="hidden lg:flex" style={{ gap: 48 }}>
+                    <div
+                        style={{ position: "relative" }}
+                        onMouseEnter={handleServiciosEnter}
+                        onMouseLeave={handleServiciosLeave}
+                    >
+                        <button
+                            style={{
+                                borderBottom: "4px solid transparent",
+                                padding: "0 20px",
+                                borderRadius: 6,
+                                fontSize: 14,
+                                lineHeight: "1.5rem",
+                                fontWeight: 600,
+                                color: "rgba(255,255,255,0.7)",
+                                background: "none",
+                                border: "none",
+                                cursor: "pointer",
+                                display: "flex", alignItems: "center", gap: 4
+                            }}
+                            onClick={() => setServiciosOpen(o => !o)}
+                            type="button"
+                        >
+                            Servicios
+                            <svg style={{ width: 16, height: 16, marginLeft: 4 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        {serviciosOpen && (
+                            <div
+                                style={{
+                                    position: "absolute", left: 0, marginTop: 8,
+                                    width: 224, borderRadius: 6,
+                                    boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+                                    background: "white",
+                                    border: "1px solid rgba(0,0,0,0.05)",
+                                    zIndex: 50
+                                }}
+                                onMouseEnter={handleServiciosEnter}
+                                onMouseLeave={handleServiciosLeave}
+                            >
+                                <div style={{ padding: "4px 0" }}>
+                                    {serviciosDropdown.map((item) =>
+                                        item.external ? (
+                                            <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer"
+                                                style={{ display: "block", padding: "8px 16px", fontSize: 14, color: "rgba(255,255,255,0.7)", textDecoration: "none" }}>
+                                                {item.name}
+                                            </a>
+                                        ) : (
+                                            <Link key={item.name} to={item.href}
+                                                style={{ display: "block", padding: "8px 16px", fontSize: 14, color: "rgba(255,255,255,0.7)", textDecoration: "none" }}>
+                                                {item.name}
+                                            </Link>
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    {navigation.map((item) => (
+                        <Link key={item.name} to={item.href}
+                            style={{
+                                padding: "0 20px", borderRadius: 6,
+                                fontSize: 14, lineHeight: "1.5rem",
+                                fontWeight: 600, color: "rgba(255,255,255,0.7)",
+                                textDecoration: "none",
+                                borderBottom: "4px solid transparent"
+                            }}>
+                            {item.name}
+                        </Link>
+                    ))}
+                </div>
+            </nav>
+
+            {/* Mobile menu */}
+            <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+                <div style={{ position: "fixed", inset: 0, zIndex: 50 }} />
+                <DialogPanel style={{
+                    position: "fixed", insetBlock: 0, right: 0, zIndex: 50,
+                    width: "100%", overflowY: "auto",
+                    background: "white", padding: "24px",
+                    maxWidth: 384
+                }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <Link to="/" style={{ padding: "6px" }}>
+                            <span className="sr-only">EVA</span>
+                            <img alt="" src="img/logo1.png" style={{ height: 100, width: "auto" }} />
+                        </Link>
+                        <button
+                            type="button"
+                            onClick={() => setMobileMenuOpen(false)}
+                            style={{
+                                margin: "-10px", borderRadius: 6, padding: 10,
+                                background: "none", border: "none", cursor: "pointer", color: "#374151"
+                            }}
+                        >
+                            <span className="sr-only">Close menu</span>
+                            <XMarkIcon aria-hidden="true" style={{ width: 24, height: 24 }} />
+                        </button>
+                    </div>
+                    <div style={{ marginTop: 24 }}>
+                        <div style={{ borderTop: "1px solid rgba(107,114,128,0.1)", paddingTop: 24 }}>
+                            <div style={{ marginBottom: 8 }}>
+                                <span style={{ display: "block", padding: "8px 12px", fontSize: 18, fontWeight: 600, color: "#111827" }}>
+                                    Servicios
+                                </span>
+                                <div style={{ paddingLeft: 16 }}>
+                                    {serviciosDropdown.map((item) =>
+                                        item.external ? (
+                                            <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer"
+                                                style={{ display: "block", padding: "8px 12px", fontSize: 18, color: "#023d6d", textDecoration: "none" }}
+                                                onClick={() => setMobileMenuOpen(false)}>
+                                                {item.name}
+                                            </a>
+                                        ) : (
+                                            <Link key={item.name} to={item.href}
+                                                style={{ display: "block", padding: "8px 12px", fontSize: 18, color: "#023d6d", textDecoration: "none" }}
+                                                onClick={() => setMobileMenuOpen(false)}>
+                                                {item.name}
+                                            </Link>
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                            {navigation.map((item) => (
+                                <Link key={item.name} to={item.href}
+                                    style={{
+                                        display: "block", margin: "0 -12px",
+                                        borderRadius: 8, padding: "8px 12px",
+                                        fontSize: 18, fontWeight: 600, color: "#111827",
+                                        textDecoration: "none"
+                                    }}
+                                    onClick={() => setMobileMenuOpen(false)}>
+                                    {item.name}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                </DialogPanel>
+            </Dialog>
+        </header>
     );
 };
 
-const Faq = () => {
-    const faqs = [
-        {
-            question: "¿EVA reemplaza a un psicólogo?",
-            answer: "No. EVA es una herramienta de acompañamiento diseñada para usarse entre sesiones o para ayudarte a practicar el autocuidado. No reemplaza la terapia profesional, pero sí puede ser un gran complemento."
-        },
-        {
-            question: "¿Qué pasa con mis datos? ¿Son privados?",
-            answer: "Absolutamente. Tu privacidad es nuestra prioridad. Todos tus datos están cifrados. Solo tú controlas tus registros y se almacenan en servidores seguros. Puedes ver, exportar o eliminar tu información cuando quieras."
-        },
-        {
-            question: "¿Es realmente gratuita?",
-            answer: "Sí, podrás usar la versión beta de nuestra app de forma gratuita. Más adelante, ofreceremos una versión premium con funciones adicionales, pero la versión básica siempre será accesible sin costo."
-        },
-        {
-            question: "¿Qué hago en caso de una crisis?",
-            answer: "EVA no es un servicio de emergencias. Si te encuentras en una crisis o sientes que tu vida está en peligro, por favor contacta a los servicios de emergencia locales de inmediato. EVA te puede proporcionar enlaces a líneas de ayuda."
-        }
+// ─── 1. HERO ──────────────────────────────────────────────────────────────────
+const Hero = () => {
+    const [phase, setPhase] = useState(0);
+
+    useEffect(() => {
+        const t1 = setTimeout(() => setPhase(1), 900);
+        const t2 = setTimeout(() => setPhase(2), 2100);
+        const t3 = setTimeout(() => setPhase(3), 3600);
+        return () => [t1, t2, t3].forEach(clearTimeout);
+    }, []);
+
+    const scrollDown = () => {
+        document.getElementById("what")?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    return (
+        <section style={{
+            minHeight: "100vh", width: "100vw", display: "flex", alignItems: "center",
+            paddingTop: "clamp(120px, 20vw, 200px)",
+            position: "relative", overflow: "hidden",
+            background: "linear-gradient(180deg, #060709 0%, #0a0c10 60%, #0c0f16 100%)"
+        }}>
+            <Orb style={{ width: "min(600px, 80vw)", height: "min(600px, 80vw)", top: "-15%", left: "-10%", background: "rgba(60,70,120,0.08)" }} />
+            <Orb style={{ width: "min(400px, 60vw)", height: "min(400px, 60vw)", bottom: "-5%", right: "5%", background: "rgba(80,60,120,0.06)", animationDelay: "6s" }} />
+
+            <div style={{
+                width: "100%", maxWidth: 1100,
+                margin: "0 auto",
+                padding: "0 clamp(20px, 6vw, 80px)",
+                position: "relative", zIndex: 1
+            }}>
+                {/* Tiny label top-left */}
+                <div style={{
+                    position: "absolute", top: "-10vh", left: "clamp(20px, 6vw, 80px)",
+                    fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase",
+                    color: "var(--text-dim)",
+                    opacity: phase >= 1 ? 1 : 0,
+                    transition: "opacity 2s ease 0.3s"
+                }}>
+                    EVA · Ecosistema de acompañamiento
+                </div>
+
+                {/* Main mark */}
+                <div style={{
+                    opacity: phase >= 1 ? 1 : 0,
+                    transform: phase >= 1 ? "translateY(0)" : "translateY(30px)",
+                    transition: "all 1.6s cubic-bezier(0.16,1,0.3,1)"
+                }}>
+                    <div style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: "clamp(72px, 20vw, 200px)",
+                        fontWeight: 300,
+                        lineHeight: 0.88,
+                        color: "rgba(255,255,255,0.88)",
+                        letterSpacing: "-0.02em",
+                        userSelect: "none"
+                    }}>
+                        UMBRA
+                    </div>
+                </div>
+
+                {/* Subtle rule */}
+                <div style={{
+                    width: phase >= 2 ? 80 : 0,
+                    height: 1,
+                    background: "var(--accent)",
+                    margin: "clamp(20px, 4vw, 32px) 0 clamp(16px, 3.5vw, 28px)",
+                    transition: "width 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s"
+                }} />
+
+                {/* Tagline */}
+                <div style={{
+                    maxWidth: 360,
+                    opacity: phase >= 2 ? 1 : 0,
+                    transform: phase >= 2 ? "translateY(0)" : "translateY(16px)",
+                    transition: "all 1.4s cubic-bezier(0.16,1,0.3,1) 0.1s"
+                }}>
+                    <p style={{
+                        fontSize: "clamp(17px, 2.5vw, 20px)",
+                        fontWeight: 200,
+                        color: "var(--text-mid)",
+                        lineHeight: 1.7,
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontStyle: "italic"
+                    }}>
+                        Un espacio donde puedes<br />pensar en voz alta.
+                    </p>
+                </div>
+
+                {/* CTA */}
+                <button
+                    onClick={scrollDown}
+                    style={{
+                        marginTop: "clamp(36px, 7vw, 56px)",
+                        background: "none", border: "none", padding: 0,
+                        display: "flex", alignItems: "center", gap: 14,
+                        opacity: phase >= 3 ? 1 : 0,
+                        transform: phase >= 3 ? "translateY(0)" : "translateY(12px)",
+                        transition: "all 1.2s cubic-bezier(0.16,1,0.3,1)",
+                        cursor: "pointer",
+                        color: "var(--text-dim)",
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.color = "var(--text-bright)"}
+                    onMouseLeave={e => e.currentTarget.style.color = "var(--text-dim)"}
+                >
+                    <span style={{ fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", transition: "color 0.4s" }}>
+                        Entrar
+                    </span>
+                    <svg width="28" height="1" viewBox="0 0 28 1"><line x1="0" y1="0.5" x2="28" y2="0.5" stroke="currentColor" strokeWidth="0.8" /></svg>
+                    <svg width="6" height="6" viewBox="0 0 6 6">
+                        <circle cx="3" cy="3" r="2.5" fill="currentColor" style={{ animation: "pulse-dot 3s infinite" }} />
+                    </svg>
+                </button>
+            </div>
+
+            {/* Vertical text on right — hide on mobile */}
+            <div className="hide-mobile" style={{
+                position: "absolute", right: "5vw", top: "50%",
+                transform: "translateY(-50%) rotate(90deg)",
+                fontSize: 9, letterSpacing: "0.4em", textTransform: "uppercase",
+                color: "var(--text-dim)",
+                opacity: phase >= 3 ? 0.4 : 0,
+                transition: "opacity 2s ease 1s",
+                whiteSpace: "nowrap"
+            }}>
+                La sombra también es un lugar seguro
+            </div>
+
+            <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: 120,
+                background: "linear-gradient(transparent, #0a0c10)",
+                pointerEvents: "none"
+            }} />
+        </section>
+    );
+};
+
+// ─── 2. WHAT IS UMBRA ─────────────────────────────────────────────────────────
+const WhatIsUmbra = () => {
+    const [ref1, v1] = useInView();
+    const [ref2, v2] = useInView();
+    const [ref3, v3] = useInView();
+
+    return (
+        <section id="what" style={{
+            padding: "clamp(60px, 18vh, 180px) 0",
+            position: "relative",
+            background: "linear-gradient(180deg, #0a0c10 0%, #0c0f18 100%)",
+            overflow: "hidden"
+        }}>
+            <Orb style={{ width: 500, height: 300, top: "30%", right: "-15%", background: "rgba(60,80,140,0.07)", animationDelay: "3s" }} />
+
+            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(20px, 6vw, 80px)" }}>
+
+                {/* Fragment 1 */}
+                <div ref={ref1} style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "clamp(16px, 4vw, 60px)",
+                    marginBottom: "clamp(48px, 14vh, 140px)"
+                }}>
+                    <div style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: "clamp(48px, 10vw, 140px)",
+                        lineHeight: 1,
+                        color: "rgba(255,255,255,0.04)",
+                        flexShrink: 0,
+                        userSelect: "none",
+                        marginTop: -12
+                    }}>01</div>
+                    <div style={{ maxWidth: 480 }}>
+                        <p className={`fade-up ${v1 ? "visible d1" : ""}`}
+                            style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(22px,3.5vw,42px)", fontWeight: 300, color: "var(--text-bright)", lineHeight: 1.4, marginBottom: 20 }}>
+                            No es terapia.<br />No es coaching.
+                        </p>
+                        <p className={`fade-up ${v1 ? "visible d2" : ""}`}
+                            style={{ fontSize: "clamp(13px, 1.8vw, 15px)", lineHeight: 1.9, color: "var(--text-mid)", fontWeight: 200 }}>
+                            Es presencia. Un lugar donde puedes escribir lo que no le dirías a nadie. Donde tus pensamientos no son interrumpidos. Donde el silencio también es válido.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Fragment 2 */}
+                <div ref={ref2} style={{ display: "flex", justifyContent: "flex-end", marginBottom: "clamp(48px, 14vh, 140px)" }}>
+                    <div style={{ maxWidth: 520, textAlign: "right" }}>
+                        <p className={`fade-up ${v2 ? "visible d1" : ""}`}
+                            style={{
+                                fontFamily: "'Cormorant Garamond', serif",
+                                fontSize: "clamp(18px,2.8vw,34px)",
+                                fontStyle: "italic",
+                                color: "rgba(140,160,210,0.7)",
+                                lineHeight: 1.55,
+                                marginBottom: 20
+                            }}>
+                            "Aquí no vienes a mejorar.<br />Vienes a estar."
+                        </p>
+                        <p className={`fade-up ${v2 ? "visible d2" : ""}`}
+                            style={{ fontSize: "clamp(13px, 1.6vw, 14px)", lineHeight: 1.9, color: "var(--text-dim)", fontWeight: 200, maxWidth: 360, marginLeft: "auto" }}>
+                            UMBRA es una experiencia de acompañamiento personal diseñada para esos momentos en los que tu mente no se detiene.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Fragment 3 */}
+                <div ref={ref3} style={{ textAlign: "center" }}>
+                    <div className={`fade-in ${v3 ? "visible" : ""}`}
+                        style={{ display: "inline-block", position: "relative" }}>
+                        <div style={{
+                            position: "absolute", inset: "-30px -50px",
+                            background: "var(--accent-glow)",
+                            filter: "blur(40px)", borderRadius: "50%",
+                            animation: "breathe 5s infinite ease-in-out"
+                        }} />
+                        <p style={{
+                            position: "relative",
+                            fontFamily: "'Cormorant Garamond', serif",
+                            fontSize: "clamp(12px, 1.6vw, 18px)",
+                            letterSpacing: "0.18em",
+                            textTransform: "uppercase",
+                            color: "var(--text-mid)"
+                        }}>
+                            No todo lo que sientes necesita una respuesta inmediata.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// ─── 3. CHATBOT ───────────────────────────────────────────────────────────────
+const ChatSection = () => {
+    const [ref, visible] = useInView(0.1);
+    const messages = [
+        { role: "bot", text: "Estoy aquí.", delay: 400 },
+        { role: "user", text: "No sé por dónde empezar.", delay: 1200 },
+        { role: "bot", text: "No tienes que saber. Solo empieza.", delay: 2200 },
+        { role: "user", text: "Es que hay demasiado.", delay: 3200 },
+        { role: "bot", text: "Lo sé. No hay prisa.\n¿Qué es lo primero que aparece?", delay: 4200 },
+    ];
+
+    const [shown, setShown] = useState(0);
+    const [started, setStarted] = useState(false);
+
+    useEffect(() => {
+        if (!visible || started) return;
+        setStarted(true);
+        messages.forEach((m, i) => {
+            setTimeout(() => setShown(i + 1), m.delay);
+        });
+    }, [visible]);
+
+    return (
+        <section style={{
+            minHeight: "110vh",
+            background: "linear-gradient(180deg, #0c0f18 0%, #080b12 60%, #060810 100%)",
+            display: "flex", alignItems: "center",
+            position: "relative", overflow: "hidden",
+            padding: "clamp(60px, 10vh, 0px) 0"
+        }}>
+            <Orb style={{ width: 700, height: 400, top: "20%", left: "-20%", background: "rgba(50,65,120,0.08)", animationDelay: "9s" }} />
+
+            <div style={{ width: "100%", maxWidth: 1100, margin: "0 auto", padding: "0 clamp(20px, 6vw, 80px)" }}>
+                <div className="chat-grid">
+
+                    {/* Left: editorial text */}
+                    <div ref={ref}>
+                        <div className={`fade-up ${visible ? "visible d1" : ""}`}
+                            style={{ fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 28 }}>
+                            Compañero digital
+                        </div>
+                        <h2 className={`fade-up ${visible ? "visible d2" : ""}`}
+                            style={{
+                                fontFamily: "'Cormorant Garamond', serif",
+                                fontSize: "clamp(32px, 5vw, 64px)",
+                                fontWeight: 300, color: "var(--text-bright)",
+                                lineHeight: 1.15, marginBottom: 28
+                            }}>
+                            Un compañero<br />que escucha.
+                        </h2>
+                        <p className={`fade-up ${visible ? "visible d3" : ""}`}
+                            style={{ fontSize: "clamp(13px, 1.8vw, 15px)", lineHeight: 1.95, color: "var(--text-mid)", fontWeight: 200, maxWidth: 320 }}>
+                            No te corrige. No te dirige. No te presiona a resolver lo que sientes. Solo está ahí, en la oscuridad contigo.
+                        </p>
+                        <p className={`fade-up ${visible ? "visible d4" : ""}`}
+                            style={{ marginTop: 24, fontSize: "clamp(13px, 1.6vw, 14px)", lineHeight: 1.9, color: "var(--text-dim)", fontStyle: "italic", fontFamily: "'Cormorant Garamond', serif", maxWidth: 300 }}>
+                            "Aquí no hay prisa."
+                        </p>
+                    </div>
+
+                    {/* Right: simulated chat */}
+                    <div style={{
+                        background: "rgba(255,255,255,0.015)",
+                        border: "1px solid rgba(255,255,255,0.045)",
+                        borderRadius: 4,
+                        padding: "clamp(24px, 5vw, 40px) clamp(20px, 4vw, 36px)",
+                        minHeight: 320,
+                        display: "flex", flexDirection: "column", justifyContent: "flex-end",
+                        backdropFilter: "blur(10px)",
+                        position: "relative"
+                    }}>
+                        <div style={{
+                            position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+                            width: "70%", height: 1,
+                            background: "linear-gradient(90deg, transparent, rgba(120,140,200,0.2), transparent)"
+                        }} />
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                            {messages.slice(0, shown).map((m, i) => (
+                                <div key={i} style={{
+                                    alignSelf: m.role === "user" ? "flex-end" : "flex-start",
+                                    maxWidth: "80%",
+                                    animation: "fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards",
+                                    opacity: 0
+                                }}>
+                                    <p style={{
+                                        fontSize: "clamp(13px, 1.8vw, 15px)",
+                                        lineHeight: 1.7,
+                                        fontWeight: 200,
+                                        whiteSpace: "pre-wrap",
+                                        color: m.role === "user" ? "rgba(255,255,255,0.65)" : "rgba(255,255,255,0.42)",
+                                        textAlign: m.role === "user" ? "right" : "left"
+                                    }}>
+                                        {m.text}
+                                    </p>
+                                </div>
+                            ))}
+
+                            {shown < messages.length && (
+                                <div style={{ alignSelf: "flex-start" }}>
+                                    <span style={{
+                                        display: "inline-block", width: 6, height: 14,
+                                        background: "rgba(120,140,200,0.5)",
+                                        animation: "cursor-blink 1.2s infinite"
+                                    }} />
+                                </div>
+                            )}
+                        </div>
+
+                        <div style={{
+                            marginTop: 28, paddingTop: 18,
+                            borderTop: "1px solid rgba(255,255,255,0.05)",
+                            display: "flex", alignItems: "center", gap: 12
+                        }}>
+                            <div style={{ flex: 1, fontSize: 13, color: "rgba(255,255,255,0.15)", fontStyle: "italic" }}>
+                                Escribe lo que no puedes decir en voz alta...
+                            </div>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M1 7h12M7 1l6 6-6 6" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" strokeLinecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// ─── 4. DIARIO ────────────────────────────────────────────────────────────────
+const DiarySection = () => {
+    const [ref, visible] = useInView();
+    const entries = [
+        { date: "Lunes, 11:43pm", text: "No sé si lo que siento es tristeza o cansancio. O ambos. O ninguno." },
+        { date: "Miércoles, 7:12am", text: "Desperté pensando en eso que dije hace tres años. Por qué el cerebro hace eso." },
+        { date: "Viernes, 2:58am", text: "A veces el silencio pesa más que el ruido." },
     ];
 
     return (
-        <AnimatedSection className="py-24 bg-white">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Preguntas frecuentes
-                    </h2>
+        <section style={{
+            position: "relative",
+            background: "#070a10",
+            overflow: "hidden"
+        }}>
+            <div className="diary-grid">
+                {/* Left half */}
+                <div style={{
+                    padding: "clamp(48px, 15vh, 150px) clamp(20px, 6vw, 80px) clamp(48px, 15vh, 150px) clamp(24px, 8vw, 100px)",
+                    display: "flex", flexDirection: "column", justifyContent: "center",
+                    borderRight: "1px solid rgba(255,255,255,0.04)",
+                    position: "relative"
+                }}>
+                    <Orb style={{ width: 300, height: 300, bottom: "10%", left: "-10%", background: "rgba(60,80,140,0.06)" }} />
+                    <div ref={ref} style={{ position: "relative", zIndex: 1 }}>
+                        <div className={`fade-up ${visible ? "visible d1" : ""}`}
+                            style={{ fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 28 }}>
+                            Diario emocional
+                        </div>
+                        <h2 className={`fade-up ${visible ? "visible d2" : ""}`}
+                            style={{
+                                fontFamily: "'Cormorant Garamond', serif",
+                                fontSize: "clamp(28px, 4.5vw, 56px)",
+                                fontWeight: 300, color: "var(--text-bright)",
+                                lineHeight: 1.2, marginBottom: 28
+                            }}>
+                            Un mapa suave<br />de tu interior.
+                        </h2>
+                        <p className={`fade-up ${visible ? "visible d3" : ""}`}
+                            style={{ fontSize: "clamp(13px, 1.8vw, 15px)", lineHeight: 1.95, color: "var(--text-mid)", fontWeight: 200, maxWidth: 300 }}>
+                            No es un registro de productividad. Es un espacio que guarda tus pensamientos sin estructura forzada y detecta patrones emocionales con el tiempo.
+                        </p>
+                        <div className={`fade-up ${visible ? "visible d4" : ""}`}
+                            style={{ marginTop: 44, display: "flex", flexDirection: "column", gap: 10 }}>
+                            {["Guarda sin estructura forzada", "Detecta patrones con el tiempo", "Te permite releer tu proceso", "Evoluciona contigo"].map((item, i) => (
+                                <div key={i} style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                                    <div style={{ width: 4, height: 4, borderRadius: "50%", background: "rgba(120,140,200,0.4)", flexShrink: 0 }} />
+                                    <span style={{ fontSize: 13, color: "var(--text-dim)", fontWeight: 200 }}>{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-                <div className="divide-y divide-gray-200">
-                    {faqs.map((faq) => (
-                        <FaqItem key={faq.question} question={faq.question} answer={faq.answer} />
+
+                {/* Right half — notebook simulation, hidden on mobile */}
+                <div className="diary-right" style={{
+                    background: "rgba(255,255,255,0.015)",
+                    padding: "15vh 6vw",
+                    display: "flex", flexDirection: "column", justifyContent: "center",
+                    position: "relative",
+                    overflow: "hidden"
+                }}>
+                    {[...Array(16)].map((_, i) => (
+                        <div key={i} style={{
+                            position: "absolute", left: 0, right: 0,
+                            top: `${12 + i * 5.6}%`, height: 1,
+                            background: "rgba(255,255,255,0.025)"
+                        }} />
+                    ))}
+
+                    <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 44 }}>
+                        {entries.map((e, i) => (
+                            <div key={i} className={`fade-up ${visible ? `visible d${i + 2}` : ""}`}>
+                                <div style={{
+                                    fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase",
+                                    color: "var(--text-dim)", marginBottom: 10
+                                }}>
+                                    {e.date}
+                                </div>
+                                <p style={{
+                                    fontSize: "clamp(14px, 1.5vw, 17px)",
+                                    fontFamily: "'Cormorant Garamond', serif",
+                                    fontStyle: "italic",
+                                    color: "rgba(255,255,255,0.5)",
+                                    lineHeight: 1.7,
+                                    fontWeight: 300
+                                }}>
+                                    {e.text}
+                                </p>
+                            </div>
+                        ))}
+
+                        <div className={`fade-in ${visible ? "visible d5" : ""}`}
+                            style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span style={{
+                                display: "inline-block", width: 1, height: 18,
+                                background: "rgba(120,140,200,0.4)",
+                                animation: "cursor-blink 1.4s infinite 2s"
+                            }} />
+                            <span style={{ fontSize: 13, color: "rgba(255,255,255,0.1)", fontStyle: "italic" }}>
+                                Escribe tu próxima entrada...
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// ─── 5. COLLAGE ───────────────────────────────────────────────────────────────
+const CollageSection = () => {
+    const [ref, visible] = useInView(0.1);
+    const fragments = [
+        { w: 180, h: 220, bg: "rgba(80,60,120,0.18)", top: "8%", left: "5%", rotate: -3, delay: 0 },
+        { w: 260, h: 160, bg: "rgba(40,60,100,0.22)", top: "5%", left: "25%", rotate: 1.5, delay: 120 },
+        { w: 140, h: 200, bg: "rgba(60,80,60,0.14)", top: "30%", left: "12%", rotate: -1, delay: 240 },
+        { w: 320, h: 200, bg: "rgba(100,60,60,0.12)", top: "20%", left: "42%", rotate: 2, delay: 180 },
+        { w: 160, h: 280, bg: "rgba(60,100,120,0.16)", top: "45%", left: "28%", rotate: -2.5, delay: 300 },
+        { w: 200, h: 130, bg: "rgba(80,80,40,0.14)", top: "58%", left: "52%", rotate: 1, delay: 360 },
+        { w: 240, h: 180, bg: "rgba(40,60,120,0.2)", top: "65%", left: "8%", rotate: 3, delay: 420 },
+        { w: 180, h: 240, bg: "rgba(100,50,80,0.16)", top: "40%", left: "65%", rotate: -1.5, delay: 480 },
+    ];
+
+    return (
+        <section style={{
+            minHeight: "110vh",
+            background: "linear-gradient(180deg, #070a10 0%, #0a0c14 100%)",
+            position: "relative",
+            overflow: "hidden",
+            display: "flex", alignItems: "center"
+        }}>
+            <div ref={ref} style={{ position: "absolute", inset: 0 }}>
+                {fragments.map((f, i) => (
+                    <div key={i} style={{
+                        position: "absolute",
+                        width: f.w, height: f.h,
+                        background: f.bg,
+                        top: f.top, left: f.left,
+                        transform: `rotate(${f.rotate}deg) ${visible ? "translateY(0)" : "translateY(30px)"}`,
+                        opacity: visible ? 1 : 0,
+                        transition: `all 1.4s cubic-bezier(0.16,1,0.3,1) ${f.delay}ms`,
+                        borderRadius: 2,
+                        backdropFilter: "blur(1px)"
+                    }} />
+                ))}
+
+                <div style={{
+                    position: "absolute", inset: 0,
+                    background: "linear-gradient(135deg, transparent 30%, rgba(6,8,14,0.6) 100%)"
+                }} />
+            </div>
+
+            <div style={{ position: "relative", zIndex: 2, width: "100%", maxWidth: 1100, margin: "0 auto", padding: "clamp(60px, 10vh, 0px) clamp(20px, 6vw, 80px)" }}>
+                <div className="collage-text" style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <div className="collage-text-inner" style={{ maxWidth: 360 }}>
+                        <div className={`fade-up ${visible ? "visible d1" : ""}`}
+                            style={{ fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 24 }}>
+                            Collage emocional
+                        </div>
+                        <h2 className={`fade-up ${visible ? "visible d2" : ""}`}
+                            style={{
+                                fontFamily: "'Cormorant Garamond', serif",
+                                fontSize: "clamp(26px, 4vw, 50px)",
+                                fontWeight: 300, color: "var(--text-bright)",
+                                lineHeight: 1.2, marginBottom: 20
+                            }}>
+                            Hay emociones que no se pueden explicar con palabras.
+                        </h2>
+                        <p className={`fade-up ${visible ? "visible d3" : ""}`}
+                            style={{ fontSize: "clamp(13px, 1.8vw, 15px)", lineHeight: 1.9, color: "var(--text-mid)", fontWeight: 200 }}>
+                            Un espacio creativo para combinar imágenes, colores y formas abstractas. Este espacio no busca estética. Busca autenticidad.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// ─── 6. MINDFULNESS ───────────────────────────────────────────────────────────
+const MindfulSection = () => {
+    const [ref, visible] = useInView(0.2);
+    const [breathPhase, setBreathPhase] = useState("inhala");
+    const [active, setActive] = useState(false);
+
+    useEffect(() => {
+        if (!visible || active) return;
+        setActive(true);
+    }, [visible]);
+
+    useEffect(() => {
+        if (!active) return;
+        const phases = ["inhala", "sostén", "exhala", "pausa"];
+        const durations = [4000, 2000, 6000, 2000];
+        let idx = 0;
+        const cycle = () => {
+            setBreathPhase(phases[idx]);
+            idx = (idx + 1) % phases.length;
+            return setTimeout(cycle, durations[idx]);
+        };
+        const t = setTimeout(cycle, 1000);
+        return () => clearTimeout(t);
+    }, [active]);
+
+    const exercises = ["Respiración guiada", "Técnica de los 5 sentidos", "Pausas conscientes", "Micro-ejercicios de regulación"];
+
+    return (
+        <section style={{
+            minHeight: "100vh",
+            background: "linear-gradient(180deg, #0a0c14 0%, #07090f 100%)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            position: "relative", overflow: "hidden",
+            padding: "clamp(60px, 10vh, 0px) 0"
+        }}>
+            <Orb style={{ width: 800, height: 800, top: "50%", left: "50%", transform: "translate(-50%,-50%)", background: "rgba(60,80,130,0.04)", animationDelay: "2s" }} />
+
+            <div ref={ref} style={{
+                textAlign: "center", position: "relative", zIndex: 1,
+                maxWidth: 520, padding: "0 clamp(20px, 6vw, 60px)",
+                width: "100%"
+            }}>
+                {/* Breath circle */}
+                <div className={`fade-in ${visible ? "visible" : ""}`} style={{ marginBottom: 64 }}>
+                    <div style={{ position: "relative", width: 120, height: 120, margin: "0 auto" }}>
+                        <div style={{
+                            position: "absolute", inset: 0, borderRadius: "50%",
+                            border: "1px solid rgba(120,140,200,0.15)",
+                            animation: active ? `breathe ${breathPhase === "inhala" ? "4s" : breathPhase === "exhala" ? "6s" : "2s"} ease-in-out infinite` : "none"
+                        }} />
+                        <div style={{
+                            position: "absolute", inset: 16, borderRadius: "50%",
+                            border: "1px solid rgba(120,140,200,0.08)"
+                        }} />
+                        <div style={{
+                            position: "absolute", inset: "50%", transform: "translate(-50%,-50%)",
+                            width: 8, height: 8, borderRadius: "50%",
+                            background: "rgba(120,140,200,0.35)",
+                            animation: "pulse-dot 4s infinite ease-in-out"
+                        }} />
+                        <div style={{
+                            position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center"
+                        }}>
+                            <span style={{
+                                fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase",
+                                color: "rgba(120,140,200,0.5)"
+                            }}>
+                                {breathPhase}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={`fade-up ${visible ? "visible d2" : ""}`}
+                    style={{ fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 24 }}>
+                    Mindfulness
+                </div>
+                <h2 className={`fade-up ${visible ? "visible d3" : ""}`}
+                    style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: "clamp(24px, 4vw, 48px)",
+                        fontWeight: 300, color: "var(--text-bright)",
+                        lineHeight: 1.25, marginBottom: 24
+                    }}>
+                    Cuando la mente se acelera,<br />el cuerpo puede ayudarte<br />a regresar.
+                </h2>
+                <p className={`fade-up ${visible ? "visible d4" : ""}`}
+                    style={{ fontSize: "clamp(13px, 1.6vw, 14px)", lineHeight: 2, color: "var(--text-dim)", fontWeight: 200, marginBottom: 44 }}>
+                    Sin música invasiva. Sin narradores motivacionales. Solo indicaciones suaves.
+                </p>
+
+                <div className={`fade-up ${visible ? "visible d5" : ""}`}
+                    style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "center" }}>
+                    {exercises.map((ex, i) => (
+                        <div key={i} style={{
+                            fontSize: 13, color: "var(--text-dim)", fontWeight: 200,
+                            padding: "8px 24px",
+                            border: "1px solid rgba(255,255,255,0.04)",
+                            borderRadius: 40,
+                            background: "rgba(255,255,255,0.015)",
+                            whiteSpace: "nowrap"
+                        }}>
+                            {ex}
+                        </div>
                     ))}
                 </div>
             </div>
-        </AnimatedSection>
+        </section>
     );
 };
 
-// --- 14. Footer ---
-const Footer = () => {
-    const socialLinks = [
-        { name: "Instagram", icon: Instagram, href: "#" },
+// ─── 7. PRIVACIDAD ────────────────────────────────────────────────────────────
+const PrivacySection = () => {
+    const [ref, visible] = useInView();
+
+    const pillars = [
         {
-            name: "TikTok", icon: (props) => (
-                <svg {...props} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.17.04-4.36-.6-6.08-2.23-1.95-1.8-2.73-4.3-2.49-6.6.23-2.13 1.34-4.14 3.09-5.38 1.83-1.29 4.14-1.72 6.18-1.23.08 1.54.01 3.08.01 4.63-.69-.01-1.39-.01-2.08-.02-1.03-.01-2.02.38-2.71 1.15-.51.56-.8 1.28-.8 2.04.01 1.02.6 1.98 1.59 2.4.98.41 2.13.24 3.02-.38.87-.6 1.33-1.5 1.35-2.58.02-2.5.01-5 .01-7.5z" />
-                </svg>
-            ), href: "#"
+            label: "Anónimo por defecto",
+            text: "Puedes usar UMBRA sin registrarte. Ningún perfil. Ninguna cuenta."
         },
-        { name: "YouTube", icon: Youtube, href: "#" }
-    ];
-
-    const footerLinks = [
-        { name: "Aviso de Privacidad", href: "#" },
-        { name: "Términos y Condiciones", href: "#" },
-        { name: "Contacto", href: "#" }
+        {
+            label: "Tus pensamientos son tuyos",
+            text: "No están diseñados para exhibirse. No se venden. No se analizan para publicidad."
+        },
+        {
+            label: "Control total",
+            text: "Si decides compartir tu proceso con un profesional, lo haces bajo tus términos y en tu tiempo."
+        },
     ];
 
     return (
-        <footer id="download" className="bg-gray-900 text-gray-300">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    {/* Col 1: Logo y Descarga */}
+        <section style={{
+            padding: "clamp(60px, 16vh, 160px) 0",
+            background: "#06080d",
+            position: "relative"
+        }}>
+            <div style={{
+                position: "absolute", top: 0, left: 0, right: 0, height: 1,
+                background: "rgba(255,255,255,0.04)"
+            }} />
+
+            <div ref={ref} style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(20px, 6vw, 80px)" }}>
+                <div className="privacy-grid">
+
+                    {/* Left */}
                     <div>
-                        <div className="flex items-center space-x-2">
-                            <Heart className="w-8 h-8 text-[#8DC8FA]" />
-                            <span className="font-bold text-2xl text-white">EVA Salud Mental</span>
+                        <div className={`fade-up ${visible ? "visible d1" : ""}`}
+                            style={{ fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 24 }}>
+                            Privacidad real
                         </div>
-                        <p className="mt-4 text-gray-400">Tu bienestar emocional, al alcance de tu mano.</p>
-                        <div className="mt-6 space-y-3">
-                            <p className="font-semibold text-white">Descarga la app (Pronto):</p>
-                            <div className="flex space-x-3">
-                                <a href="javascript:void(0)" className="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg flex items-center justify-center opacity-70 cursor-not-allowed" aria-label="Descargar en la App Store (Próximamente)">
-                                    {/* Placeholder App Store */}
-                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.3 12.38c-.3.08-.5.31-.5.62 0 .28.18.53.46.61.32.1.66-.1.9-.38.25-.3.4-.64.4-.98 0-.34-.15-.68-.42-.87-.27-.2-.6-.3-.94-.2zM15.4 9.1c-.8-.88-1.78-1.3-3.1-1.32-1.28 0-2.3.4-3.1 1.2-.8.8-1.2 1.8-1.2 2.8 0 .8.2 1.6.6 2.3.4.7 1 1.3 1.7 1.7.7.4 1.5.6 2.4.6 1 0 1.9-.2 2.7-.7.8-.5 1.4-1.2 1.8-2.1.2-.4.3-.8.3-1.2 0-.9-.4-1.8-1.2-2.5zM21 6.88c-.62-.9-1.4-1.6-2.3-2.12-.92-.5-1.93-.76-3.03-.76-1.12 0-2.1.25-3.02.7-1.1.55-2.03 1.34-2.7 2.3-.68.97-1.02 2.1-1.02 3.3 0 1.1.3 2.1.9 3 .6.9 1.37 1.6 2.2 2.1.9.5 1.8.7 2.9.7 1.1 0 2.1-.2 3.1-.7s1.8-1.2 2.5-2c.6-.8.9-1.7 1-2.6.1-1.1-.2-2.2-.7-3.2zM17 19.18a3.3 3.3 0 01-1.4.3c-.6 0-1.1-.1-1.7-.3-.6-.2-1.1-.5-1.5-.9-.4-.4-.7-.9-.9-1.4-.2-.6-.3-1.1-.3-1.7 0-.3.02-.6.08-.9H7.5c-1.3 0-2.4.4-3.4 1.1C3 16.18 2.3 17 1.8 18 .8 19.9 1.1 22 2.8 22c.9 0 1.9-.3 3-.8 1.1-.5 2.1-1.3 2.8-2.3.6-.9 1-1.9.9-3H17v3.3z" /></svg>
-                                </a>
-                                <a href="javascript:void(0)" className="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg flex items-center justify-center opacity-70 cursor-not-allowed" aria-label="Descargar en Google Play (Próximamente)">
-                                    {/* Placeholder Play Store */}
-                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M21.5 12c0-1.07-.3-2.07-.88-2.88l-5.63-5.63C14.1.4 13.07 0 12 0c-.05 0-.1 0-.16.02l7.46 7.46C20.37 8.54 21.5 10.1 21.5 12zM3.6 3.6C2.5 4.7 1.8 6.1 1.6 7.6L12.1 18.1c.4.4.9.6 1.4.6.5 0 1-.2 1.4-.6l2.9-2.9-14.2-14.2zM.5 12c0-1.9 1.1-3.6 2.6-4.5L13.6 18c-.4.4-.9.7-1.5.8L2.6 16.5C1.1 15.6.5 13.9.5 12zM15 16.5l5.6-3.2c1.2-.7 1.2-1.9 0-2.6L15 7.5l-2.9 2.9 2.9 2.9-2.9 2.9 2.9 2.9z" /></svg>
-                                </a>
+                        <h2 className={`fade-up ${visible ? "visible d2" : ""}`}
+                            style={{
+                                fontFamily: "'Cormorant Garamond', serif",
+                                fontSize: "clamp(28px, 4vw, 50px)",
+                                fontWeight: 300, color: "var(--text-bright)",
+                                lineHeight: 1.15
+                            }}>
+                            Nada se fuerza.<br />Nada se impone.
+                        </h2>
+                    </div>
+
+                    {/* Right: three dense blocks */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                        {pillars.map((p, i) => (
+                            <div key={i} className={`fade-up ${visible ? `visible d${i + 2}` : ""}`}
+                                style={{
+                                    padding: "28px 0",
+                                    borderBottom: i < pillars.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+                                }}>
+                                <div className="pillar-item">
+                                    <div style={{ fontSize: 12, color: "rgba(120,140,200,0.5)", letterSpacing: "0.05em", paddingTop: 3, marginBottom: 8 }}>
+                                        {p.label}
+                                    </div>
+                                    <p style={{ fontSize: "clamp(13px, 1.8vw, 15px)", lineHeight: 1.85, color: "var(--text-mid)", fontWeight: 200 }}>
+                                        {p.text}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        ))}
                     </div>
-
-                    {/* Col 2: Enlaces */}
-                    <div className="lg:col-span-1 lg:justify-self-center">
-                        <h4 className="text-lg font-semibold text-white">Enlaces</h4>
-                        <ul className="mt-4 space-y-3">
-                            {footerLinks.map((link) => (
-                                <li key={link.name}>
-                                    <a href="javascript:void(0)" className="text-gray-400 hover:text-white transition-colors">
-                                        {link.name}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Col 3: Social */}
-                    <div className="lg:col-span-1 lg:justify-self-end">
-                        <h4 className="text-lg font-semibold text-white">Síguenos</h4>
-                        <div className="flex space-x-4 mt-4">
-                            {socialLinks.map((link) => (
-                                <a
-                                    key={link.name}
-                                    href={link.href}
-                                    className="text-gray-400 hover:text-white transition-colors"
-                                    aria-label={`EVA Salud Mental en ${link.name}`}
-                                >
-                                    <link.icon className="w-6 h-6" />
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Copyright */}
-                <div className="mt-12 pt-8 border-t border-gray-700 text-center text-sm text-gray-500">
-                    <p>&copy; {new Date().getFullYear()} EVA Salud Mental. Todos los derechos reservados.</p>
-                    <p>Hecho con ❤️ en México.</p>
                 </div>
             </div>
-        </footer>
+        </section>
     );
 };
 
-// --- 15. Modal de Consentimiento de Cookies ---
-const ConsentModal = ({ onAccept }) => {
+// ─── 8. ECOSISTEMA EVA ────────────────────────────────────────────────────────
+const EcosystemSection = () => {
+    const [ref, visible] = useInView();
+
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 100 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-lg z-50"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="consent-title"
-        >
-            <div className="bg-white p-6 rounded-2xl shadow-2xl border border-gray-200">
-                <h2 id="consent-title" className="text-lg font-semibold text-gray-900">
-                    Tu privacidad es importante
+        <section style={{
+            padding: "clamp(60px, 14vh, 140px) 0",
+            background: "linear-gradient(180deg, #06080d 0%, #050710 100%)",
+            position: "relative", overflow: "hidden"
+        }}>
+            <Orb style={{ width: 500, height: 500, top: "20%", right: "-15%", background: "rgba(60,70,130,0.06)", animationDelay: "4s" }} />
+
+            <div ref={ref} style={{ maxWidth: 1100, margin: "0 auto", padding: "0 clamp(20px, 6vw, 80px)" }}>
+                <div style={{ maxWidth: 600 }}>
+                    <div className={`fade-up ${visible ? "visible d1" : ""}`}
+                        style={{ fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 28 }}>
+                        Parte del ecosistema EVA
+                    </div>
+                    <h2 className={`fade-up ${visible ? "visible d2" : ""}`}
+                        style={{
+                            fontFamily: "'Cormorant Garamond', serif",
+                            fontSize: "clamp(24px, 3.5vw, 44px)",
+                            fontWeight: 300, color: "var(--text-bright)",
+                            lineHeight: 1.3, marginBottom: 28
+                        }}>
+                        UMBRA es el primer espacio.<br />Un lugar donde puedes construir claridad antes de dar cualquier otro paso.
+                    </h2>
+                    <p className={`fade-up ${visible ? "visible d3" : ""}`}
+                        style={{ fontSize: "clamp(13px, 1.8vw, 15px)", lineHeight: 1.95, color: "var(--text-mid)", fontWeight: 200 }}>
+                        Si algún día decides iniciar un proceso terapéutico, tu experiencia no empieza desde cero. Empieza desde lo que ya pensaste.
+                    </p>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// ─── 9. CIERRE ────────────────────────────────────────────────────────────────
+const ClosingSection = () => {
+    const [ref, visible] = useInView(0.1);
+    const [email, setEmail] = useState("");
+    const [sent, setSent] = useState(false);
+
+    return (
+        <section style={{
+            minHeight: "100vh",
+            background: "linear-gradient(180deg, #050710 0%, #030507 40%, #010203 100%)",
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            position: "relative", overflow: "hidden",
+            padding: "clamp(60px, 10vh, 0px) 0"
+        }}>
+            <Orb style={{ width: 600, height: 600, top: "50%", left: "50%", transform: "translate(-50%,-50%)", background: "rgba(40,50,100,0.05)", animationDelay: "0s" }} />
+
+            <div ref={ref} style={{
+                position: "relative", zIndex: 1,
+                textAlign: "center",
+                maxWidth: 480,
+                padding: "0 clamp(20px, 6vw, 60px)",
+                width: "100%",
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 0
+            }}>
+                <div className={`fade-in ${visible ? "visible d1" : ""}`}>
+                    <img
+                        src="/img/logo-umbra.png"
+                        alt="Umbra Logo"
+                        style={{
+                           width: "100%",
+                            maxWidth: 110,   // opcional para control fino
+                            height: "auto",
+                            display: "block"
+                        }}
+                    />
+                </div>
+
+                <div className={`fade-up ${visible ? "visible d1" : ""}`}
+                    style={{ fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 28 }}>
+                    Próximamente
+                </div>
+
+                <h2 className={`fade-up ${visible ? "visible d2" : ""}`}
+                    style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: "clamp(24px, 4vw, 48px)",
+                        fontWeight: 300, color: "rgba(255,255,255,0.7)",
+                        lineHeight: 1.25, marginBottom: 20
+                    }}>
+                    Un espacio donde puedes<br />existir sin actuar.
                 </h2>
-                <p className="mt-2 text-sm text-gray-600">
-                    Usamos cookies esenciales y de análisis para mejorar tu experiencia. Al continuar, aceptas nuestro{" "}
-                    <a href="#" className="text-[#0077b6] underline">Aviso de Privacidad</a>.
+
+                <p className={`fade-up ${visible ? "visible d3" : ""}`}
+                    style={{
+                        fontSize: "clamp(13px, 1.6vw, 14px)", lineHeight: 1.9, color: "var(--text-dim)",
+                        fontWeight: 200, marginBottom: 52, maxWidth: 340
+                    }}>
+                    No te promete felicidad. No te promete transformación instantánea. Solo un espacio seguro.
                 </p>
-                <div className="mt-5 flex flex-col sm:flex-row sm:space-x-3 space-y-2 sm:space-y-0">
-                    <button
-                        onClick={onAccept}
-                        className="w-full sm:w-auto flex-1 bg-[#8DC8FA] text-black font-semibold px-5 py-2.5 rounded-lg hover:bg-[#6AA5D7] transition-all"
-                    >
-                        Aceptar
-                    </button>
-                    <button
-                        onClick={onAccept} // Simplificado, idealmente abriría config
-                        className="w-full sm:w-auto flex-1 bg-gray-100 text-gray-700 font-semibold px-5 py-2.5 rounded-lg hover:bg-gray-200 transition-all"
-                    >
-                        Configurar
-                    </button>
+
+                {/* Email capture */}
+                {!sent ? (
+                    <div className={`fade-up ${visible ? "visible d4" : ""}`}
+                        style={{ width: "100%", maxWidth: 340 }}>
+                        <div style={{
+                            display: "flex",
+                            borderBottom: "1px solid rgba(255,255,255,0.1)",
+                        }}>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                placeholder="Tu correo electrónico"
+                                onKeyDown={e => e.key === "Enter" && email && setSent(true)}
+                                style={{
+                                    flex: 1, background: "none", border: "none",
+                                    padding: "14px 0",
+                                    fontSize: 14, fontWeight: 200,
+                                    color: "rgba(255,255,255,0.6)",
+                                    fontFamily: "'DM Sans', sans-serif",
+                                    minWidth: 0 // important for flex shrinking on mobile
+                                }}
+                            />
+                            <button
+                                onClick={() => email && setSent(true)}
+                                style={{
+                                    background: "none", border: "none", padding: "0 4px",
+                                    cursor: "pointer",
+                                    color: email ? "rgba(120,140,200,0.6)" : "rgba(255,255,255,0.1)",
+                                    transition: "color 0.4s", fontSize: 11, letterSpacing: "0.2em",
+                                    textTransform: "uppercase",
+                                    flexShrink: 0
+                                }}>
+                                →
+                            </button>
+                        </div>
+                        <p style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 12, textAlign: "center" }}>
+                            Sé el primero en entrar.
+                        </p>
+                    </div>
+                ) : (
+                    <div className="fade-in visible"
+                        style={{ fontSize: 14, color: "rgba(120,140,200,0.6)", fontStyle: "italic", fontFamily: "'Cormorant Garamond', serif" }}>
+                        Te avisaremos cuando UMBRA esté lista.
+                    </div>
+                )}
+
+                <div className={`fade-in ${visible ? "visible d6" : ""}`}
+                    style={{
+                        marginTop: 80,
+                        fontSize: 11, letterSpacing: "0.25em",
+                        color: "rgba(255,255,255,0.1)",
+                        textTransform: "uppercase"
+                    }}>
+                    La sombra también es un lugar seguro.
                 </div>
             </div>
-        </motion.div>
+
+            <div style={{
+                position: "absolute", inset: 0,
+                background: "radial-gradient(ellipse at center, transparent 30%, rgba(1,2,4,0.7) 100%)",
+                pointerEvents: "none"
+            }} />
+        </section>
     );
 };
 
-// --- Componente Principal ---
+// ─── ROOT ─────────────────────────────────────────────────────────────────────
 export default function App() {
-    const [showConsentModal, setShowConsentModal] = useState(false);
-
-    useEffect(() => {
-        // Simular que es la primera visita
-        const consentGiven = localStorage.getItem("eva_consent_given");
-        if (!consentGiven) {
-            // Retrasar modal para no ser tan intrusivo
-            const timer = setTimeout(() => {
-                setShowConsentModal(true);
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, []);
-
-    const handleConsentAccept = () => {
-        localStorage.setItem("eva_consent_given", "true");
-        setShowConsentModal(false);
-    };
-
-    // Forzar el scroll al inicio al cargar la página
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
     return (
-        <div className="bg-white font-sans text-gray-800 antialiased">
-            {/* Skip Link (Accesibilidad) */}
-            <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-blue-600">
-                Saltar al contenido principal
-            </a>
-
-
-            <main id="main-content" className="pt-20">
+        <>
+            <GlobalStyle />
+            <Header />
+            <main>
                 <Hero />
-                <ThreeBenefits />
-                <ChatbotDemo />
-                <WhatYouCanDo />
-                <HowItWorks />
-                <Testimonials />
-                <SecurityAndPrivacy />
-                <IsItForYou />
-                <PlansAndPrice />
-                <Faq />
+                <WhatIsUmbra />
+                <ChatSection />
+                <DiarySection />
+                <CollageSection />
+                <MindfulSection />
+                <PrivacySection />
+                <EcosystemSection />
+                <ClosingSection />
             </main>
-
-            <Footer />
-
-            <AnimatePresence>
-                {showConsentModal && <ConsentModal onAccept={handleConsentAccept} />}
-            </AnimatePresence>
-        </div>
+        </>
     );
 }

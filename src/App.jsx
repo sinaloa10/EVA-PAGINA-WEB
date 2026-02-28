@@ -6,7 +6,8 @@ import Login from './components/Login/login';
 import Register from './components/Login/register';
 import Navbar from '../src/components/Navbar/Navbar';
 import Footer from './components/Footer/footer';
-import Survey from './components/Pages/Survey';
+import Survey from './components/Surveys/Survey.jsx';
+import SurveyPatient from './components/Surveys/SurveyPatient.jsx';
 import NotFound from './components/Pages/NotFound';
 import Terms from './components/Pages/terms';
 import Privacy from './components/Pages/Privacy';
@@ -29,11 +30,11 @@ function App() {
             <Login />
           </>
         } />
-        {/*<Route path="/dashboard" element={
+        <Route path="/dashboard" element={
           <>
             <Dashboard />
           </>
-        } />*/}
+        } />
         <Route path="/" element={
           <>
             {!shouldHideLayout && <Navbar />}
@@ -45,6 +46,12 @@ function App() {
           <>
             {!shouldHideLayout && <Navbar />}
             <Survey />
+          </>
+        } />
+        <Route path="/formulario-sesion" element={
+          <>
+            {!shouldHideLayout && <Navbar />}
+            <SurveyPatient />
           </>
         } />
         <Route path="/register" element={
@@ -67,13 +74,16 @@ function App() {
             <Footer />
           </>
         } />
-        <Route path="/app" element={
+        <Route path="/umbra" element={
           <>
-            <Navbar />
             <AppLanding />
           </>
         } />
-
+        <Route path="/dashboard" element={
+          <>
+            <Dashboard />
+          </>
+        } />
         {/* Ruta 404 sin Navbar ni Footer */}
         <Route path="*" element={<NotFound />} />
       </Routes>

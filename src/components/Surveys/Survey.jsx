@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-
-
-
-
 // --- Constantes y Componentes (sin cambios) ---
 const evaColors = {
   light: '#EAF7FF',
@@ -256,77 +252,6 @@ function Survey() {
     }
   }
 
-  // --- Renderizado (el resto del JSX no necesita cambios) ---
-  if (!isAuthenticated) {
-    return (
-      <div className="text-gray-700 font-sans">
-        <section id="inicio" className="py-20 md:py-20 md-20 mt-20" >
-          <div className="container mx-auto px-6 text-center">
-            <h1
-              className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              Ayúdanos a construir,
-              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#8DC8FA] to-[#0077b6]">la mejor herramienta para ti</span>
-            </h1>
-            <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Las respuestas de tu encuesta serán anónimas y nos ayudarán a lanzar una herramienta valiosa</p>
-            <div className="flex items-center justify-center mt-8">
-              <form
-                onSubmit={handlePasswordSubmit}
-                className="bg-white p-8 rounded-xl shadow-lg max-w-sm w-full"
-              >
-                <label className="block mb-2 font-medium text-gray-700" htmlFor="survey-password">
-                  Ingresa la clave de acceso:
-                </label>
-                <div className='flex items-stretch gap-2'>
-                  <input
-                    id="survey-password"
-                    type="password"
-                    value={passwordInput}
-                    onChange={e => setPasswordInput(e.target.value)}
-                    className="flex-grow p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2"
-                    style={{ '--tw-ring-color': evaColors.accent }}
-                    placeholder="Contraseña"
-                    autoFocus
-
-                  />
-                  {loading && (
-                    <AiOutlineLoading3Quarters className="animate-spin text-[#83c6eb] text-4xl" />
-                  )}
-                </div>
-                {passwordError && (
-                  <div className="mb-4 text-red-600 text-sm">{passwordError}</div>
-                )}
-                <button
-                  type="submit"
-                  disabled={disableButton}
-                  className={`w-full py-3 rounded-md font-semibold text-white transition-opacity
-                            ${disableButton ? 'opacity-25  cursor-not-allowed' : 'hover:opacity-90 cursor-pointer'}`}
-                  style={{ backgroundColor: evaColors.accent }}
-                >
-                  Ingresar
-                </button>
-
-              </form>
-
-            </div>
-          </div>
-        </section>
-
-        <section id="eva" className="py-20" style={{ backgroundColor: evaColors.light }}>
-          <div className="container mx-auto px-6 text-center max-w-3xl">
-            <h2 className="text-3xl font-bold text-[#023d6d]">¿Qué es EVA Salud Mental?</h2>
-            <div className="w-24 h-1 mx-auto my-6 rounded" style={{ backgroundColor: evaColors.accent }}></div>
-            <p className="text-lg text-gray-600 leading-relaxed">
-              EVA Salud Mental es una plataforma digital diseñada para mejorar la atención psicológica, facilitando la conexión entre pacientes y profesionales de manera efectiva, accesible y continua. Su enfoque inteligente optimiza el seguimiento terapéutico y potencia los resultados del tratamiento.
-            </p>
-          </div>
-        </section>
-      </div>
-    );
-  }
 
   const renderStep = () => {
     // ... (El contenido de renderStep no cambia)

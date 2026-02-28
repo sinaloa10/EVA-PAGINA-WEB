@@ -1,523 +1,231 @@
 import React, { useState } from 'react';
-import { 
-    LayoutDashboard, Users, UserPlus, Calendar, FileText, MessageSquare, Settings, BrainCircuit, 
-    PanelLeftClose, Bell, LogOut, Search, MessageCircle, TrendingDown, AlertCircle, CalendarCheck, Activity ,
-    AlertTriangle, Video, MapPin, CheckCircle2, XCircle, Clock, Download, Brain, Send, User, CalendarClock,
-    UserRoundCheck
+import {
+    ScatterChart,
+    Scatter,
+    XAxis,
+    YAxis,
+    ResponsiveContainer,
+    ReferenceLine,
+    LabelList
+} from 'recharts';
+import {
+    Activity,
+    Brain,
+    Search,
+    ChevronDown,
+    FileText
 } from 'lucide-react';
 
-import {Pie, Bar} from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale,LinearScale } from 'chart.js';
-// --- Reusable Components ---
-
-const StatsCard = ({ icon, title, value, change, iconBgColor, iconTextColor }) => (
-    <div className="bg-white p-6 rounded-xl shadow-sm flex items-center justify-between">
-        <div>
-            <p className="text-sm text-gray-500">{title}</p>
-            <p className="text-3xl font-bold text-gray-800">{value}</p>
-            <p className={`text-xs mt-1 ${change.startsWith('+') ? 'text-green-500' : 'text-gray-400'}`}>{change}</p>
-        </div>
-        <div className={`p-3 rounded-full ${iconBgColor}`}>
-            {React.cloneElement(icon, { className: iconTextColor })}
-        </div>
-    </div>
-);
-
-const PatientCard = ({ name, age, avatarSrc, interactionStatus, interactionIcon, interactionBg, interactionText }) => (
-  <div className="bg-white p-4 rounded-xl shadow-sm flex flex-col gap-3 relative">
-    <div className="flex">
-      {/* Iconos accion rapido */}
-      <div className="flex flex-col gap-2 mr-4">
-        <div className="relative group">
-          <button className="p-2 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors">
-            <Calendar className="w-4 h-4" />
-          </button>
-          <span className="absolute left-full ml-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-            Agendar sesión
-          </span>
-        </div>
-
-        <div className="relative group">
-          <button className="p-2 bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
-            <MessageCircle className="w-4 h-4" />
-          </button>
-          <span className="absolute left-full ml-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-            Enviar mensaje motivacional
-          </span>
-        </div>
-
-        <div className="relative group">
-          <button className="p-2 bg-purple-100 text-purple-700 rounded-full hover:bg-purple-200 transition-colors">
-            <Activity className="w-4 h-4" />
-          </button>
-          <span className="absolute left-full ml-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-            Asignar ejercicio
-          </span>
-        </div>
-      </div>
-
-      {/* Contenido del paciente */}
-      <div className="flex-1 flex flex-col gap-2">
-        <div className="flex items-center gap-3">
-          <img src={avatarSrc} alt={name} className="w-16 h-16 rounded-full object-cover" />
-          <div className="flex flex-col">
-            <p className="font-semibold text-gray-800">{name}</p>
-            <p className="text-sm text-gray-500">{age}</p>
-          </div>
-        </div>
-
-        <div className={`flex items-center gap-1 text-sm font-medium ${interactionText}`}>
-          <span className={`p-1 rounded-full ${interactionBg}`}>{interactionIcon}</span>
-          {interactionStatus}
-        </div>
-
-        {/* Boton Ver perfil*/}
-        <button className="mt-auto w-full bg-cyan-900 text-white font-semibold py-2 rounded-lg hover:bg-cyan-700 transition-colors">
-          Ver perfil
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement,);
-const barData = {
-  labels: ['Feliz', 'Tranquilo', 'Ansioso', 'Triste', 'Neutral'],
-  datasets: [
-    {
-      label: 'Número de pacientes',
-      data: [8, 6, 4, 3, 5], // reemplaza con tus valores reales
-      backgroundColor: ['#86efac', '#bfdbfe', '#fef08a', '#fecaca', '#e5e7eb'],
-      borderRadius: 6,
-    },
-  ],
-};
-
-const barOptions = {
-  responsive: true,
-  plugins: {
-    legend: { display: false },
-  },
-  scales: {
-    y: { beginAtZero: true, ticks: { stepSize: 1 } },
-  },
-};
-
-const BarChartCard = ({ title }) => (
-  <div className="lg:col-span-4 bg-white p-6 rounded-xl shadow-sm">
-        <h3 className="font-semibold text-gray-800 mb-4">{ title }</h3>
-        <div className="w-full h-[400px]">
-            <Bar data={barData} options={barOptions} />
-        </div>
-  </div>
-);
-
-const pacientes = [
-  { nombre: "Ana", estadoHoy: 8, estadoAyer: 6 },
-  { nombre: "Luis", estadoHoy: 4, estadoAyer: 5 },
-  { nombre: "Carla", estadoHoy: 7, estadoAyer: 7 },
+/**
+ * Datos simulados para la red clínica.
+ * Se utiliza una estructura de coordenadas (x, y) para posicionar los nodos en el gráfico.
+ * El nodo central es "Inutilidad".
+ */
+const networkData = [
+    { id: 1, x: 50, y: 50, label: "Inutilidad", type: "core" },    // Nodo Central
+    { id: 2, x: 30, y: 80, label: "Madre", type: "peripheral" },
+    { id: 3, x: 70, y: 80, label: "Trabajo", type: "peripheral" },
+    { id: 4, x: 25, y: 25, label: "Vergüenza", type: "peripheral" },
+    { id: 5, x: 75, y: 25, label: "Ansiedad", type: "peripheral" },
 ];
 
-const getTendencia = (hoy, ayer) => {
-  if (hoy > ayer) return "⬆️"; 
-  if (hoy < ayer) return "⬇️"; 
-  return "➡️";
-};
-
-const TendenciaGlobal = () => {
-  return (
-    <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {pacientes.map(p => (
-        <div key={p.nombre} className="bg-white p-4 rounded-2xl shadow-md flex justify-between items-center hover:shadow-lg transition-shadow">
-          <div>
-            <p className="text-sm text-gray-500">Paciente</p>
-            <h4 className="font-bold text-gray-800">{p.nombre}</h4>
-          </div>
-          <div className={`text-2xl ${p.estadoHoy > p.estadoAyer ? 'text-green-500' : p.estadoHoy < p.estadoAyer ? 'text-red-500' : 'text-gray-400'}`}>
-            {getTendencia(p.estadoHoy, p.estadoAyer)}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-// --- Nuevos componentes ---
-const QuickInsights = () => {
-  return (
-    <aside className="hidden lg:flex lg:flex-col lg:w-80 p-6 gap-4 bg-white rounded-xl shadow-sm">
-      <h3 className="font-semibold text-gray-800 ">Resumen Diario</h3>
-      <div className="space-y-2">
-        {/* Alertas urgentes */}
-        <div>
-          <p className="text-sm text-gray-500 mb-2">Alertas urgentes</p>
-          <ul className="space-y-1">
-            <li className="flex items-center gap-2 p-2 rounded-lg bg-red-100 text-red-700 hover:shadow-md cursor-pointer">
-              ⚠️ Laura Gómez - Insomnio severo
-            </li>
-            <li className="flex items-center gap-2 p-2 rounded-lg bg-red-100 text-red-700 hover:shadow-md cursor-pointer">
-              ⚠️ Carlos Ruiz - Ansiedad alta
-            </li>
-          </ul>
-        </div>
-
-        {/* Top preocupaciones hoy */}
-        <div>
-          <p className="text-sm text-gray-500 mb-2">Top preocupaciones</p>
-          <ul className="space-y-1">
-            <li className="flex items-center gap-2 p-2 rounded-lg bg-yellow-100 text-yellow-700 hover:shadow-md cursor-pointer">
-              💛 Ansiedad
-            </li>
-            <li className="flex items-center gap-2 p-2 rounded-lg bg-yellow-100 text-yellow-700 hover:shadow-md cursor-pointer">
-              💛 Estrés
-            </li>
-            <li className="flex items-center gap-2 p-2 rounded-lg bg-yellow-100 text-yellow-700 hover:shadow-md cursor-pointer">
-              💛 Insomnio
-            </li>
-          </ul>
-        </div>
-
-        {/* Actividades completadas */}
-        <div>
-          <p className="text-sm text-gray-500 mb-2">Actividades completadas</p>
-          <ul className="space-y-1">
-            <li className="flex items-center gap-2 p-2 rounded-lg bg-green-100 text-green-700 hover:shadow-md cursor-pointer">
-              ✅ 3 diarios completados
-            </li>
-            <li className="flex items-center gap-2 p-2 rounded-lg bg-green-100 text-green-700 hover:shadow-md cursor-pointer">
-              ✅ 2 ejercicios de respiración
-            </li>
-            <li className="flex items-center gap-2 p-2 rounded-lg bg-green-100 text-green-700 hover:shadow-md cursor-pointer">
-              ✅ 1 dibujo del día
-            </li>
-          </ul>
-        </div>
-      </div>
-    </aside>
-  );
-};
-
-// --- Section Components ---
-
-const DashboardSection = () => (
-    <section id="inicio">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-11 pt-10">
-            <StatsCard icon={<Users />} title="Pacientes" value="40" change="" iconBgColor="bg-blue-100" iconTextColor="text-blue-500" />
-            <StatsCard icon={<UserRoundCheck />} title="Pacientes Activos" value="24" change="+2 esta semana" iconBgColor="bg-green-100" iconTextColor="text-green-500" />
-            <StatsCard icon={<CalendarCheck />} title="Sesiones para Hoy" value="4" change="1 pendiente de confirmar" iconBgColor="bg-purple-100" iconTextColor="text-purple-500" />
-            <StatsCard icon={<AlertTriangle />} title="Alertas Importantes" value="3" change="Requieren atención" iconBgColor="bg-red-100" iconTextColor="text-red-500" />
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-6 px-11 pt-10">
-        <div className="lg:col-span-4 flex flex-col lg:flex-row gap-6">
-            <QuickInsights />
-
-            <div className="bg-white p-6 rounded-xl shadow-sm flex-1">
-                <h3 className="font-semibold text-gray-800 mb-4">Resúmenes de EVA AI</h3>
-                <div className="space-y-4">
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-sm font-medium text-gray-700">Laura Gómez</p>
-                    <p className="text-xs text-gray-500">EVA detectó un patrón de insomnio en sus últimos 3 registros de diario.</p>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-sm font-medium text-gray-700">Carlos Ruiz</p>
-                    <p className="text-xs text-gray-500">El sentimiento dominante en su última semana fue la ansiedad.</p>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-sm font-medium text-gray-700">Ana Torres</p>
-                    <p className="text-xs text-gray-500">Completó el test de autoestima con resultados positivos.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {/* BarChart separado */}
-        <BarChartCard title={"Distribución Emocional"} />
-        </div>
-        
-    </section>
-);
-
-const PatientsSection = () => {
-    const patients = [
-        { name: 'Laura Gómez', age: '28 años', avatarSrc: 'https://placehold.co/80x80/E2F1FE/3B82F6?text=LG', status: 'Interacción Alta', icon: <MessageCircle className="w-4 h-4" />, bg: 'bg-green-100', text: 'text-green-600' },
-        { name: 'Carlos Ruiz', age: '35 años', avatarSrc: 'https://placehold.co/80x80/FEF3C7/F59E0B?text=CR', status: 'Interacción Media', icon: <TrendingDown className="w-4 h-4" />, bg: 'bg-yellow-100', text: 'text-yellow-600' },
-        { name: 'Ana Torres', age: '42 años', avatarSrc: 'https://placehold.co/80x80/FEE2E2/EF4444?text=AT', status: 'Interacción Baja', icon: <AlertCircle className="w-4 h-4" />, bg: 'bg-red-100', text: 'text-red-600' },
-        { name: 'Marcos Peña', age: '22 años', avatarSrc: 'https://placehold.co/80x80/D1FAE5/10B981?text=MP', status: 'Interacción Alta', icon: <MessageCircle className="w-4 h-4" />, bg: 'bg-green-100', text: 'text-green-600' }
-    ];
-    return (
-        <section id="pacientes" className="flex flex-col flex-1 min-h-0 w-{p.name} px-11 py-5">
-            <div className="mb-6 flex flex-col md:flex-row gap-4 items-center">
-                <div className="relative w-full md:w-1/3"><Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /><input type="text" placeholder="Buscar paciente..." className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" /></div>
-                <select className="w-full md:w-auto border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400"><option>Filtrar por estado</option><option>Estable</option><option>Ansioso</option><option>En riesgo</option></select>
-                <button className="w-full md:w-auto bg-blue-400 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-500 transition-colors">Buscar</button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {patients.map(p => (
-                    <div key={p.name} className="h-64">
-                    <PatientCard
-                        name={p.name}
-                        age={p.age}
-                        avatarSrc={p.avatarSrc}
-                        interactionStatus={p.status}
-                        interactionIcon={p.icon}
-                        interactionBg={p.bg}
-                        interactionText={p.text}
-                    />
-                    </div>
-                ))}
-            </div>
-        </section>
-    );
-};
-
-const AgendaSection = () => {
-    const sessions = [
-        { name: 'Laura Gómez', time: '10:00 AM', modality: 'Virtual', icon: <Video className="w-5 h-5 text-purple-500" />, status: 'Confirmada', statusColor: 'text-green-500', statusIcon: <CheckCircle2 /> },
-        { name: 'Carlos Ruiz', time: '11:30 AM', modality: 'Presencial', icon: <MapPin className="w-5 h-5 text-blue-500" />, status: 'Confirmada', statusColor: 'text-green-500', statusIcon: <CheckCircle2 /> },
-        { name: 'Marcos Peña', time: '02:00 PM', modality: 'Virtual', icon: <Video className="w-5 h-5 text-purple-500" />, status: 'Pendiente', statusColor: 'text-yellow-500', statusIcon: <Clock /> },
-        { name: 'Ana Torres', time: '04:30 PM', modality: 'Presencial', icon: <MapPin className="w-5 h-5 text-blue-500" />, status: 'Cancelada', statusColor: 'text-red-500', statusIcon: <XCircle /> }
-    ];
-    return (
-        <section id="agenda" className="flex flex-col flex-1 min-h-0 w-full px-11 py-5">
-            <div className="bg-white p-4 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row gap-4 items-center justify-between w-full">
-                <div className="flex flex-col md:flex-row gap-4 items-center">
-                    <input type="date" defaultValue={new Date().toISOString().substring(0, 10)} className="border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                    <select className="w-full md:w-auto border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400"><option>Todos los estados</option><option>Confirmada</option><option>Pendiente</option><option>Cancelada</option></select>
-                </div>
-                <button className="w-full md:w-auto bg-blue-400 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-500 transition-colors flex items-center gap-2 justify-center"><CalendarClock className="w-5 h-5" /> Agendar nueva sesión</button>
-            </div>
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden w-full">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-500">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">Paciente</th>
-                                <th scope="col" className="px-6 py-3">Hora</th>
-                                <th scope="col" className="px-6 py-3">Modalidad</th>
-                                <th scope="col" className="px-6 py-3">Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {sessions.map(session => (
-                                <tr key={session.name} className="bg-white border-b hover:bg-gray-50">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{session.name}</th>
-                                    <td className="px-6 py-4">{session.time}</td>
-                                    <td className="px-6 py-4 flex items-center gap-2">{session.icon} {session.modality}</td>
-                                    <td className={`px-6 py-4 font-semibold ${session.statusColor}`}>
-                                        <div className="flex items-center gap-2">
-                                            {React.cloneElement(session.statusIcon, { className: "w-5 h-5" })} {session.status}
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    );
-};
-
-const InformesSection = () => {
-    const reports = [
-        { patient: 'Laura Gómez', date: '2024-05-18', type: 'Estado emocional', icon: <Brain />, content: 'Patrón de ansiedad recurrente los fines de semana.' },
-        { patient: 'Carlos Ruiz', date: '2024-05-17', type: 'Resultados de test', icon: <FileText />, content: 'Puntuación media-baja en el test de autoestima GAD-7.' },
-        { patient: 'Marcos Peña', date: '2024-05-16', type: 'Patrones de sueño', icon: <Clock />, content: 'Insomnio intermitente detectado, con un promedio de 4.5h de sueño.' }
-    ];
-    return (
-        <section id="informes" className="flex flex-col flex-1 min-h-0 w-full px-11 py-5">
-            <div className="bg-white p-4 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
-                <select className="w-full md:w-auto border border-gray-200 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option>Todos los informes</option><option>Estado emocional</option><option>Resultados de test</option><option>Patrones de sueño</option>
-                </select>
-                <button className="w-full md:w-auto bg-gray-800 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2 justify-center"><Download className="w-5 h-5" /> Exportar a PDF</button>
-            </div>
-            <div className="space-y-4 overflow-y-auto pr-2">
-                {reports.map((report, index) => (
-                    <div key={index} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-                        <div className="flex justify-between items-start">
-                            <div>
-                                <h4 className="font-bold text-gray-800">{report.patient}</h4>
-                                <div className="flex items-center gap-4 text-xs text-gray-500 mt-1">
-                                    <span className="flex items-center gap-1.5">{React.cloneElement(report.icon, { className: "w-4 h-4" })} {report.type}</span>
-                                    <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {report.date}</span>
-                                </div>
-                            </div>
-                            <button className="text-gray-400 hover:text-blue-500"><Download className="w-5 h-5"/></button>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-3">{report.content}</p>
-                    </div>
-                ))}
-            </div>
-        </section>
-    );
-};
-
-const MensajesSection = () => {
-    const [selectedChat, setSelectedChat] = useState(null);
-    const conversations = [
-        { id: 1, name: 'Laura Gómez', avatar: 'https://placehold.co/40x40/E2F1FE/3B82F6?text=LG', lastMessage: 'Entendido, lo haré. ¡Gracias!', time: '10:45 AM', unread: 2 },
-        { id: 2, name: 'Carlos Ruiz', avatar: 'https://placehold.co/40x40/FEF3C7/F59E0B?text=CR', lastMessage: 'Hola Dr., quería comentarle algo...', time: 'Ayer', unread: 0 },
-        { id: 3, name: 'Marcos Peña', avatar: 'https://placehold.co/40x40/D1FAE5/10B981?text=MP', lastMessage: 'Perfecto, nos vemos en la sesión.', time: 'Hace 3 días', unread: 0 },
-    ];
-    const messages = {
-        1: [
-            { from: 'other', text: 'Hola Dr., he estado teniendo problemas para dormir de nuevo.', time: '10:40 AM' },
-            { from: 'me', text: 'Hola Laura, lamento escuchar eso. ¿Has intentado las técnicas de respiración que discutimos?', time: '10:42 AM' },
-            { from: 'other', text: 'Sí, pero mi mente sigue muy activa.', time: '10:43 AM' },
-            { from: 'other', text: 'Entendido, lo haré. ¡Gracias!', time: '10:45 AM' },
-        ],
-        2: [{ from: 'other', text: 'Hola Dr., quería comentarle algo...', time: 'Ayer' }],
-        3: [{ from: 'me', text: 'Perfecto, nos vemos en la sesión.', time: 'Hace 3 días' }]
-    };
-    
-    const activeChat = selectedChat ? conversations.find(c => c.id === selectedChat) : null;
-
-    return (
-        <section className='px-11 py-5'>
-            <div className="flex bg-white rounded-xl shadow-sm overflow-hidden " style={{minHeight: 'calc(100vh - 12rem)'}}>
-                {/* Conversations List */}
-                <div className={`w-full md:w-1/3 border-r border-gray-200 flex flex-col ${selectedChat && 'hidden md:flex'}`}>
-                    <div className="p-4 border-b">
-                        <input type="text" placeholder="Buscar en mensajes..." className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                    </div>
-                    <div className="flex-1 overflow-y-auto">
-                        {conversations.map(conv => (
-                            <div key={conv.id} onClick={() => setSelectedChat(conv.id)}
-                                 className={`flex items-center gap-4 p-4 cursor-pointer border-l-4 ${selectedChat === conv.id ? 'border-blue-500 bg-blue-50' : 'border-transparent hover:bg-gray-50'}`}>
-                                <img src={conv.avatar} alt={conv.name} className="w-12 h-12 rounded-full" />
-                                <div className="flex-1 overflow-hidden">
-                                    <div className="flex justify-between items-center">
-                                        <h5 className="font-semibold text-gray-800">{conv.name}</h5>
-                                        <span className="text-xs text-gray-400">{conv.time}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <p className="text-sm text-gray-500 truncate">{conv.lastMessage}</p>
-                                        {conv.unread > 0 && <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{conv.unread}</span>}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                
-                {/* Chat Panel */}
-                <div className="flex-1 flex flex-col">
-                    {activeChat ? (
-                        <>
-                            <div className="p-4 border-b flex items-center gap-4">
-                               {selectedChat && <button onClick={() => setSelectedChat(null)} className="md:hidden p-2 rounded-full hover:bg-gray-100"> &larr; </button>}
-                                <img src={activeChat.avatar} alt={activeChat.name} className="w-10 h-10 rounded-full" />
-                                <h4 className="font-semibold text-gray-800">{activeChat.name}</h4>
-                            </div>
-                            <div className="flex-1 p-6 overflow-y-auto bg-gray-50 space-y-4">
-                                {messages[selectedChat].map((msg, i) => (
-                                    <div key={i} className={`flex gap-3 ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}>
-                                        {msg.from === 'other' && <img src={activeChat.avatar} className="w-8 h-8 rounded-full" />}
-                                        <div className={`max-w-xs lg:max-w-md p-3 rounded-2xl ${msg.from === 'me' ? 'bg-blue-500 text-white rounded-br-none' : 'bg-gray-200 text-gray-800 rounded-bl-none'}`}>
-                                            <p>{msg.text}</p>
-                                            <span className={`text-xs mt-1 block text-right ${msg.from === 'me' ? 'text-blue-200' : 'text-gray-500'}`}>{msg.time}</span>
-                                        </div>
-                                        {msg.from === 'me' && <img src="https://placehold.co/40x40/8DC8FA/FFFFFF?text=D" className="w-8 h-8 rounded-full" />}
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="p-4 bg-white border-t">
-                                <div className="relative">
-                                    <input type="text" placeholder="Escribe un mensaje..." className="w-full pr-12 pl-4 py-3 border rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                                    <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-500 text-white p-2.5 rounded-full hover:bg-blue-600"><Send className="w-5 h-5" /></button>
-                                </div>
-                            </div>
-                        </>
-                    ) : (
-                        <div className="flex-1 flex flex-col items-center justify-center text-center text-gray-500 bg-gray-50">
-                            <MessageCircle className="w-16 h-16 text-gray-300 mb-4" />
-                            <h3 className="text-xl font-semibold">Bienvenido a tus mensajes</h3>
-                            <p>Selecciona una conversación para comenzar a chatear.</p>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </section>
-    );
-};
-
-// --- Layout Components ---
-
-const navItemsList = [
-    { id: 'inicio', text: 'Inicio', icon: <LayoutDashboard /> },
-    { id: 'pacientes', text: 'Mis pacientes', icon: <Users /> },
-    { id: 'agenda', text: 'Agenda', icon: <Calendar /> },
-    { id: 'informes', text: 'Informes AI', icon: <FileText /> },
-    { id: 'mensajes', text: 'Mensajes', icon: <MessageSquare /> },
-];
-
-const Sidebar = ({ isCollapsed, activeSection, setActiveSection }) => (
-<aside className={`bg-white shadow-lg flex-shrink-0 flex flex-col justify-between transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20 p-2' : 'w-64 p-10'}`}>
-        <div>
-            <div className={`flex items-center gap-3 mb-10 ${isCollapsed ? 'justify-center' : ''}`}>
-                <div className="p-2 rounded-lg">
-                    <img src="/img/logo1.png" alt="Logo EVA"  className={`${isCollapsed ? 'w-12 h-12' : 'w-20 h-20'} object-contain mx-auto`} />
-                </div>
-                {!isCollapsed && <h1 className="text-2xl font-bold text-gray-800">EVA</h1>}
-            </div>
-            <nav className="flex flex-col gap-3">
-                {navItemsList.map(item => (<a href="#" key={item.id} onClick={(e) => { e.preventDefault(); setActiveSection(item.id); }} className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${isCollapsed ? 'justify-center' : ''} ${activeSection === item.id ? 'bg-blue-100 font-semibold text-gray-800' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-800'}`}>{item.icon}{!isCollapsed && <span>{item.text}</span>}</a>))}
-            </nav>
-        </div>
-        <div className="flex flex-col gap-3">
-            <a href="#" className={`flex items-center gap-4 p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-800 ${isCollapsed ? 'justify-center' : ''}`}><Settings />{!isCollapsed && <span>Configuración</span>}</a>
-        </div>
-    </aside>
-);
-
-const Header = ({ toggleSidebar, sectionTitle }) => (
-    <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-10 p-4 border-b border-gray-200 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-            <button onClick={toggleSidebar} className="p-2 rounded-md hover:bg-gray-100 text-gray-600"><PanelLeftClose /></button>
-            <h2 className="text-xl font-semibold text-gray-800 capitalize">{sectionTitle}</h2>
-        </div>
-        <div className="flex items-center gap-6">
-            <button className="relative text-gray-600 hover:text-gray-900"><Bell /><span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">2</span></button>
-            <div className="flex items-center gap-3">
-                <img src="https://placehold.co/40x40/8DC8FA/FFFFFF?text=D" alt="Avatar del psicólogo" className="w-10 h-10 rounded-full object-cover" />
-                <div><p className="font-semibold text-sm text-gray-800">Adilene Ruiz</p><p className="text-xs text-gray-500">Psicólogo Clínico</p></div>
-            </div>
-            <button className="text-gray-600 hover:text-gray-900" title="Cerrar Sesión"><LogOut /></button>
-        </div>
-    </header>
-);
-
-// --- Main App Component ---
-
+/**
+ * Componente principal de la aplicación.
+ * Maneja el estado de la vista (edición vs análisis) y la renderización de la interfaz.
+ */
 export default function App() {
-    const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-    const [activeSection, setActiveSection] = useState('inicio');
+    const [isAnalyzed, setIsAnalyzed] = useState(false);
+    const [notes, setNotes] = useState("");
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    const renderSection = () => {
-        switch (activeSection) {
-            case 'inicio': return <DashboardSection />;
-            case 'pacientes': return <PatientsSection />;
-            case 'agenda': return <AgendaSection />;
-            case 'informes': return <InformesSection />;
-            case 'mensajes': return <MensajesSection />;
-            default: return <DashboardSection />;
-        }
+    // Manejador para el botón de analizar
+    const handleAnalyze = () => {
+        if (!notes.trim()) return; // Previene análisis vacío
+
+        setIsProcessing(true);
+        // Simula un pequeño retraso de procesamiento para dar sensación de "herramienta trabajando"
+        setTimeout(() => {
+            setIsAnalyzed(true);
+            setIsProcessing(false);
+        }, 800);
     };
-    
-    const sectionName = navItemsList.find(item => item.id === activeSection)?.text || 'Dashboard';
+
+    /**
+     * Renderizado personalizado para los puntos del gráfico (Nodos).
+     * Diferencia visualmente el nodo central de los periféricos.
+     */
+    const CustomNode = (props) => {
+        const { cx, cy, payload } = props;
+        const isCore = payload.type === "core";
+
+        return (
+            <g>
+                {/* Círculo del nodo */}
+                <circle
+                    cx={cx}
+                    cy={cy}
+                    r={isCore ? 25 : 18}
+                    fill={isCore ? "#334155" : "#94a3b8"} // Slate-700 vs Slate-400
+                    stroke="white"
+                    strokeWidth={3}
+                    className="transition-all duration-300 hover:opacity-80 cursor-pointer"
+                />
+                {/* Etiqueta de texto debajo del nodo */}
+                <text
+                    x={cx}
+                    y={cy + (isCore ? 45 : 35)}
+                    textAnchor="middle"
+                    fill="#475569" // Slate-600
+                    className={`text-xs font-medium tracking-wide ${isCore ? 'font-bold' : ''}`}
+                    style={{ fontSize: isCore ? '14px' : '12px' }}
+                >
+                    {payload.label}
+                </text>
+            </g>
+        );
+    };
 
     return (
-        <div className="flex min-h-screen w-screen bg-gray-50 font-sans">
-            <Sidebar isCollapsed={isSidebarCollapsed} activeSection={activeSection} setActiveSection={setActiveSection} />
-            <div className="flex-1 flex flex-col min-h-screen w-full">
-                <Header toggleSidebar={() => setSidebarCollapsed(!isSidebarCollapsed)} sectionTitle={sectionName} />
-                <main className="flex-1 flex flex-col w-full min-h-0 p-0">
-                    {/* Elimina el div interior con padding, y aplica padding solo a los elementos que lo necesiten */}
-                    {renderSection()}
-                </main>
-            </div>
+        <div className="flex flex-col min-h-screen w-full bg-slate-50 font-sans text-slate-800 overflow-hidden selection:bg-slate-200">
+
+            {/* --- BARRA SUPERIOR --- */}
+            <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-10 shrink-0">
+                <div className="flex items-center gap-3">
+                    <div className="p-1.5 bg-slate-100 rounded-md">
+                        <Brain size={18} className="text-slate-700" />
+                    </div>
+                    <h1 className="text-sm font-semibold tracking-wide text-slate-700 uppercase">
+                        EVA <span className="text-slate-400 mx-2">|</span> Análisis Estructural del Caso
+                    </h1>
+                </div>
+                <div className="flex items-center gap-4 text-xs text-slate-500 font-medium">
+                    <span className="flex items-center gap-1">
+                        <Activity size={14} />
+                        Sistema Listo
+                    </span>
+                    <div className="h-4 w-px bg-slate-200"></div>
+                    <span className="hover:text-slate-800 cursor-pointer">Dr. Admin</span>
+                </div>
+            </header>
+
+            {/* --- CONTENEDOR PRINCIPAL --- */}
+            <main className="flex-1 flex flex-col relative overflow-hidden">
+
+                {/* --- SECCIÓN EDITOR --- */}
+                <div
+                    className={`
+            relative w-full transition-all duration-700 ease-in-out bg-slate-50
+            ${isAnalyzed ? 'h-[45%]' : 'h-full'}
+          `}
+                >
+                    <div className="h-[300px] w-full max-w-5xl mx-auto p-8 flex flex-col">
+                        <div className="flex items-center gap-2 mb-4 opacity-70">
+                            <FileText size={16} className="text-slate-400" />
+                            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Notas de Sesión</span>
+                        </div>
+
+                        <textarea
+                            className="w-full h-full bg-transparent resize-none outline-none text-lg leading-relaxed text-slate-700 placeholder-slate-300 font-light"
+                            placeholder="Escribe aquí tus notas clínicas... Describe los síntomas, narrativa del paciente y observaciones fenomenológicas."
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
+                            spellCheck="false"
+                        />
+
+                        {/* Botón de Análisis (Solo visible si no se ha analizado) */}
+                        {!isAnalyzed && (
+                            <div className="flex justify-center bottom-8 right-8">
+                                <button
+                                    onClick={handleAnalyze}
+                                    disabled={isProcessing || !notes.trim()}
+                                    className={`
+                                        flex items-center gap-3 px-6 py-3 rounded-md shadow-lg transition-all duration-300
+                                        ${!notes.trim() ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-800 text-white hover:bg-slate-700 hover:shadow-xl hover:-translate-y-0.5'}
+                                    `}
+                                >
+                                    {isProcessing ? (
+                                        <span className="text-sm font-medium tracking-wide">Procesando...</span>
+                                    ) : (
+                                        <>
+                                            <span className="text-sm font-medium tracking-wide">Analizar Caso</span>
+                                            <Search size={16} />
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* --- SECCIÓN VISUALIZACIÓN DE RED (Aparece tras análisis) --- */}
+                {isAnalyzed && (
+                    <div className=" flex justify-center bg-white border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] animate-in fade-in slide-in-from-bottom-10 duration-700">
+                        <div className="w-[1000px] p-6 flex flex-col h-[500px]">
+
+                            {/* Cabecera de la sección de red */}
+                            <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                    <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wider">Red Psicopatológica Identificada</h2>
+                                </div>
+                                <button
+                                    onClick={() => setIsAnalyzed(false)}
+                                    className="text-xs text-slate-400 hover:text-slate-600 flex items-center gap-1 transition-colors"
+                                >
+                                    Ocultar análisis <ChevronDown size={14} className="rotate-180" />
+                                </button>
+                            </div>
+
+                            {/* Contenedor del Gráfico (Recharts) */}
+                            <div className="flex-1 w-full relative">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <ScatterChart margin={{ top: 40, right: 40, bottom: 40, left: 40 }}>
+                                        {/* Ejes invisibles necesarios para el posicionamiento */}
+                                        <XAxis type="number" dataKey="x" domain={[0, 100]} hide />
+                                        <YAxis type="number" dataKey="y" domain={[0, 100]} hide />
+
+                                        {/* Líneas de conexión (Edges) - Renderizadas usando ReferenceLine de la librería */}
+                                        {/* Conectamos cada nodo periférico al nodo central (50, 50) */}
+                                        {networkData.filter(n => n.type === 'peripheral').map((node) => (
+                                            <ReferenceLine
+                                                key={`link-${node.id}`}
+                                                segment={[
+                                                    { x: 50, y: 50 }, // Origen: Nodo central
+                                                    { x: node.x, y: node.y } // Destino: Nodo actual
+                                                ]}
+                                                stroke="#e2e8f0" // Slate-200
+                                                strokeWidth={2}
+                                            />
+                                        ))}
+
+                                        {/* Nodos */}
+                                        <Scatter
+                                            data={networkData}
+                                            shape={<CustomNode />}
+                                            isAnimationActive={true}
+                                            animationDuration={1500}
+                                        />
+                                    </ScatterChart>
+                                </ResponsiveContainer>
+
+                                {/* Leyenda flotante simple */}
+                                <div className="absolute bottom-4 left-4 bg-slate-50/80 backdrop-blur-sm p-3 rounded border border-slate-100 text-xs text-slate-500">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <div className="w-3 h-3 rounded-full bg-slate-700"></div>
+                                        <span>Nodo Nuclear</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-3 h-3 rounded-full bg-slate-400"></div>
+                                        <span>Nodos Asociados</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+            </main>
         </div>
     );
 }

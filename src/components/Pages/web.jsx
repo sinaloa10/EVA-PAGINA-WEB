@@ -157,7 +157,7 @@ function ChatBotDemo() {
 
 // 1. Sección “Lo que viven los psicólogos hoy”
 const ColleaguePainPointsSection = () => (
-    <AnimatedSection id="pain-points" className="py-24 bg-gray-50">
+    <AnimatedSection id="pain-points" className="py-24">    
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Lo que escuchamos de nuestros colegas</h2>
@@ -544,7 +544,7 @@ export default function HomePage() {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.5, delay: 0.6 }}
                         >
-                            <span className="font-semibold text-gray-800">EVA</span>: La plataforma de salud mental con IA, orgullosamente desarrollada en México.
+                            <span className="font-semibold text-gray-800">La plataforma de salud mental con IA, orgullosamente desarrollada en México.</span>
                         </motion.p>
                     </div>
                 </AnimatedSection>

@@ -131,7 +131,7 @@ export default function TermsAndConditionsPage() {
                                     </ul>
                                 </li>
                             </ul>
-                            <p className="mt-2 text-gray-700">Consulta el Aviso de Privacidad completo en: <a href="#" className="text-[#0077b6] hover:underline">[● enlace oficial ●]</a></p>
+                            <p className="mt-2 text-gray-700">Consulta el Aviso de Privacidad completo en: <a href="https://evasalud.com.mx/privacy" className="text-[#0077b6] hover:underline">[evasalud.com.mx/privacy]</a></p>
                         </section>
 
                         <section>
@@ -141,7 +141,7 @@ export default function TermsAndConditionsPage() {
                                 <li>Acceso, rectificación, cancelación o oposición al uso de sus datos (Derechos ARCO)</li>
                                 <li>Eliminación total o parcial de su información, conforme a lo dispuesto en la LFPDPPP</li>
                             </ul>
-                            <p className="mt-2 text-gray-700">Para ejercer estos derechos, deberá enviar una solicitud a <a href="mailto:[●correo●]" className="text-[#0077b6] hover:underline">[●correo●]</a>, indicando:</p>
+                            <p className="mt-2 text-gray-700">Para ejercer estos derechos, deberá enviar una solicitud a <a href="mailto:contacto@evasalud.com.mx" className="text-[#0077b6] hover:underline">contacto@evasalud.com.mx</a>, indicando:</p>
                             <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
                                 <li>Nombre completo</li>
                                 <li>Correo registrado</li>

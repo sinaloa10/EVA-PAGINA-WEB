@@ -95,7 +95,7 @@ export default function PrivacyPolicyPage() {
                                 <li>Evaluar la usabilidad de las herramientas</li>
                                 <li>Contactarle para invitaciones a estudios piloto o encuestas de mejora</li>
                             </ul>
-                            <p className="mt-2 text-gray-700">Usted puede oponerse al uso secundario de sus datos enviando un correo a: <a href="mailto:avisoprivacidad@evasalud.com.mx" className="text-[#0077b6] hover:underline">avisoprivacidad@evasalud.com.mx</a>.</p>
+                            <p className="mt-2 text-gray-700">Usted puede oponerse al uso secundario de sus datos enviando un correo a: <a href="mailto:contacto@evasalud.com.mx" className="text-[#0077b6] hover:underline">contacto@evasalud.com.mx</a>.</p>
                         </section>
 
                         <section>
@@ -129,7 +129,7 @@ export default function PrivacyPolicyPage() {
                                 <li>Solicitar su eliminación (Cancelación)</li>
                                 <li>Oponerse a que se usen para fines no esenciales (Oposición)</li>
                             </ul>
-                            <p className="mt-2 text-gray-700">Para ejercer estos derechos, deberá enviar un correo a <a href="mailto:avisoprivacidad@evasalud.com.mx" className="text-[#0077b6] hover:underline">avisoprivacidad@evasalud.com.mx</a> con:</p>
+                            <p className="mt-2 text-gray-700">Para ejercer estos derechos, deberá enviar un correo a <a href="mailto:contacto@evasalud.com.mx" className="text-[#0077b6] hover:underline">contacto@evasalud.com.mx</a> con:</p>
                             <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
                                 <li>Nombre completo</li>
                                 <li>Correo registrado en la app</li>
